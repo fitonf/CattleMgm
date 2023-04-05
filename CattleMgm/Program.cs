@@ -24,12 +24,12 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var serviceProvider = scope.ServiceProvider;
-    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    UserAndRoleDataInitializer.SeedData(userManager);
-}
+//using (var scope = app.Services.CreateScope())
+//{
+//    var serviceProvider = scope.ServiceProvider;
+//    var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+//    UserAndRoleDataInitializer.SeedData(userManager);
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
