@@ -16,6 +16,7 @@ namespace CattleMgm.Data.Entities
         {
         }
 
+
         public virtual DbSet<AspNetRoleClaims> AspNetRoleClaims { get; set; } = null!;
         public virtual DbSet<AspNetRoles> AspNetRoles { get; set; } = null!;
         public virtual DbSet<AspNetUserClaims> AspNetUserClaims { get; set; } = null!;

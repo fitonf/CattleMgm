@@ -10,5 +10,11 @@ namespace CattleMgm.Data
             : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<ProcedureModel>().HasNoKey();
+            base.OnModelCreating(builder);
+        }
     }
 }

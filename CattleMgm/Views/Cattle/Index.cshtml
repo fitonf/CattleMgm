@@ -1,8 +1,15 @@
-﻿@model List<int>
+﻿@model List<ProcedureModel>
 
 <div>
     @foreach (var item in Model)
     {
-        <p>@item</p>
+        var gjinia = "";
+        
+        @if(@item.Gender == 1){
+            gjinia = "Mashkull"; } 
+        else { gjinia = "Femer"; }
+
+        <p>Gjinia: @gjinia </p>
+        <p>Emri: @item.Name</p>
     }
 </div>

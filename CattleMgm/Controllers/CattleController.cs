@@ -1,18 +1,41 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CattleMgm.Data;
+using CattleMgm.Data.Entities;
+using CattleMgm.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CattleMgm.Controllers
 {
+    
     public class CattleController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _context;
+        private praktikadbContext _db;
+        public CattleController(ApplicationDbContext context, praktikadbContext db)
         {
-            var lista = new List<int>();
-            for (int i = 0; i <= 10; i++)
-            {
-                lista.Add(i);
-            }
+            _context = context;
+            _db = db;
+        }
+        public async Task<IActionResult> Index()
+        {
+            CallProcedure obj = new CallProcedure(_context);
 
-            return View(lista);
+            var list = obj.cattleList();
+
+            var listaGjedheve = await _db.Cattle.Select(q => new ProcedureModel{ Gender = q.Gender, Name = q.Name}).ToListAsync();
+            
+            //List<ProcedureModel> model = new List<ProcedureModel>();
+
+            //foreach (var item in list)
+            //{
+            //    model.Add(new ProcedureModel
+            //    {
+            //        Name = item.Name,
+            //        Gender = item.Gender
+            //    });
+            //}
+
+            return View(listaGjedheve);
         }
 
         public IActionResult Visari()
