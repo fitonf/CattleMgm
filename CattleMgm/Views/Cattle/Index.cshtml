@@ -1,20 +1,50 @@
-﻿@model List<ProcedureModel>
+﻿@model List<CattleViewModel>
 
-<div>
-    @foreach (var item in Model)
-    {
-        var gjinia = "";
-        
-        @if(@item.Gender == 1){
-            gjinia = "Mashkull"; } 
-        else { gjinia = "Femer"; }
-
-        <p>Gjinia: @gjinia </p>
-        <p>Emri: @item.Name</p>
-    }
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Cattle">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="cattle-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i gjedhit</th>
+                    <th>Numri identifikues</th>
+                    <th>Raca</th>
+                    <th>Data e lindjes</th>
+                    <th>Gjinia</th>
+                    <th>Ferma</th>
+                    <th>Emri i fermerit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.UniqueIdentifier</td>
+                        <td>@item.Breed</td>
+                        <td>@item.BirthDate</td>
+                        <td>@item.Gender</td>
+                        <td>@item.FarmName</td>
+                        <td>@item.FarmerName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
-@section Scripts
-{
-    
+@section Scripts{
+    <script type="text/javascript">
+        $("#cattle-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
 }

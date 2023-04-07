@@ -1,14 +1,15 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
+using CattleMgm.Helpers;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
+using CattleMgm.ViewModels.Cattle;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CattleMgm.Controllers
 {
-    [AllowAnonymous]
     public class CattleController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -22,17 +23,32 @@ namespace CattleMgm.Controllers
             _db = db;
             _cattleRepository = cattleRepository;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var lista = _cattleRepository.GetCattles();
+            ViewData["Title"] = "Lista e gjedheve";
 
-            CallProcedure obj = new CallProcedure(_context);
+            var lista = _cattleRepository.GetCattles().ToList();
 
-            var list = obj.cattleList();
+            List<CattleViewModel> listaViewModel = new List<CattleViewModel>();
+            
+            foreach (var cattle in lista)
+            {
+                listaViewModel.Add(new CattleViewModel { 
+                    Id = cattle.Id,
+                    Name = cattle.Name,
+                    Gender = cattle.Gender == (int)Gender.Male ? "Mashkull" : "Femer",
+                    BirthDate = cattle.BirthDate.ToShortDateString(),
+                    FarmName = cattle.Farm.Name,
+                    FarmerName = cattle.Farm.Farmer.FirstName + 
+                    " " + cattle.Farm.Farmer.LastName,
+                    Breed = cattle.Breed.Name,
+                    UniqueIdentifier = cattle.UniqueIdentifier.ToString(),
+                    Weight = cattle.Weight
+                });
+            }
 
-            var listaGjedheve = await _db.Cattle.Select(q => new ProcedureModel{ Gender = q.Gender, Name = q.Name}).ToListAsync();
-
-            return View(listaGjedheve);
+            listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
+            return View(listaViewModel);
         }
 
         public IActionResult Visari()

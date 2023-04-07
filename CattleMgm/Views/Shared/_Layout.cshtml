@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - CattleMgm</title>
-     @RenderSection("Styles", false)
+    @RenderSection("Styles", false)
 
-        <!-- App css -->
+    <!-- App css -->
     <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="~/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="~/css/metisMenu.min.css" rel="stylesheet" type="text/css" />
@@ -29,220 +29,221 @@
 </head>
 <body class="dark-sidenav">
     <div class="left-sidenav">
-    <!-- LOGO -->
-    <div class="brand">
-        <a asp-controller="home" asp-action="index" class="logo">
-            <span>
-                <img src="~/images/logo-sm.png" alt="logo-small" class="logo-sm">
-            </span>
-            <span>
-                <img src="~/images/logo-light.png" alt="logo-large" class="logo-lg logo-light">
-                <img src="~/images/logo-dark.png" alt="logo-large" class="logo-lg logo-dark">
-            </span>
-        </a>
-    </div>
-    <!--end logo-->
-    <div class="menu-content h-100" data-simplebar>
-        <ul class="metismenu left-sidenav-menu">
-            <li class="menu-label mt-0">Main</li>
-            <li>
-                <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li class="nav-item"><a class="nav-link" asp-controller="home" asp-action="index"><i class="ti-control-record"></i>Analytics</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="home" asp-action="sales" ><i class="ti-control-record"></i>Sales</a></li>
-                </ul>
-            </li>
-
-            <li>
-                <a href="javascript: void(0);"><i data-feather="grid" class="align-self-center menu-icon"></i><span>Apps</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li>
-                        <a href="javascript: void(0);">
-                            <i class="ti-control-record"></i>Email 
-                            <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="inbox" asp-controller="apps">Inbox</a></li>
-                            <li><a asp-action="reademail" asp-controller="apps">Read Email</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" asp-action="chat" asp-controller="apps"><i class="ti-control-record"></i>Chat</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="contacts" asp-controller="apps"><i class="ti-control-record"></i>Contact List</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="Calendar" asp-controller="apps"><i class="ti-control-record"></i>Calendar</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="filemanager" asp-controller="apps"><i class="ti-control-record"></i>File Manager</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="invoice" asp-controller="apps"><i class="ti-control-record"></i>Invoice</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="tasks" asp-controller="apps"><i class="ti-control-record"></i>Tasks</a></li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Projects <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="overview" asp-controller="Project">Overview</a></li>
-                            <li><a asp-action="projects" asp-controller="apps">Projects</a></li>
-                            <li><a asp-action="board" asp-controller="Project">Board</a></li>
-                            <li><a asp-action="teams" asp-controller="Project">Teams</a></li>
-                            <li><a asp-action="files" asp-controller="Project">Files</a></li>
-                            <li><a asp-action="project" asp-controller="apps">New Project</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Ecommerce <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="Products" asp-controller="ecommerce">Products</a></li>
-                            <li><a asp-action="ProductsList" asp-controller="ecommerce">Product List</a></li>
-                            <li><a asp-action="ProcuctDetail" asp-controller="ecommerce">Product Detail</a></li>
-                            <li><a asp-action="Cart" asp-controller="ecommerce">Cart</a></li>
-                            <li><a asp-action="Checkout" asp-controller="ecommerce">Checkout</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript: void(0);"><i data-feather="lock" class="align-self-center menu-icon"></i><span>Authentication</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li class="nav-item"><a class="nav-link" asp-action="Login" asp-controller="Authentication"><i class="ti-control-record"></i>Log in</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="Register" asp-controller="Authentication"><i class="ti-control-record"></i>Register</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="RecoverPassword" asp-controller="Authentication"><i class="ti-control-record"></i>Recover Password</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="LockScreen" asp-controller="Authentication"><i class="ti-control-record"></i>Lock Screen</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="NotFound" asp-controller="Authentication"><i class="ti-control-record"></i>Error 404</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="InternalError" asp-controller="Authentication"><i class="ti-control-record"></i>Error 500</a></li>
-                </ul>
-            </li>
-            <hr class="hr-dashed hr-menu">
-            <li class="menu-label my-2">Components & Extra</li>
-            <li>
-                <a href="javascript: void(0);"><i data-feather="box" class="align-self-center menu-icon"></i><span>UI Kit</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>UI Elements <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="alert" asp-controller="ui-kit">Alerts</a></li>
-                            <li><a asp-action="avatar" asp-controller="ui-kit">Avatar</a></li>
-                            <li><a asp-action="buttons" asp-controller="ui-kit">Buttons</a></li>
-                            <li><a asp-action="badges" asp-controller="ui-kit">Badges</a></li>
-                            <li><a asp-action="cards" asp-controller="ui-kit">Cards</a></li>
-                            <li><a asp-action="carousels" asp-controller="ui-kit">Carousels</a></li>
-                            <li><a asp-action="radio" asp-controller="ui-kit"><span>Check & Radio</span></a></li>
-                            <li><a asp-action="dropdowns" asp-controller="ui-kit">Dropdowns</a></li>
-                            <li><a asp-action="grids" asp-controller="ui-kit">Grids</a></li>
-                            <li><a asp-action="images" asp-controller="ui-kit">Images</a></li>
-                            <li><a asp-action="list" asp-controller="ui-kit">List</a></li>
-                            <li><a asp-action="models" asp-controller="ui-kit">Modals</a></li>
-                            <li><a asp-action="navs" asp-controller="ui-kit">Navs</a></li>
-                            <li><a asp-action="navbar" asp-controller="ui-kit">Navbar</a></li>
-                            <li><a asp-action="offcanvas" asp-controller="ui-kit">Offcanvas <span class="badge badge-soft-success ms-auto">New</span></a></li>
-                            <li><a asp-action="paginations" asp-controller="ui-kit">Paginations</a></li>
-                            <li><a asp-action="popovertooltips" asp-controller="ui-kit">Popover & Tooltips</a></li>
-                            <li><a asp-action="progress" asp-controller="ui-kit">Progress</a></li>
-                            <li><a asp-action="spinners" asp-controller="ui-kit">Spinners</a></li>
-                            <li><a asp-action="accordions" asp-controller="ui-kit">Tabs & Accordions</a></li>
-                            <li><a asp-action="toasts" asp-controller="ui-kit">Toasts</a></li>
-                            <li><a asp-action="typography" asp-controller="ui-kit">Typography</a></li>
-                            <li><a asp-action="videos" asp-controller="ui-kit">Videos</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Advanced UI <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="animation" asp-controller="ui-kit">Animation</a></li>
-                            <li><a asp-action="clipboard" asp-controller="ui-kit">Clip Board</a></li>
-                            <li><a asp-action="highlight" asp-controller="ui-kit">Highlight</a></li>
-                            <li><a asp-action="idletimer" asp-controller="ui-kit">Idle Timer</a></li>
-                            <li><a asp-action="kanban" asp-controller="ui-kit">Kanban</a></li>
-                            <li><a asp-action="lightbox" asp-controller="ui-kit">Lightbox</a></li>
-                            <li><a asp-action="nestable" asp-controller="ui-kit">Nestable List</a></li>
-                            <li><a asp-action="rangeslider" asp-controller="ui-kit">Range Slider</a></li>
-                            <li><a asp-action="ratings" asp-controller="ui-kit">Ratings</a></li>
-                            <li><a asp-action="ribbons" asp-controller="ui-kit">Ribbons</a></li>
-                            <li><a asp-action="session" asp-controller="ui-kit">Session Timeout</a></li>
-                            <li><a asp-action="sweetalerts" asp-controller="ui-kit">Sweet Alerts</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Forms <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="advanced" asp-controller="ui-kit">Advance Elements</a></li>
-                            <li><a asp-action="elements" asp-controller="ui-kit">Basic Elements</a></li>
-                            <li><a asp-action="editor" asp-controller="ui-kit">Editors</a></li>
-                            <li><a asp-action="uploads" asp-controller="ui-kit">File Upload</a></li>
-                            <li><a asp-action="repeater" asp-controller="ui-kit">Repeater</a></li>
-                            <li><a asp-action="validation" asp-controller="ui-kit">Validation</a></li>
-                            <li><a asp-action="wizard" asp-controller="ui-kit">Wizard</a></li>
-                            <li><a asp-action="xeditable" asp-controller="ui-kit">X Editable</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Charts <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="apex" asp-controller="ui-kit">Apex</a></li>
-                            <li><a asp-action="chartjs" asp-controller="ui-kit">Chartjs</a></li>
-                            <li><a asp-action="flot" asp-controller="ui-kit">Flot</a></li>
-                            <li><a asp-action="morris" asp-controller="ui-kit">Morris</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Tables <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="tablebasic" asp-controller="ui-kit">Basic</a></li>
-                            <li><a asp-action="Datatable" asp-controller="ui-kit">Datatables</a></li>
-                            <li><a asp-action="editable" asp-controller="ui-kit">Editable</a></li>
-                            <li><a asp-action="responsive" asp-controller="ui-kit">Responsive</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);"><i class="ti-control-record"></i>Icons <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="dripicons" asp-controller="ui-kit">Dripicons</a></li>
-                            <li><a asp-action="feather" asp-controller="ui-kit">Feather</a></li>
-                            <li><a asp-action="fontawesome" asp-controller="ui-kit">Font awesome</a></li>
-                            <li><a asp-action="materialdesign" asp-controller="ui-kit">Material Design</a></li>
-                            <li><a asp-action="themify" asp-controller="ui-kit">Themify</a></li>
-                            <li><a asp-action="typicons" asp-controller="ui-kit">Typicons</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript:void(0);"><i class="ti-control-record"></i>Maps <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="Googlemap" asp-controller="ui-kit">Google Maps</a></li>
-                            <li><a asp-action="Leafletmap" asp-controller="ui-kit">Leaflet Maps</a></li>
-                            <li><a asp-action="Vectormap" asp-controller="ui-kit">Vector Maps</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="javascript: void(0);"><i class="ti-control-record"></i>Email Template <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
-                        <ul class="nav-second-level" aria-expanded="false">
-                            <li><a asp-action="emailalert" asp-controller="ui-kit">Alert Email</a></li>
-                            <li><a asp-action="emailbasic" asp-controller="ui-kit">Basic Action Email</a></li>
-                            <li><a asp-action="EmailBilling" asp-controller="ui-kit">Billing Email</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a asp-action="widgets" asp-controller="home"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Widgets</span><span class="badge badge-soft-success menu-arrow">New</span></a>
-            </li>
-
-            <li>
-                <a href="javascript: void(0);"><i data-feather="file-plus" class="align-self-center menu-icon"></i><span>Pages</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
-                <ul class="nav-second-level" aria-expanded="false">
-                    <li class="nav-item"><a class="nav-link" asp-action="blogs" asp-controller="pages"><i class="ti-control-record"></i>Blogs</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="faqs" asp-controller="pages"><i class="ti-control-record"></i>FAQs</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="pricing" asp-controller="pages"><i class="ti-control-record"></i>Pricing</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="profile" asp-controller="pages"><i class="ti-control-record"></i>Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="starter" asp-controller="pages"><i class="ti-control-record"></i>Starter Page</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="timeline" asp-controller="pages"><i class="ti-control-record"></i>Timeline</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-action="treeview" asp-controller="pages"><i class="ti-control-record"></i>Treeview</a></li>
-                </ul>
-            </li>
-        </ul>
-
-        <div class="update-msg text-center">
-            <a href="javascript: void(0);" class="float-end close-btn text-muted" data-dismiss="update-msg" aria-label="Close" aria-hidden="true">
-                <i class="mdi mdi-close"></i>
+        <!-- LOGO -->
+        <div class="brand">
+            <a asp-controller="home" asp-action="index" class="logo">
+                <span>
+                    <img src="~/images/logo-sm.png" alt="logo-small" class="logo-sm">
+                </span>
+                <span>
+                    <img src="~/images/logo-light.png" alt="logo-large" class="logo-lg logo-light">
+                    <img src="~/images/logo-dark.png" alt="logo-large" class="logo-lg logo-dark">
+                </span>
             </a>
-            <h5 class="mt-3">Mannat Themes</h5>
-            <p class="mb-3">We Design and Develop Clean and High Quality Web Applications</p>
-            <a href="javascript: void(0);" class="btn btn-outline-warning btn-sm">Upgrade your plan</a>
+        </div>
+        <!--end logo-->
+        <div class="menu-content h-100" data-simplebar>
+            <ul class="metismenu left-sidenav-menu">
+                <li class="menu-label mt-0">Main</li>
+                <li>
+                    <a href="javascript: void(0);"> <i data-feather="home" class="align-self-center menu-icon"></i><span>Dashboard</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" asp-controller="home" asp-action="index"><i class="ti-control-record"></i>Analytics</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-controller="home" asp-action="sales"><i class="ti-control-record"></i>Sales</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"><i data-feather="grid" class="align-self-center menu-icon"></i><span>Apps</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="javascript: void(0);">
+                                <i class="ti-control-record"></i>Email
+                                <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span>
+                            </a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="inbox" asp-controller="apps">Inbox</a></li>
+                                <li><a asp-action="reademail" asp-controller="apps">Read Email</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" asp-action="chat" asp-controller="apps"><i class="ti-control-record"></i>Chat</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="contacts" asp-controller="apps"><i class="ti-control-record"></i>Contact List</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="Calendar" asp-controller="apps"><i class="ti-control-record"></i>Calendar</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="filemanager" asp-controller="apps"><i class="ti-control-record"></i>File Manager</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="invoice" asp-controller="apps"><i class="ti-control-record"></i>Invoice</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="tasks" asp-controller="apps"><i class="ti-control-record"></i>Tasks</a></li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Projects <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="overview" asp-controller="Project">Overview</a></li>
+                                <li><a asp-action="projects" asp-controller="apps">Projects</a></li>
+                                <li><a asp-action="board" asp-controller="Project">Board</a></li>
+                                <li><a asp-action="teams" asp-controller="Project">Teams</a></li>
+                                <li><a asp-action="files" asp-controller="Project">Files</a></li>
+                                <li><a asp-action="project" asp-controller="apps">New Project</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Ecommerce <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="Products" asp-controller="ecommerce">Products</a></li>
+                                <li><a asp-action="ProductsList" asp-controller="ecommerce">Product List</a></li>
+                                <li><a asp-action="ProcuctDetail" asp-controller="ecommerce">Product Detail</a></li>
+                                <li><a asp-action="Cart" asp-controller="ecommerce">Cart</a></li>
+                                <li><a asp-action="Checkout" asp-controller="ecommerce">Checkout</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);"><i data-feather="lock" class="align-self-center menu-icon"></i><span>Authentication</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" asp-action="Login" asp-controller="Authentication"><i class="ti-control-record"></i>Log in</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="Register" asp-controller="Authentication"><i class="ti-control-record"></i>Register</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="RecoverPassword" asp-controller="Authentication"><i class="ti-control-record"></i>Recover Password</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="LockScreen" asp-controller="Authentication"><i class="ti-control-record"></i>Lock Screen</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="NotFound" asp-controller="Authentication"><i class="ti-control-record"></i>Error 404</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="InternalError" asp-controller="Authentication"><i class="ti-control-record"></i>Error 500</a></li>
+                    </ul>
+                </li>
+                <hr class="hr-dashed hr-menu">
+                <li class="menu-label my-2">Components & Extra</li>
+                <li>
+                    <a href="javascript: void(0);"><i data-feather="box" class="align-self-center menu-icon"></i><span>UI Kit</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>UI Elements <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="alert" asp-controller="ui-kit">Alerts</a></li>
+                                <li><a asp-action="avatar" asp-controller="ui-kit">Avatar</a></li>
+                                <li><a asp-action="buttons" asp-controller="ui-kit">Buttons</a></li>
+                                <li><a asp-action="badges" asp-controller="ui-kit">Badges</a></li>
+                                <li><a asp-action="cards" asp-controller="ui-kit">Cards</a></li>
+                                <li><a asp-action="carousels" asp-controller="ui-kit">Carousels</a></li>
+                                <li><a asp-action="radio" asp-controller="ui-kit"><span>Check & Radio</span></a></li>
+                                <li><a asp-action="dropdowns" asp-controller="ui-kit">Dropdowns</a></li>
+                                <li><a asp-action="grids" asp-controller="ui-kit">Grids</a></li>
+                                <li><a asp-action="images" asp-controller="ui-kit">Images</a></li>
+                                <li><a asp-action="list" asp-controller="ui-kit">List</a></li>
+                                <li><a asp-action="models" asp-controller="ui-kit">Modals</a></li>
+                                <li><a asp-action="navs" asp-controller="ui-kit">Navs</a></li>
+                                <li><a asp-action="navbar" asp-controller="ui-kit">Navbar</a></li>
+                                <li><a asp-action="offcanvas" asp-controller="ui-kit">Offcanvas <span class="badge badge-soft-success ms-auto">New</span></a></li>
+                                <li><a asp-action="paginations" asp-controller="ui-kit">Paginations</a></li>
+                                <li><a asp-action="popovertooltips" asp-controller="ui-kit">Popover & Tooltips</a></li>
+                                <li><a asp-action="progress" asp-controller="ui-kit">Progress</a></li>
+                                <li><a asp-action="spinners" asp-controller="ui-kit">Spinners</a></li>
+                                <li><a asp-action="accordions" asp-controller="ui-kit">Tabs & Accordions</a></li>
+                                <li><a asp-action="toasts" asp-controller="ui-kit">Toasts</a></li>
+                                <li><a asp-action="typography" asp-controller="ui-kit">Typography</a></li>
+                                <li><a asp-action="videos" asp-controller="ui-kit">Videos</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Advanced UI <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="animation" asp-controller="ui-kit">Animation</a></li>
+                                <li><a asp-action="clipboard" asp-controller="ui-kit">Clip Board</a></li>
+                                <li><a asp-action="highlight" asp-controller="ui-kit">Highlight</a></li>
+                                <li><a asp-action="idletimer" asp-controller="ui-kit">Idle Timer</a></li>
+                                <li><a asp-action="kanban" asp-controller="ui-kit">Kanban</a></li>
+                                <li><a asp-action="lightbox" asp-controller="ui-kit">Lightbox</a></li>
+                                <li><a asp-action="nestable" asp-controller="ui-kit">Nestable List</a></li>
+                                <li><a asp-action="rangeslider" asp-controller="ui-kit">Range Slider</a></li>
+                                <li><a asp-action="ratings" asp-controller="ui-kit">Ratings</a></li>
+                                <li><a asp-action="ribbons" asp-controller="ui-kit">Ribbons</a></li>
+                                <li><a asp-action="session" asp-controller="ui-kit">Session Timeout</a></li>
+                                <li><a asp-action="sweetalerts" asp-controller="ui-kit">Sweet Alerts</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Forms <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="advanced" asp-controller="ui-kit">Advance Elements</a></li>
+                                <li><a asp-action="elements" asp-controller="ui-kit">Basic Elements</a></li>
+                                <li><a asp-action="editor" asp-controller="ui-kit">Editors</a></li>
+                                <li><a asp-action="uploads" asp-controller="ui-kit">File Upload</a></li>
+                                <li><a asp-action="repeater" asp-controller="ui-kit">Repeater</a></li>
+                                <li><a asp-action="validation" asp-controller="ui-kit">Validation</a></li>
+                                <li><a asp-action="wizard" asp-controller="ui-kit">Wizard</a></li>
+                                <li><a asp-action="xeditable" asp-controller="ui-kit">X Editable</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Charts <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="apex" asp-controller="ui-kit">Apex</a></li>
+                                <li><a asp-action="chartjs" asp-controller="ui-kit">Chartjs</a></li>
+                                <li><a asp-action="flot" asp-controller="ui-kit">Flot</a></li>
+                                <li><a asp-action="morris" asp-controller="ui-kit">Morris</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Tables <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="tablebasic" asp-controller="ui-kit">Basic</a></li>
+                                <li><a asp-action="Datatable" asp-controller="ui-kit">Datatables</a></li>
+                                <li><a asp-action="editable" asp-controller="ui-kit">Editable</a></li>
+                                <li><a asp-action="responsive" asp-controller="ui-kit">Responsive</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><i class="ti-control-record"></i>Icons <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="dripicons" asp-controller="ui-kit">Dripicons</a></li>
+                                <li><a asp-action="feather" asp-controller="ui-kit">Feather</a></li>
+                                <li><a asp-action="fontawesome" asp-controller="ui-kit">Font awesome</a></li>
+                                <li><a asp-action="materialdesign" asp-controller="ui-kit">Material Design</a></li>
+                                <li><a asp-action="themify" asp-controller="ui-kit">Themify</a></li>
+                                <li><a asp-action="typicons" asp-controller="ui-kit">Typicons</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0);"><i class="ti-control-record"></i>Maps <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="Googlemap" asp-controller="ui-kit">Google Maps</a></li>
+                                <li><a asp-action="Leafletmap" asp-controller="ui-kit">Leaflet Maps</a></li>
+                                <li><a asp-action="Vectormap" asp-controller="ui-kit">Vector Maps</a></li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="javascript: void(0);"><i class="ti-control-record"></i>Email Template <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                <li><a asp-action="emailalert" asp-controller="ui-kit">Alert Email</a></li>
+                                <li><a asp-action="emailbasic" asp-controller="ui-kit">Basic Action Email</a></li>
+                                <li><a asp-action="EmailBilling" asp-controller="ui-kit">Billing Email</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a asp-action="widgets" asp-controller="home"><i data-feather="layers" class="align-self-center menu-icon"></i><span>Widgets</span><span class="badge badge-soft-success menu-arrow">New</span></a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);"><i data-feather="file-plus" class="align-self-center menu-icon"></i><span>Pages</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                    <ul class="nav-second-level" aria-expanded="false">
+                        <li class="nav-item"><a class="nav-link" asp-action="blogs" asp-controller="pages"><i class="ti-control-record"></i>Blogs</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="faqs" asp-controller="pages"><i class="ti-control-record"></i>FAQs</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="pricing" asp-controller="pages"><i class="ti-control-record"></i>Pricing</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="profile" asp-controller="pages"><i class="ti-control-record"></i>Profile</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="starter" asp-controller="pages"><i class="ti-control-record"></i>Starter Page</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="timeline" asp-controller="pages"><i class="ti-control-record"></i>Timeline</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-action="treeview" asp-controller="pages"><i class="ti-control-record"></i>Treeview</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="update-msg text-center">
+                <a href="javascript: void(0);" class="float-end close-btn text-muted" data-dismiss="update-msg" aria-label="Close" aria-hidden="true">
+                    <i class="mdi mdi-close"></i>
+                </a>
+                <h5 class="mt-3">Mannat Themes</h5>
+                <p class="mb-3">We Design and Develop Clean and High Quality Web Applications</p>
+                <a href="javascript: void(0);" class="btn btn-outline-warning btn-sm">Upgrade your plan</a>
+            </div>
         </div>
     </div>
-</div>
 
     <div class="page-wrapper">
         <!-- Top Bar Start -->
@@ -362,7 +363,10 @@
                             <a class="dropdown-item" href="#"><i data-feather="user" class="align-self-center icon-xs icon-dual me-1"></i> Profile</a>
                             <a class="dropdown-item" href="#"><i data-feather="settings" class="align-self-center icon-xs icon-dual me-1"></i> Settings</a>
                             <div class="dropdown-divider mb-0"></div>
-                            <a class="dropdown-item" href="#"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i> Logout</a>
+
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index","Home")" method="post">
+                                <button type="submit" class="dropdown-item"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i>Logout</button>
+                            </form>
                         </div>
                     </li>
                 </ul><!--end topbar-nav-->
@@ -384,13 +388,25 @@
         </div>
         <!-- Top Bar End -->
         <div class="page-content">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="row">
+                            <div class="col">
+                                <h4 class="page-title">@ViewData["Title"]</h4>
+                            </div><!--end col-->
+                        </div><!--end row-->
+                    </div><!--end page-title-box-->
+                </div><!--end col-->
+            </div>
+            <br />
             <!-- Page Content-->
             @RenderBody()
         </div>
         <!-- end page content -->
     </div>
 
-     <!-- jQuery  -->
+    <!-- jQuery  -->
     <script src="~/js/jquery.min.js"></script>
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/metismenu.min.js"></script>
@@ -409,15 +425,15 @@
     <script src="~/lib/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
     <script src="~/lib/bootstrap-touchspin/js/jquery.bootstrap-touchspin.min.js"></script>
 
-        <!-- Sweet-Alert  -->
+    <!-- Sweet-Alert  -->
     <script src="~/lib/sweet-alert2/sweetalert2.min.js"></script>
     <script src="~/js/pages/jquery.sweet-alert.init.js"></script>
 
-        <!-- Required datatable js -->
+    <!-- Required datatable js -->
     <script src="~/lib/datatables/jquery.dataTables.min.js"></script>
     <script src="~/lib/datatables/dataTables.bootstrap5.min.js"></script>
 
-        <!-- Responsive examples -->
+    <!-- Responsive examples -->
     <script src="~/lib/datatables/dataTables.responsive.min.js"></script>
     <script src="~/lib/datatables/responsive.bootstrap4.min.js"></script>
     <script src="~/js/pages/jquery.datatable.init.js"></script>

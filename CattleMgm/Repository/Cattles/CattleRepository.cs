@@ -19,7 +19,11 @@ namespace CattleMgm.Repository.Cattles
 
         public List<Cattle> GetCattles()
         {
-            var cattles = _context.Cattle.ToList();
+            var cattles = _context.Cattle
+                .Include(x => x.Farm)
+                .ThenInclude(x => x.Farmer)
+                .Include(x => x.Breed)
+                .ToList();
 
             return cattles;
         }
