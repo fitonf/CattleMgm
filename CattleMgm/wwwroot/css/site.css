@@ -1,18 +1,30 @@
-html {
-  font-size: 14px;
+
+
+.required:after {
+    content: " *";
+    color: #ea585a;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.button-td {
+    padding: 2px !important;
+    text-align: -webkit-center;
+    vertical-align: middle !important;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.select2-results__option {
+    text-align: left;
 }
 
-body {
-  margin-bottom: 60px;
+.select2-container {
+    z-index: 999;
+}
+
+.btn-download {
+    width: 40px;
+}
+.title-text, .card-title{
+    text-transform: inherit;
+}
+.img-fluid{
+    padding:5px;
 }
