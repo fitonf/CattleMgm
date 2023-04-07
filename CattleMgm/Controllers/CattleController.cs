@@ -27,7 +27,7 @@ namespace CattleMgm.Controllers
         {
             ViewData["Title"] = "Lista e gjedheve";
 
-            var lista = _cattleRepository.GetCattles().ToList();
+            var lista = _cattleRepository.GetCattles();
 
             List<CattleViewModel> listaViewModel = new List<CattleViewModel>();
             
@@ -48,6 +48,7 @@ namespace CattleMgm.Controllers
             }
 
             listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
+
             return View(listaViewModel);
         }
 
