@@ -1,4 +1,6 @@
-﻿using CattleMgm.Models;
+﻿using CattleMgm.Data;
+using CattleMgm.Data.Entities;
+using CattleMgm.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -9,7 +11,7 @@ namespace CattleMgm.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, praktikadbContext db) : base(context, db)
         {
             _logger = logger;
         }

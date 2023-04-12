@@ -1,0 +1,63 @@
+﻿@model List<UserViewModel>
+@{
+    ViewData["Title"] = "Perdoruesit";
+}
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Cattle">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="user-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Perdoruesi</th>
+                    <th>E-mail</th>
+                    <th>Emri</th>
+                    <th>Mbiemri</th>
+                    <th>Nr. i telefonit</th>
+                    <th>Roli i konfirmuar</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var span = "";
+                    if (item.isRoleConfirmed == true)
+                    {
+                        span = "<span class='badge badge-outline-success'>Konfirmuar</span>";
+                    }
+                    else
+                    {
+                        span = "<span class='badge badge-outline-danger'>Jo e konfirmuar</span>";
+                    }
+                    <tr>
+                        <td>@item.UserName</td>
+                        <td>@item.Email</td>
+                        <td>@item.FirstName</td>
+                        <td>@item.LastName</td>
+                        <td>@item.PhoneNumber</td>
+                        <td>@Html.Raw(span)</td>
+                        <td><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="User">Edit</a></td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#user-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}

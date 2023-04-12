@@ -10,17 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CattleMgm.Controllers
 {
-    public class CattleController : Controller
+    public class CattleController : BaseController
     {
-        private readonly ApplicationDbContext _context;
-        private praktikadbContext _db;
+        
         private ICattleRepository _cattleRepository;
 
         public CattleController(ApplicationDbContext context, praktikadbContext db, 
-                                ICattleRepository cattleRepository)
+                                ICattleRepository cattleRepository) : base(context,db)
         {
-            _context = context;
-            _db = db;
+            
             _cattleRepository = cattleRepository;
         }
         public IActionResult Index()
