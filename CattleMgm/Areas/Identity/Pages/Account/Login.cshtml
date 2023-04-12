@@ -44,7 +44,9 @@
                                         <a class="nav-link active fw-semibold" data-bs-toggle="tab" href="#LogIn_Tab" role="tab">Log In</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link fw-semibold" data-bs-toggle="tab" href="#Register_Tab" role="tab">Register</a>
+                                        <form class="form-inline" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="@Url.Action("Index","Home")" method="get">
+                                            <button type="submit" class="nav-link fw-semibold"><i data-feather="power" class="align-self-center icon-xs icon-dual me-1"></i>Register</button>
+                                        </form>
                                     </li>
                                 </ul>
                                 <!-- Tab panes -->
@@ -83,63 +85,11 @@
                                             </div> <!--end form-group-->
                                         </form><!--end form-->
                                         <div class="m-3 text-center text-muted">
-                                            <p class="mb-0">Don't have an account ?  <a href="auth-register.html" class="text-primary ms-2">Free Resister</a></p>
+                                            <p class="mb-0">Don't have an account ?  <a href="/Identity/Account/Register" class="text-primary ms-2">Register now</a></p>
                                         </div>
                                     </div>
                                     <div class="tab-pane px-3 pt-3" id="Register_Tab" role="tabpanel">
-                                        <form class="form-horizontal auth-form" action="index.html">
-
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="username">Username</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="username" id="username" placeholder="Enter username">
-                                                </div>
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="useremail">Email</label>
-                                                <div class="input-group">
-                                                    <input type="email" class="form-control" name="email" id="useremail" placeholder="Enter Email">
-                                                </div>
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="userpassword">Password</label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" name="password" id="userpassword" placeholder="Enter password">
-                                                </div>
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="conf_password">Confirm Password</label>
-                                                <div class="input-group">
-                                                    <input type="password" class="form-control" name="conf-password" id="conf_password" placeholder="Enter Confirm Password">
-                                                </div>
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="mo_number">Mobile Number</label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" name="mobile number" id="mo_number" placeholder="Enter Mobile Number">
-                                                </div>
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group row my-3">
-                                                <div class="col-sm-12">
-                                                    <div class="custom-control custom-switch switch-success">
-                                                        <input type="checkbox" class="custom-control-input" id="customSwitchSuccess2">
-                                                        <label class="form-label text-muted" for="customSwitchSuccess2">You agree to the Dastone <a href="#" class="text-primary">Terms of Use</a></label>
-                                                    </div>
-                                                </div><!--end col-->
-                                            </div><!--end form-group-->
-
-                                            <div class="form-group mb-0 row">
-                                                <div class="col-12">
-                                                    <button class="btn btn-primary w-100 waves-effect waves-light" type="button">Register <i class="fas fa-sign-in-alt ms-1"></i></button>
-                                                </div><!--end col-->
-                                            </div> <!--end form-group-->
-                                        </form><!--end form-->
-                                        <p class="my-3 text-muted">Already have an account ?<a href="auth-login.html" class="text-primary ms-2">Log in</a></p>
+                                        <p class="my-3 text-muted">Already have an account ?<a href="/Identity/Account/Login" class="text-primary ms-2">Log in</a></p>
                                     </div>
                                 </div>
                             </div><!--end card-body-->

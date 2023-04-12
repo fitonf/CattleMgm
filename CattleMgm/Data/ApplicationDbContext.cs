@@ -13,7 +13,7 @@ namespace CattleMgm.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<ProcedureModel>().HasNoKey();
+            //builder.Entity<ProcedureModel>().HasNoKey();
             base.OnModelCreating(builder);
         }
     }
