@@ -12,7 +12,7 @@ namespace CattleMgm.Controllers
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly RoleManager<ApplicationRole> _roleManager; 
 
         public UserController(ApplicationDbContext context, praktikadbContext db, 
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
