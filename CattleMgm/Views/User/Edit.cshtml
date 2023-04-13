@@ -1,31 +1,34 @@
-﻿@model UserCreateViewModel
+﻿@model UserEditViewModel
 @{
-    ViewData["Title"] = "Regjistrimi i përdoruesit";
+    ViewData["Title"] = "Editimi i perdoruesit";
 }
 
 <div class="card">
     <div class="card-header with-border">
         <h4>Plotesoni te dhenat me poshte</h4>
     </div>
-    <form id="createForm" method="post">
-        @Html.ValidationSummary()
+    <form id="editForm" method="post">
         <div class="card-body">
+            @Html.HiddenFor(x=>x.Id)
             <div class="row">
                 <div class="col-md-3">
                     <label class="required" asp-for="FirstName"></label>
                     <input asp-for="FirstName" class="form-control" />
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label class="required" asp-for="LastName"></label>
                     <input asp-for="LastName" class="form-control" />
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label class="required" asp-for="Email"></label>
                     <input asp-for="Email" class="form-control" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label asp-for="PhoneNumber"></label>
                     <input asp-for="PhoneNumber" class="form-control" />
@@ -33,33 +36,36 @@
             </div>
             <div class="row">
                 <div class="col-md-3">
-                    <label class="required" asp-for="RoleId"></label>
-                    @Html.DropDownListFor(m=>m.RoleId, ViewBag.Roles as SelectList, "Choose", new { @class = "form-control select2"})
-                    @*ekuivalente me dropdownlistfor*@
-                    @* <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control select2">
-                        <option></option>
-                    </select>*@
+                     <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control select2">
+                    <option></option>
+                    </select>
                     <span asp-validation-for="RoleId" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label class="required" asp-for="UserName"></label>
-                    <input asp-for="UserName" autocomplete="off" class="form-control" placeholder="Shenoni username" />
+                    <input asp-for="UserName" autocomplete="off" class="form-control" />
                     <span asp-validation-for="UserName" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label class="required" asp-for="Password"></label>
-                    <input asp-for="Password" autocomplete="new-password" class="form-control" placeholder="Shenoni fjalekalimin" />
+                    <input asp-for="Password" autocomplete="new-password" class="form-control" />
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
+
                 <div class="col-md-3">
                     <label class="required" asp-for="ConfirmPassword"></label>
-                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Shenoni fjalekalimin" />
+                    <input asp-for="ConfirmPassword" autocomplete="off" class="form-control" />
                     <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
                 </div>
             </div>
+
         </div>
         <div class="card-footer">
-            <input type="submit" class="btn btn-sm btn-primary" value="Regjistro"/>
+            <input type="submit" class="btn btn-sm btn-primary" value="Edito">
+
         </div>
     </form>
+
 </div>

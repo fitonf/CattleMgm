@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <div class="card-toolbar float-end">
-            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Cattle">Regjistro</a>
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="User">Regjistro</a>
         </div>
     </div>
     <div class="card-body">
@@ -41,7 +41,10 @@
                         <td>@item.LastName</td>
                         <td>@item.PhoneNumber</td>
                         <td>@Html.Raw(span)</td>
-                        <td><a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="User">Edit</a></td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="User">Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteUser('@item.Id')">Delete</a>
+                        </td>
 
                     </tr>
                 }
@@ -59,5 +62,73 @@
             "ordering": false
 
         });
+
+        var DeleteUser = function (id) {
+            Swal.fire({
+                title: 'A jeni te sigurt?',
+                text: "Kjo ben fshirjen e perdoruesit!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Jo, kthehu.',
+                buttonsStyling: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Po, deshiroj ta fshij!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                debugger;
+                if (result) {
+                    debugger;
+                    // Make the AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","User")', //
+                        data: { id: id },
+
+                        success: function (data) {
+                            debugger;
+                            Swal.fire({
+                                text: "Perdoruesi u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                if (result.isConfirmed) {
+
+                                    //var table = $('#kt_table_perdoruesit_trajnimet').DataTable();
+                                    //table.ajax.reload();
+                                }
+                            });
+
+
+
+
+
+                        },
+                        error: function (xhr, status, error) {
+                            debugger;
+                            // Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                }
+
+                });
+
+        }
     </script>
 }
