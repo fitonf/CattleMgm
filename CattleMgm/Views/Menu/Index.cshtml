@@ -1,0 +1,65 @@
+﻿@model IEnumerable<MenuViewModel>
+@{
+    ViewData["Title"] = "Lista e menuve";
+    int rownumber = 0;
+}
+
+<div class="card card-custom">
+    <div class="card-header">
+        <h3 class="card-title">Lista e menuve</h3>
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" href="javascript:;" onclick="CreateMenu()">Regjistro menu</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="tblMenus" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Icon)</th>
+                    <th>@Html.DisplayNameFor(m => m.Action)</th>
+                    <th>@Html.DisplayNameFor(m => m.Controller)</th>
+                    <th>@Html.DisplayNameFor(m => m.Area)</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var menu in Model)
+                {
+                    rownumber++;
+                    <tr>
+                        <td>@rownumber</td>
+                        <td>@Html.DisplayFor(m => menu.Name)</td>
+                        <td><i class="@Html.DisplayFor(m=> menu.Icon)" /></td>
+                        <td>@Html.DisplayFor(m => menu.Action)</td>
+                        <td>@Html.DisplayFor(m => menu.Controller)</td>
+                        <td>@Html.DisplayFor(m => menu.Area)</td>
+                        <td>
+@*                            <button class="btn btn-sm btn-primary">Edit</button>
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                            <button class="btn btn-sm btn-success">Add submenu</button>*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+        $("#tblmenus").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+        });
+
+        function CreateMenu() {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Create", "Menu")', function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+    </script>
+}
