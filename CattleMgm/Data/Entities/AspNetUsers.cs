@@ -10,6 +10,10 @@ namespace CattleMgm.Data.Entities
             AspNetUserClaims = new HashSet<AspNetUserClaims>();
             AspNetUserLogins = new HashSet<AspNetUserLogins>();
             AspNetUserTokens = new HashSet<AspNetUserTokens>();
+            MenuInsertedFromNavigation = new HashSet<Menu>();
+            MenuUpdatedFromNavigation = new HashSet<Menu>();
+            SubMenuInsertedFromNavigation = new HashSet<SubMenu>();
+            SubMenuUpdatedFromNavigation = new HashSet<SubMenu>();
             Role = new HashSet<AspNetRoles>();
         }
 
@@ -36,6 +40,10 @@ namespace CattleMgm.Data.Entities
         public virtual ICollection<AspNetUserClaims> AspNetUserClaims { get; set; }
         public virtual ICollection<AspNetUserLogins> AspNetUserLogins { get; set; }
         public virtual ICollection<AspNetUserTokens> AspNetUserTokens { get; set; }
+        public virtual ICollection<Menu> MenuInsertedFromNavigation { get; set; }
+        public virtual ICollection<Menu> MenuUpdatedFromNavigation { get; set; }
+        public virtual ICollection<SubMenu> SubMenuInsertedFromNavigation { get; set; }
+        public virtual ICollection<SubMenu> SubMenuUpdatedFromNavigation { get; set; }
 
         public virtual ICollection<AspNetRoles> Role { get; set; }
     }

@@ -26,6 +26,8 @@ namespace CattleMgm.Data.Entities
         public virtual DbSet<Cattle> Cattle { get; set; } = null!;
         public virtual DbSet<Farm> Farm { get; set; } = null!;
         public virtual DbSet<Farmer> Farmer { get; set; } = null!;
+        public virtual DbSet<Menu> Menu { get; set; } = null!;
+        public virtual DbSet<SubMenu> SubMenu { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -217,6 +219,108 @@ namespace CattleMgm.Data.Entities
                 entity.Property(e => e.PersonalNumber).HasMaxLength(10);
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.Property(e => e.MenuId).HasColumnName("MenuID");
+
+                entity.Property(e => e.Action).HasMaxLength(128);
+
+                entity.Property(e => e.Area).HasMaxLength(128);
+
+                entity.Property(e => e.Claim).HasMaxLength(128);
+
+                entity.Property(e => e.ClaimType).HasMaxLength(128);
+
+                entity.Property(e => e.Controller).HasMaxLength(128);
+
+                entity.Property(e => e.Icon).HasMaxLength(128);
+
+                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+
+                entity.Property(e => e.NameEn)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_EN");
+
+                entity.Property(e => e.NameSq)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_SQ");
+
+                entity.Property(e => e.NameSr)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_SR");
+
+                entity.Property(e => e.Roles).HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.MenuInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Menu_AspNetUsers");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.MenuUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_Menu_AspNetUsers1");
+            });
+
+            modelBuilder.Entity<SubMenu>(entity =>
+            {
+                entity.Property(e => e.SubmenuId).HasColumnName("SubmenuID");
+
+                entity.Property(e => e.Action).HasMaxLength(128);
+
+                entity.Property(e => e.Area).HasMaxLength(128);
+
+                entity.Property(e => e.Claim).HasMaxLength(128);
+
+                entity.Property(e => e.ClaimType).HasMaxLength(128);
+
+                entity.Property(e => e.Controller).HasMaxLength(128);
+
+                entity.Property(e => e.Icon).HasMaxLength(128);
+
+                entity.Property(e => e.InsertedFrom).HasMaxLength(450);
+
+                entity.Property(e => e.MenuId).HasColumnName("MenuID");
+
+                entity.Property(e => e.NameEn)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_EN");
+
+                entity.Property(e => e.NameSq)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_SQ");
+
+                entity.Property(e => e.NameSr)
+                    .HasMaxLength(128)
+                    .HasColumnName("Name_SR");
+
+                entity.Property(e => e.ParentSubId).HasColumnName("ParentSubID");
+
+                entity.Property(e => e.Roles).HasMaxLength(1024);
+
+                entity.Property(e => e.UpdatedFrom).HasMaxLength(450);
+
+                entity.HasOne(d => d.InsertedFromNavigation)
+                    .WithMany(p => p.SubMenuInsertedFromNavigation)
+                    .HasForeignKey(d => d.InsertedFrom)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubMenu_AspNetUsers");
+
+                entity.HasOne(d => d.Menu)
+                    .WithMany(p => p.SubMenu)
+                    .HasForeignKey(d => d.MenuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SubMenu_Menu");
+
+                entity.HasOne(d => d.UpdatedFromNavigation)
+                    .WithMany(p => p.SubMenuUpdatedFromNavigation)
+                    .HasForeignKey(d => d.UpdatedFrom)
+                    .HasConstraintName("FK_SubMenu_AspNetUsers1");
             });
 
             OnModelCreatingPartial(modelBuilder);
