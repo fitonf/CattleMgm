@@ -1,0 +1,117 @@
+﻿@model SubmenuCreateViewModel
+@{
+
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">Krijimi i nen-menu per menu: @Model.Menu</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<form asp-action="_Create" asp-controller="Submenu" id="frmCreateSubMenu" class="noLoading" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="CreateSuccess" role="form">
+    <div class="modal-body">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.MId)
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="NameSq" class="required"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameEn" class="required"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="NameSr" class="required"></label>
+                <input asp-for="NameSr" class="form-control" />
+                <span asp-validation-for="NameSr" class="text-danger" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="Area"></label>
+                <input asp-for="Area" class="form-control" />
+                <span asp-validation-for="Area" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Controller" class="required"></label>
+                <input asp-for="Controller" class="form-control" />
+                <span asp-validation-for="Controller" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Action" class="required"></label>
+                <input asp-for="Action" class="form-control" />
+                <span asp-validation-for="Action" class="text-danger" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="Policy" class="required"></label>
+                <input asp-for="Policy" class="form-control" />
+                <span asp-validation-for="Policy" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="OrdinalNumber"></label>
+                <input asp-for="OrdinalNumber" class="form-control" />
+                <span asp-validation-for="OrdinalNumber" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Icon" class="required"></label>
+                <input asp-for="Icon" class="form-control" />
+                <span asp-validation-for="Icon" class="text-danger" />
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="StaysOpenFor" class="required"></label>
+                <input asp-for="StaysOpenFor" class="form-control" />
+                <span asp-validation-for="StaysOpenFor" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="ParentID"></label>
+                @Html.DropDownListFor(m => m.ParentID, ViewBag.ParentId as SelectList, "Zgjedh", new { @class = "form-control" })
+                <span asp-validation-for="ParentID" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                @Html.Label("Aktive", null, new { @class = "required" }) <br />
+                <div class="form-check form-switch form-switch-success">
+                    <input asp-for="IsActive" class="form-check-input" type="checkbox">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mbyll</button>
+        <button type="submit" class="btn btn-outline-primary">Regjistro</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+    var form = $('#frmCreateSubMenu');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+    function CreateSuccess(data) {
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.errorDescription,
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>

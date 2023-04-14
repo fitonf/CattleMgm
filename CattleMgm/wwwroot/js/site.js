@@ -122,9 +122,9 @@ $(document).ajaxError(function (error) {
     else {
         Swal.fire({
             icon: 'error',
-            title: resources.responseJSON["Error"],
-            text: resources.responseJSON["ErrorMsg"],
-            confirmButtonText: resources.responseJSON["Okay"]
+            title: "Gabim",
+            text: "Ka ndodhur një gabim",
+            confirmButtonText: "Në rregull"
         })
     }
 })

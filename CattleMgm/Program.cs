@@ -1,7 +1,10 @@
 using CattleMgm.Data;
 using CattleMgm.Data.Entities;
+using CattleMgm.Helpers;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
+using CattleMgm.Repository.General;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,6 +18,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDbContext<praktikadbContext>(options =>
     options.UseSqlServer(connectionString));
 
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<ApplicationRole>()
@@ -22,8 +31,10 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 
 var app = builder.Build();
 

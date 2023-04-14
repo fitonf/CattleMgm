@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SubmenuViewModel>
+@{
+    int rownumber = 0;
+}
+
+    <div class="card-body">
+        <table id="tblSubMenus" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>@Html.DisplayNameFor(m => m.Name)</th>
+                    <th>@Html.DisplayNameFor(m => m.Action)</th>
+                    <th>@Html.DisplayNameFor(m => m.Controller)</th>
+                    <th>@Html.DisplayNameFor(m => m.Area)</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var menu in Model)
+                {
+                    rownumber++;
+                    <tr>
+                        <td>@rownumber</td>
+                        <td>@Html.DisplayFor(m => menu.Name)</td>
+                        <td>@Html.DisplayFor(m => menu.Action)</td>
+                        <td>@Html.DisplayFor(m => menu.Controller)</td>
+                        <td>@Html.DisplayFor(m => menu.Area)</td>
+                        <td class="button-td">
+                            <a class="btn btn-sm btn-primary" onclick="EditSubMenu(@menu.Id)"><i class="fa fa-edit"></i>Edit</a>
+
+                            @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
+                                                                                                        new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
+                        *@</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+<script type="text/javascript">
+
+            $("#tblSubMenus").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+        });
+
+    function EditSubMenu(){
+
+    }
+</script>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using CattleMgm.Helpers;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace CattleMgm.Models
@@ -14,6 +15,8 @@ namespace CattleMgm.Models
         public string? RoleId { get; set; }
 
         public bool? IsRoleConfirmed { get; set; }
+
+        public LanguageEnum Language { get; set; }
     }
 
     public class ApplicationRole : IdentityRole

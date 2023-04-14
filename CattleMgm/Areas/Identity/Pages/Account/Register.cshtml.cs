@@ -22,6 +22,7 @@ using Microsoft.Extensions.Logging;
 
 namespace CattleMgm.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;

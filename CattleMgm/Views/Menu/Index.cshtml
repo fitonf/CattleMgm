@@ -35,10 +35,12 @@
                         <td>@Html.DisplayFor(m => menu.Action)</td>
                         <td>@Html.DisplayFor(m => menu.Controller)</td>
                         <td>@Html.DisplayFor(m => menu.Area)</td>
-                        <td>
-@*                            <button class="btn btn-sm btn-primary">Edit</button>
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                            <button class="btn btn-sm btn-success">Add submenu</button>*@
+                        <td class="button-td">
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(menu.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            @if (menu.HasSubMenu)
+                            {
+                                <a class="btn btn-sm btn-primary" onclick="AddSubmenu(@menu.Id)"><i class="fa fa-plus"></i>Shto submenu</a>
+                            }
                         </td>
                     </tr>
                 }
@@ -47,9 +49,8 @@
     </div>
 </div>
 @section Scripts{
-
     <script type="text/javascript">
-        $("#tblmenus").DataTable({
+        $("#tblMenus").DataTable({
             keys: true,
             responsive: true,
             pageLength: 10,
@@ -57,7 +58,20 @@
         });
 
         function CreateMenu() {
-            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Create", "Menu")', function () {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Create", "Menu")', function() {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        function EditMenu(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?id=' + id, function() {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        function AddSubmenu(id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Create", "Submenu")?id=' + id, function() {
                 $('#modal-center-large').modal('toggle')
             })
         }

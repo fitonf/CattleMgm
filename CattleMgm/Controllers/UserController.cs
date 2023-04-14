@@ -1,5 +1,6 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
+using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels.User;
@@ -52,7 +53,7 @@ namespace CattleMgm.Controllers
             model = (from item in users
                      select new UserViewModel
                      {
-                         Id = item.Id,
+                         Id = AesCrypto.EncryptString(item.Id),
                          UserName = item.UserName,
                          Email = item.Email,
                          FirstName = item.FirstName,
@@ -112,18 +113,18 @@ namespace CattleMgm.Controllers
         [HttpGet]
         public async Task<IActionResult> EditAsync(string id)
         {
-           
-            if (String.IsNullOrEmpty(id))
+            var did = AesCrypto.Decrypt<string>(id);
+            if (String.IsNullOrEmpty(did))
             {
                 ModelState.AddModelError("", "Id eshte e zbrazet");
-                return View();
+                return NotFound();
             }
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _userManager.FindByIdAsync(did);
 
             if(user ==null)
             {
                 ModelState.AddModelError("", "Ky user nuk ekziston");
-                return View();
+                return NotFound();
             }
 
             var roles = _db.AspNetRoles.ToList();

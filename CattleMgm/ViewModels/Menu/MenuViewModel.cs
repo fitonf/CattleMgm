@@ -40,4 +40,9 @@
 
         public int OrdinalNumber { get; set; }
     }
+
+    public class MenuEditViewModel : MenuCreateViewModel
+    {
+        public int Id { get; set; }
+    }
 }
