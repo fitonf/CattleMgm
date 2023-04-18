@@ -32,13 +32,13 @@ namespace CattleMgm.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "roc:1")]
         public IActionResult _Create()
         {
             return PartialView();
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult _Create(MenuCreateViewModel model)
         {
             ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Menu eshte regjistruar me sukses", Title = "Sukses" }; 

@@ -1,0 +1,66 @@
+﻿@model AuthorizationCreateViewModel
+@{
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-custom">
+            <div class="card-header"></div>
+            <div class="card-body">
+                <form asp-action="_Search" asp-controller="Authorization" method="post" id="authform" data-ajax="true" data-ajax-method="post" data-ajax-update="#ListAuthorization" data-ajax-complete="CompleteSearch" role="form">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <label asp-for="Role" class="required"></label><br />
+                            @Html.DropDownListFor(m => m.Role, ViewBag.Roles as SelectList, "Zgjedh", new { @class = "form-control select2 custom-select", @onchange = "kt_ChangeRole(this)" })<br />
+                            <span class="text-danger" asp-validation-for="Role"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card card-custom gutter-b d-none" id="tabResult">
+        <div class="card-header card-header-tabs-line border-0">
+            <div class="card-toolbar">
+                <ul class="nav nav-tabs nav-bold nav-tabs-line">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#" id="tabMenu">
+                            <span class="nav-icon"><i class="fas fa-bars"></i></span>
+                            <span class="nav-text">Autorizimet per menu</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#" id="tabRule">
+                            <span class="nav-icon"><i class="fas fa-shield-alt"></i></span>
+                            <span class="nav-text">Autorizimet per metoda</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="">
+            <div class="tab-content">
+                <div class="tab-pane active" id="ListAuthorization">
+                </div>
+                <div class="tab-pane" id="ListAuthorizationPolicies">
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        async function kt_ChangeRole(e) {
+            $('#tabResult').show();
+            $('#tabResult').removeClass('d-none')
+            await $('#authform').trigger('submit')
+            //await $('#ListAuthorizationPolicies').load('@Url.Action("_Index", "Rule")?r=' + $(e).val())
+        }
+
+                function CompleteSearch(){
+
+        }
+    </script>
+}

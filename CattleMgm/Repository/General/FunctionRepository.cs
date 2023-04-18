@@ -20,5 +20,10 @@ namespace CattleMgm.Repository.General
         {
             return await _context.Set<ListOfMenus>().FromSqlInterpolated(sql: $"SELECT * FROM ListOfMenus({Role}, {lang})").ToListAsync();
         }
+
+        public async Task<List<ListOfMenusAccess>> ListOfMenusAuthorized(string Role, LanguageEnum lang)
+        {
+            return await _context.Set<ListOfMenusAccess>().FromSqlInterpolated(sql: $"SELECT *FROM ListOfMenusAccess({Role}, {lang})").ToListAsync();
+        }
     }
 }

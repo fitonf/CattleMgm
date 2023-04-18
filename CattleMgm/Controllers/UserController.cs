@@ -4,6 +4,7 @@ using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using System.Net;
 
 namespace CattleMgm.Controllers
 {
+    [Authorize(policy: "u:1")]
     public class UserController : BaseController
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
