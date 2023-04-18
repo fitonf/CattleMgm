@@ -13,20 +13,20 @@ using System.Net;
 
 namespace CattleMgm.Controllers
 {
-    [Authorize(policy: "u:1")]
+    [Authorize(Policy = "u:1")]
     public class UserController : BaseController
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly UserManager<ApplicationUser> _userManager;
+        //private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
         
 
         public UserController(ApplicationDbContext context, praktikadbContext db, 
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager) : base(context, db)
+            RoleManager<ApplicationRole> roleManager) : base(context, db, userManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
+            //_userManager = userManager;
             _roleManager = roleManager;
             
         }
@@ -67,6 +67,7 @@ namespace CattleMgm.Controllers
             return View(model);
         }
 
+        //[Authorize(Policy = "uc:1")]
         [HttpGet]
         public IActionResult Create()
         {

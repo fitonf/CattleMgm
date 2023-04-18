@@ -1,9 +1,11 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
+using CattleMgm.Models;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Menu;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CattleMgm.Controllers
@@ -11,7 +13,9 @@ namespace CattleMgm.Controllers
     [Authorize(Policy = "ro:1")]
     public class MenuController : BaseController
     {
-        public MenuController(ApplicationDbContext context, praktikadbContext db) : base(context, db)
+        public MenuController(ApplicationDbContext context, 
+            praktikadbContext db,
+            UserManager<ApplicationUser> userManager) : base(context, db, userManager)
         {
 
         }
@@ -58,7 +62,7 @@ namespace CattleMgm.Controllers
                 Controller = model.Controller,
                 HasSubMenu = model.HasSubMenu,
                 IsActive = true,
-                InsertedFrom = "a9b31e68-99ab-4b6d-96ea-8bc396d6de21",
+                InsertedFrom = user.Id,
                 InsertedDate = DateTime.Now,
                 OrdinalNumber = model.OrdinalNumber,
                 StaysOpenFor = model.StaysOpenFor,
@@ -75,15 +79,15 @@ namespace CattleMgm.Controllers
         }
 
         [HttpGet]
-        public IActionResult _Edit(string? id)
+        public IActionResult _Edit(string? ide)
         {
             
-            if(id == null)
+            if(ide == null)
             {
                 return BadRequest();
             }
 
-            int did = AesCrypto.Decrypt<int>(id);
+            int did = AesCrypto.Decrypt<int>(ide);
 
             var menu = _db.Menu.Find(did);
 
@@ -93,7 +97,7 @@ namespace CattleMgm.Controllers
             }
 
             MenuEditViewModel editViewModel = new MenuEditViewModel {
-                Id = menu.MenuId,
+                Id = did,
                 Action = menu.Action,
                 Controller = menu.Controller,
                 HasSubMenu = menu.HasSubMenu,
@@ -139,7 +143,7 @@ namespace CattleMgm.Controllers
             menu.Claim = model.Policy;
             menu.ClaimType = model.Policy != null ? model.Policy.Split(':')[0] : null;
             menu.UpdatedDate = DateTime.Now;
-            menu.UpdatedFrom = "a9b31e68-99ab-4b6d-96ea-8bc396d6de21";
+            menu.UpdatedFrom = user.Id;
             menu.HasSubMenu = model.HasSubMenu;
             menu.OrdinalNumber = model.OrdinalNumber;
             menu.StaysOpenFor = model.StaysOpenFor;

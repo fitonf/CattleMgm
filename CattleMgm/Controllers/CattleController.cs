@@ -5,20 +5,23 @@ using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels.Cattle;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace CattleMgm.Controllers
 {
+    [Authorize(Policy = "t22:1")]
     public class CattleController : BaseController
     {
-        
+
         private ICattleRepository _cattleRepository;
 
-        public CattleController(ApplicationDbContext context, praktikadbContext db, 
-                                ICattleRepository cattleRepository) : base(context,db)
+        public CattleController(ApplicationDbContext context, praktikadbContext db,
+            UserManager<ApplicationUser> userManager,
+                                ICattleRepository cattleRepository) : base(context, db, userManager)
         {
-            
+
             _cattleRepository = cattleRepository;
         }
         public IActionResult Index()
@@ -28,16 +31,17 @@ namespace CattleMgm.Controllers
             var lista = _cattleRepository.GetCattles();
 
             List<CattleViewModel> listaViewModel = new List<CattleViewModel>();
-            
+
             foreach (var cattle in lista)
             {
-                listaViewModel.Add(new CattleViewModel { 
+                listaViewModel.Add(new CattleViewModel
+                {
                     Id = cattle.Id,
                     Name = cattle.Name,
                     Gender = cattle.Gender == (int)Gender.Male ? "Mashkull" : "Femer",
                     BirthDate = cattle.BirthDate.ToShortDateString(),
                     FarmName = cattle.Farm.Name,
-                    FarmerName = cattle.Farm.Farmer.FirstName + 
+                    FarmerName = cattle.Farm.Farmer.FirstName +
                     " " + cattle.Farm.Farmer.LastName,
                     Breed = cattle.Breed.Name,
                     UniqueIdentifier = cattle.UniqueIdentifier.ToString(),
@@ -53,9 +57,9 @@ namespace CattleMgm.Controllers
         public IActionResult Visari()
         {
             var lista = new List<int>();
-            for(int i = 0; i<=10; i++)
+            for (int i = 0; i <= 10; i++)
             {
-                lista.Add(i);  
+                lista.Add(i);
             }
 
             return View("Index", lista);

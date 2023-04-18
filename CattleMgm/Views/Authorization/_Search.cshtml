@@ -59,27 +59,27 @@ function ChangePermission(e, mide, side) {
     //ShowLoading();
 
             $.post('@Url.Action("ChangeAccess", "Authorization")', { Role: $('#Role').val(), mide: mide, side: side, access: $(e).is(':checked') }, function (data) {
-            if (data.ErrorNumber == ErrorNumber.SUCCESS) {
+            if (data.errorNumber == ErrorNumber.SUCCESS) {
                 Swal.fire({
                     icon: 'success',
                     title: data.title,
-                    text: data.ErrorDescription,
+                    text: data.errorDescription,
                     timer: 1500,
                     confirmButtonText: "Ne rregull"
                 })
-            } else if (data.ErrorNumber == ErrorNumber.WARNING) {
+            } else if (data.errorNumber == ErrorNumber.WARNING) {
                 Swal.fire({
                     icon: 'warning',
                     title: data.title,
-                    text: data.ErrorDescription,
+                    text: data.errorDescription,
                     confirmButtonText: "Ne rregull"
                 })
             }
-            else if (data.ErrorNumber == ErrorNumber.ERROR) {
+            else if (data.errorNumber == ErrorNumber.ERROR) {
                 Swal.fire({
                     icon: 'error',
                     title: data.title,
-                    text: data.ErrorDescription,
+                    text: data.errorDescription,
                     confirmButtonText: "Ne rregull"
                 })
             }

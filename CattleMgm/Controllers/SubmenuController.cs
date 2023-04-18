@@ -1,7 +1,9 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
+using CattleMgm.Models;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Submenu;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -9,7 +11,9 @@ namespace CattleMgm.Controllers
 {
     public class SubmenuController : BaseController
     {
-        public SubmenuController(ApplicationDbContext context, praktikadbContext db) : base(context, db)
+        public SubmenuController(ApplicationDbContext context, 
+            praktikadbContext db,
+            UserManager<ApplicationUser> userManager) : base(context, db, userManager)
         {
 
         }

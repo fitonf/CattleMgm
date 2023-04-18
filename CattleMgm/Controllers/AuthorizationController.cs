@@ -18,7 +18,7 @@ namespace CattleMgm.Controllers
         public RoleManager<ApplicationRole> _roleManager;
         private IFunctionRepository _functionRepository;
         public AuthorizationController(ApplicationDbContext context, praktikadbContext db, 
-            RoleManager<ApplicationRole> roleManager, IFunctionRepository functionRepository) : base(context, db)
+            RoleManager<ApplicationRole> roleManager, UserManager<ApplicationUser> userManager, IFunctionRepository functionRepository) : base(context, db, userManager)
         {
             _roleManager = roleManager;
             _functionRepository = functionRepository;

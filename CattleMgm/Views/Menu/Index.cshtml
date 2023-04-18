@@ -65,7 +65,7 @@
 
         function EditMenu(id) {
 
-            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?id=' + id, function() {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + id, function() {
                 $('#modal-center-large').modal('toggle')
             })
         }
