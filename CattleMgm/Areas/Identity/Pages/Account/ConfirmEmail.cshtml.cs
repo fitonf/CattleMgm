@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace CattleMgm.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class ConfirmEmailModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

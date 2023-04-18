@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace CattleMgm.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -63,19 +64,25 @@ namespace CattleMgm.Areas.Identity.Pages.Account
 
                 // For more information on how to enable account confirmation and password reset please
                 // visit https://go.microsoft.com/fwlink/?LinkID=532713
+                //Gjenerimi i tokenit random per resetim te passwordit
                 var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+                //Enkodimi i tokenit ne base64
                 code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                //Krijimi i url per email
                 var callbackUrl = Url.Page(
                     "/Account/ResetPassword",
                     pageHandler: null,
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
-
+                
+                
+                //Dergimi i email me metoda te .NET Identity
                 await _emailSender.SendEmailAsync(
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
+                //redirect to confirm your password
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 

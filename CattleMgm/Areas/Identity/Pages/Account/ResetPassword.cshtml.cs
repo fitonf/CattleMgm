@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.WebUtilities;
 
 namespace CattleMgm.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class ResetPasswordModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;

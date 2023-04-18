@@ -6,6 +6,7 @@ using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.General;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -35,6 +36,7 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyP
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
