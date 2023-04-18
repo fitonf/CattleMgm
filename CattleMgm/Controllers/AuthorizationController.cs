@@ -28,6 +28,7 @@ namespace CattleMgm.Controllers
         {
             //po i nxjerrim rolet prej db
             //per shkak qe me i shfaq ne view
+            //test
             var roles = _roleManager.Roles.ToList();
 
             //tipi selectlist perdoret per krijimin e dropdownlist ne view
