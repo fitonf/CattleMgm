@@ -23,6 +23,23 @@
                 {
                     <tr>
                         <td>@item.Name</td>
+                        <td>
+                            <a asp-controller="Roles" asp-action="Edit"
+                           asp-route-id="@item.Id" class="btn btn-primary">
+                                Edit
+                            </a>
+                        </td>
+                        <!-- Butoni SweetAlert (Jo-Funksional)-->
+                        @*<td><a class="btn btn-danger" href="javascript:;" onclick="DeleteRole('@item.Id')">Delete</a></td*@
+                        
+
+                        <!-- Butoni Normal (Fshine rolin menjehere)-->
+                        <td>
+                            <a asp-controller="Roles" asp-action="Delete"
+                           asp-route-id="@item.Id" class="btn btn-danger">
+                                Delete
+                            </a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -32,8 +49,29 @@
 
 @section Scripts{
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
             $('#cattle-table').DataTable();
         });
+
+
+        //SweetAlert Button
+        var DeleteUser = function(id) {
+            Swal.fire({
+                title: 'A dëshrinoi të fshini rolin?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Save',
+                denyButtonText: `Don't save`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    Swal.fire('Saved!', '', 'success')
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+        }
+
+
     </script>
 }

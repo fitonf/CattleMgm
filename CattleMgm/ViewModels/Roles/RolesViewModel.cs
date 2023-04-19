@@ -21,5 +21,6 @@ namespace CattleMgm.ViewModels.Roles
     public class RolesEditViewModel
     {
         public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

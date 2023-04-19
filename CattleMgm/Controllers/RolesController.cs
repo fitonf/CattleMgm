@@ -74,5 +74,87 @@ namespace CattleMgm.Controllers
 
         }
 
+
+        // Roles Edit
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            // Find the role by Role ID
+            var role = await roleManager.FindByIdAsync(id);
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+
+            var model = new RolesEditViewModel
+            {
+                Id = role.Id,
+                Name = role.Name
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(RolesEditViewModel model)
+        {
+            var role = await roleManager.FindByIdAsync(model.Id);
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                role.Name = model.Name;
+
+                // Update the Role using UpdateAsync
+                var result = await roleManager.UpdateAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View();
+            }
+        }
+
+        //Delete Role
+        public async Task<IActionResult> Delete(string id)
+        {
+            var role = await roleManager.FindByIdAsync(id);
+
+            if (role == null)
+            {
+                ViewBag.ErrorMessage = $"Role with Id = {id} cannot be found";
+                return View("Error");
+            }
+            else
+            {
+                var result = await roleManager.DeleteAsync(role);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+
+                return View("Index");
+            }
+
+        }
     }
 }
