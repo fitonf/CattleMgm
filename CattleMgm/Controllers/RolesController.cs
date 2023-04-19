@@ -36,18 +36,23 @@ namespace CattleMgm.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateRole(RolesCreateViewModel model)
+        [HttpGet]
+        public IActionResult Create()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(RolesCreateViewModel model)
+        {
+            
             if (ModelState.IsValid)
             {
-                // We just need to specify a unique role name to create a new role
                 IdentityRole identityRole = new IdentityRole
                 {
                     Name = model.Name
                 };
 
-                // Saves the role in the underlying AspNetRoles table
                 IdentityResult result = await roleManager.CreateAsync((ApplicationRole)identityRole);
 
                 if (result.Succeeded)

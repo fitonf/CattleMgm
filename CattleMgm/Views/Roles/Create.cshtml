@@ -1,29 +1,21 @@
-﻿@model List<RolesCreateViewModel>
+﻿@model RolesCreateViewModel
 
-<div class="card">
-    <div class="card-header">
-    </div>
-    <div class="card-body">
-        <table id="cattle-table" class="table table-responsive">
-            <thead>
-                <tr>
-                    <th>Emri i rolit</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-</div>
+@{
+    ViewData["Title"] = "Create Role";
+}
 
-@section Scripts{
-    <script type="text/javascript">
-    
-    </script>
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" asp-controller="Roles" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Emri Rolit</label>
+        <input type="text" asp-for="Name" class="form-control" id="Name" placeholder="Shkruani emrin">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Role</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
