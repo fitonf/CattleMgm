@@ -24,6 +24,10 @@ namespace CattleMgm.Data.Entities
         public virtual DbSet<AspNetUsers> AspNetUsers { get; set; } = null!;
         public virtual DbSet<Breed> Breed { get; set; } = null!;
         public virtual DbSet<Cattle> Cattle { get; set; } = null!;
+        public virtual DbSet<CattleBloodPressure> CattleBloodPressure { get; set; } = null!;
+        public virtual DbSet<CattleHumidity> CattleHumidity { get; set; } = null!;
+        public virtual DbSet<CattlePosition> CattlePosition { get; set; } = null!;
+        public virtual DbSet<CattleTemperature> CattleTemperature { get; set; } = null!;
         public virtual DbSet<Farm> Farm { get; set; } = null!;
         public virtual DbSet<Farmer> Farmer { get; set; } = null!;
         public virtual DbSet<Menu> Menu { get; set; } = null!;
@@ -173,6 +177,58 @@ namespace CattleMgm.Data.Entities
                     .HasForeignKey(d => d.FarmId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cattle_Farm");
+            });
+
+            modelBuilder.Entity<CattleBloodPressure>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(450);
+
+                entity.Property(e => e.DateMeasured).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Cattle)
+                    .WithMany(p => p.CattleBloodPressure)
+                    .HasForeignKey(d => d.CattleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CattleBloodPressure_Cattle");
+            });
+
+            modelBuilder.Entity<CattleHumidity>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(450);
+
+                entity.Property(e => e.DateMeasured).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Cattle)
+                    .WithMany(p => p.CattleHumidity)
+                    .HasForeignKey(d => d.CattleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CattleHumidity_Cattle");
+            });
+
+            modelBuilder.Entity<CattlePosition>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(450);
+
+                entity.Property(e => e.DateMeasured).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Cattle)
+                    .WithMany(p => p.CattlePosition)
+                    .HasForeignKey(d => d.CattleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CattlePosition_Cattle");
+            });
+
+            modelBuilder.Entity<CattleTemperature>(entity =>
+            {
+                entity.Property(e => e.CreatedBy).HasMaxLength(450);
+
+                entity.Property(e => e.DateMeasured).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Cattle)
+                    .WithMany(p => p.CattleTemperature)
+                    .HasForeignKey(d => d.CattleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CattleTemperature_Cattle");
             });
 
             modelBuilder.Entity<Farm>(entity =>

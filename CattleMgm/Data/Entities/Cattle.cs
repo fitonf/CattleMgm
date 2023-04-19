@@ -5,6 +5,14 @@ namespace CattleMgm.Data.Entities
 {
     public partial class Cattle
     {
+        public Cattle()
+        {
+            CattleBloodPressure = new HashSet<CattleBloodPressure>();
+            CattleHumidity = new HashSet<CattleHumidity>();
+            CattlePosition = new HashSet<CattlePosition>();
+            CattleTemperature = new HashSet<CattleTemperature>();
+        }
+
         public int Id { get; set; }
         public Guid UniqueIdentifier { get; set; }
         public int FarmId { get; set; }
@@ -18,5 +26,9 @@ namespace CattleMgm.Data.Entities
 
         public virtual Breed Breed { get; set; } = null!;
         public virtual Farm Farm { get; set; } = null!;
+        public virtual ICollection<CattleBloodPressure> CattleBloodPressure { get; set; }
+        public virtual ICollection<CattleHumidity> CattleHumidity { get; set; }
+        public virtual ICollection<CattlePosition> CattlePosition { get; set; }
+        public virtual ICollection<CattleTemperature> CattleTemperature { get; set; }
     }
 }
