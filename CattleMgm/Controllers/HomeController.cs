@@ -23,7 +23,7 @@ namespace CattleMgm.Controllers
 
         public async Task<ViewResult> Index()
         {
-            _emailSender.SendEmailAsync("fitonfrangi@gmail.com","Test","Test home dashboard")
+            
            return View();
         }
 
