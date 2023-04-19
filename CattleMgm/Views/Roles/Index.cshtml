@@ -1,0 +1,40 @@
+﻿@model List<RolesViewModel>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Cattle">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="cattle-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i rolit</th>
+                    <th>Aktive</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#cattle-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}
