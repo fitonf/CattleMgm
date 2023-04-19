@@ -17,6 +17,7 @@ namespace CattleMgm.Controllers
         public RolesController(ApplicationDbContext context, praktikadbContext db,
             UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager) : base(context, db, userManager)
         {
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -48,12 +49,15 @@ namespace CattleMgm.Controllers
             
             if (ModelState.IsValid)
             {
-                IdentityRole identityRole = new IdentityRole
+                //IdentityRole identityRole = new IdentityRole
+                ApplicationRole identityRole = new ApplicationRole
+
                 {
-                    Name = model.Name
+                    Name = model.Name,
+                    NormalizedName = model.Name.ToUpper()
                 };
 
-                IdentityResult result = await roleManager.CreateAsync((ApplicationRole)identityRole);
+                 IdentityResult result = await roleManager.CreateAsync(identityRole);
 
                 if (result.Succeeded)
                 {

@@ -1,14 +1,19 @@
 ﻿@model List<RolesViewModel>
 
+@{
+    ViewData["Title"] = "Roles";
+}
+
 <div class="card">
     <div class="card-header">
+        <h4>@ViewData["Title"]</h4>
         <div class="card-toolbar float-end">
             <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Roles">Regjistro</a>
         </div>
     </div>
     <div class="card-body">
-        <table id="cattle-table" class="table table-responsive">
-            <thead>
+        <table id="cattle-table" class="table table-striped table-hover">
+            <thead class="thead-dark">
                 <tr>
                     <th>Emri i rolit</th>
                 </tr>
@@ -27,6 +32,8 @@
 
 @section Scripts{
     <script type="text/javascript">
-    
+        $(document).ready(function () {
+            $('#cattle-table').DataTable();
+        });
     </script>
 }
