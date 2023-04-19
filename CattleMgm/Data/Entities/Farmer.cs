@@ -11,6 +11,7 @@ namespace CattleMgm.Data.Entities
         }
 
         public int Id { get; set; }
+        public string? UserId { get; set; }
         public string? PersonalNumber { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
@@ -22,6 +23,7 @@ namespace CattleMgm.Data.Entities
         public DateTime? LastUpdated { get; set; }
         public string? LastUpdatedBy { get; set; }
 
+        public virtual AspNetUsers? User { get; set; }
         public virtual ICollection<Farm> Farm { get; set; }
     }
 }

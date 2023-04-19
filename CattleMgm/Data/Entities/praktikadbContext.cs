@@ -219,6 +219,13 @@ namespace CattleMgm.Data.Entities
                 entity.Property(e => e.PersonalNumber).HasMaxLength(10);
 
                 entity.Property(e => e.PhoneNumber).HasMaxLength(50);
+
+                entity.Property(e => e.UserId).HasMaxLength(450);
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.Farmer)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_Farmer_AspNetUsers");
             });
 
             modelBuilder.Entity<Menu>(entity =>

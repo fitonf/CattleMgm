@@ -1,0 +1,56 @@
+﻿@model List<FarmViewModel>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Farm">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="farm-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i fermerit</th>
+                    <th>Emri i fermes</th>
+                    <th>Vendi</th>
+                    <th>Adresa</th>
+                    <th>Aktive</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    var span = "";
+                    if (item.Active == true)
+                    {
+                        span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                        span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }
+                    <tr>
+                        <td>@item.FarmerName</td>
+                        <td>@item.FarmName</td>
+                        <td>@item.Place</td>
+                        <td>@item.Address</td>
+                        <td>@Html.Raw(span)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#farm-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}

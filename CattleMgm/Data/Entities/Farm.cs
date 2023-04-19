@@ -19,6 +19,7 @@ namespace CattleMgm.Data.Entities
         public string CreatedBy { get; set; } = null!;
         public DateTime? LastUpdated { get; set; }
         public string? LastUpdatedBy { get; set; }
+        public bool Active { get; set; }
 
         public virtual Farmer Farmer { get; set; } = null!;
         public virtual ICollection<Cattle> Cattle { get; set; }
