@@ -67,4 +67,8 @@ namespace CattleMgm.ViewModels.Submenu
         [Required]
         public string StaysOpenFor { get; set; }
     }
+    public class SubmenuEditViewModel : SubmenuCreateViewModel
+    {
+        public int Id { get; set; }
+    }
 }

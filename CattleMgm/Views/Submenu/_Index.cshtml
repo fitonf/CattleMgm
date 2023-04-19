@@ -26,7 +26,7 @@
                         <td>@Html.DisplayFor(m => menu.Controller)</td>
                         <td>@Html.DisplayFor(m => menu.Area)</td>
                         <td class="button-td">
-                            <a class="btn btn-sm btn-primary" onclick="EditSubMenu(@menu.Id)"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-primary" onclick="EditSubMenu(@menu.MId, @menu.Id)"><i class="fa fa-edit"></i>Edit</a>
 
                             @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
                                                                                                         new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
@@ -46,7 +46,7 @@
             "ordering": false
         });
 
-    function EditSubMenu(){
-
+    function EditSubMenu(MId, ide){
+        $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Submenu")?mid=' + MId+ '&ide='+ide)
     }
 </script>
