@@ -5,6 +5,8 @@ namespace CattleMgm.Data.Entities
 {
     public partial class Cattle
     {
+        internal static int model;
+
         public Cattle()
         {
             CattleBloodPressure = new HashSet<CattleBloodPressure>();

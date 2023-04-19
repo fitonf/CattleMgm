@@ -1,0 +1,49 @@
+﻿@model List<CattleBloodPressureViewModel>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-toolbar float-end">
+                <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="CattleBloodPressure">Regjistro</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="cattle-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Emri i gjedhit</th>
+                        <th>Shtypja e Gjakut prej</th>
+                        <th>Shtypja e gjakut deri</th>
+                        <th>Datat e matjes</th>
+                        </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.CattleName</td>
+                            <td>@item.PresureFrom</td>
+                            <td>@item.PresureTo</td>
+                            <td>@item.DateMeasured</td>
+
+                        <td>
+                            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="CattleBloodPressure">Edit</a>
+                        </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+@section Scripts{
+    <script type="text/javascript">
+           $("#cattle-table").DataTable({
+                keys: true,
+                responsive: true,
+                pageLength: 10,
+                "ordering": false
+
+            });
+</script>
+ }

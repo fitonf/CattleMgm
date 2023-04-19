@@ -2,6 +2,7 @@ using CattleMgm.Data;
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers;
 using CattleMgm.Models;
+using CattleMgm.Repository.CattleBloodPressures;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
@@ -39,6 +40,7 @@ builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<ICattleBloodPressure, CattleBloodPressureRepository>();
 
 var app = builder.Build();
 

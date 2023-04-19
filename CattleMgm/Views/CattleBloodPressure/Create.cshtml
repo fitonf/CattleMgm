@@ -1,0 +1,37 @@
+﻿@model CattleBloodPressureCreateViewModel
+@{
+    ViewData["Title"] = "Regjistrimi i CattleBloodPressure";
+}
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte</h4>
+    </div>
+    <form id="createForm" method="post">
+        @Html.ValidationSummary()
+        <div class="card-body">
+            <div class="row">
+               
+                    <div class="col-md-3">
+                    <label asp-for="CattleId"></label>
+                    @Html.DropDownListFor(m=>m.CattleId, ViewBag.CattleId as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                    <span asp-validation-for="CattleId" class="text-danger"></span>
+                    </div>
+              
+                <div class="col-md-3">
+                    <label asp-for="PresureFrom"></label>
+                    <input asp-for="PresureFrom" class="form-control" />
+                    <span asp-validation-for="PresureFrom" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label  asp-for="PresureTo"></label>
+                    <input asp-for="PresureTo" class="form-control" />
+                    <span asp-validation-for="PresureTo" class="text-danger"></span>
+                </div>          
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Regjistro" />
+        </div>
+    </form>
+</div>
