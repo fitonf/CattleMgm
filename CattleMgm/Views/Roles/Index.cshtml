@@ -3,21 +3,21 @@
 @{
     ViewData["Title"] = "Roles";
 }
-
 <div class="card">
     <div class="card-header">
         @* <h4>@ViewData["Title"]</h4> *@
         <div class="card-toolbar float-end">
-            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Roles">Regjistro</a>
+            <a class="btn btn-primary" asp-action="Create" asp-controller="Roles">Regjistro</a>
         </div>
     </div>
 
     <div class="card-body">
-        <table id="cattle-table" class="table table-striped table-hover">
+        <table id="roles-table" class="table table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
                     <th>Emri i Rolit</th>
                     <th>Veprimet</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -30,17 +30,17 @@
                            asp-route-id="@item.Id" class="btn btn-primary">
                                 Edit
                             </a>
+                        </td>
 
-                            <!-- Butoni SweetAlert (Jo-Funksional)-->
-                        <td><a class="btn btn-danger" href="javascript:;" onclick="DeleteRole('@item.Id')">Delete SA</a></td>
-
+                        <!-- Butoni në SweetAlert -->
+                        <td><a class="btn btn-danger" href="javascript:;" onclick="DeleteRole('@item.Id')">Delete</a></td>
 
                         <!-- Butoni Normal (Fshin rolin menjehere)-->
-                            @*                            <a asp-controller="Roles" asp-action="Delete"
+                        @*<a asp-controller="Roles" asp-action="Delete"
                     asp-route-id="@item.Id" class="btn btn-danger">
                     Delete
                     </a>
-                    *@                        </td>
+                    *@
                     </tr>
                 }
             </tbody>
@@ -57,6 +57,7 @@
 
         //SweetAlert Button
         function DeleteRole(roleId) {
+            debugger;
             Swal.fire({
                 title: 'A jeni të sigurt?',
                 text: "Ju nuk do mund të ktheheni prapa!",
@@ -66,7 +67,8 @@
                 cancelButtonColor: '#3085d6',
                 confirmButtonText: 'Fshij'
             }).then((result) => {
-                if (result.isConfirmed) {
+                debugger;
+                if (result.value) {
                     $.ajax({
                         url: '@Url.Action("Delete", "Roles")/' + roleId,
                         type: 'POST',
@@ -74,7 +76,9 @@
                             Swal.fire({
                                 title: 'Fshier!',
                                 text: 'Roli u fshi me sukses!',
-                                icon: 'success'
+                                icon: 'success',
+                                timer: 1500,
+                                timerProgressBar: true,
                             }).then((result) => {
                                 location.reload();
                             });
