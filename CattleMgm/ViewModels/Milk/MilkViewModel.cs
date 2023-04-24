@@ -23,4 +23,9 @@
 
         public double LitersCollected { get; set; }
     }
+    public class MilkEditViewModel
+    {
+        public int CattleId { get; set; }
+        public double Price { get; set; }
+        public double LitersCollected { get;set;}
 }
