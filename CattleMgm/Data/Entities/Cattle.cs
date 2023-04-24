@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 namespace CattleMgm.Data.Entities
 {
-    public partial class Cattle
+    public class Cattle
     {
-        internal static int model;
-
-        public Cattle()
+       public Cattle()
         {
             CattleBloodPressure = new HashSet<CattleBloodPressure>();
             CattleHumidity = new HashSet<CattleHumidity>();
