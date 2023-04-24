@@ -27,5 +27,18 @@ namespace CattleMgm.Repository.Cattles
 
             return cattles;
         }
+
+        public List<Cattle> GetCattlesByFarmerId(int farmerId)
+        {
+            var farm = _context.Farm.Where(x=>x.FarmerId == farmerId).FirstOrDefault();
+            var cattles = _context.Cattle
+                .Include(x => x.Farm)
+                .ThenInclude(x => x.Farmer)
+                .Include(x => x.Breed)
+                .Where(x=>x.FarmId == farm.Id)
+                .ToList();
+
+            return cattles;
+        }
     }
 }
