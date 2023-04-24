@@ -1,32 +1,32 @@
-﻿@model MenuEditViewModel
+﻿@model SubmenuEditViewModel
 @{
 
 }
 
 <div class="modal-header">
-    <h5 class="modal-title">Editimi i menus: @Model.Name_SQ</h5>
+    <button class="btn btn-back" @*onclick="goBack('@AesCrypto.Enkrypt(Model.MId)')"*@  onclick="$('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=@Model.Menu')">Back</button>
+    <h5 class="modal-title">Editimi i SubMenus: @Model.NameSq</h5>
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <form asp-action="_Edit" asp-controller="Menu" class="noLoading" id="frmEditMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
-        ,
+    <form asp-action="_Edit" asp-controller="Submenu" class="noLoading" id="frmEditMenu" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
         @Html.AntiForgeryToken()
         <input asp-for="Id" hidden />
         <div class="row form-group">
             <div class="col-md-4">
-                <label asp-for="Name_SQ" class="required form-label"></label>
-                <input asp-for="Name_SQ" class="form-control" />
-                <span asp-validation-for="Name_SQ" class="text-danger" />
+                <label asp-for="NameSq" class="required form-label"></label>
+                <input asp-for="NameSq" class="form-control" />
+                <span asp-validation-for="NameSq" class="text-danger" />
             </div>
             <div class="col-md-4">
-                <label asp-for="Name_EN" class="required form-label"></label>
-                <input asp-for="Name_EN" class="form-control" />
-                <span asp-validation-for="Name_EN" class="text-danger" />
+                <label asp-for="NameEn" class="required form-label"></label>
+                <input asp-for="NameEn" class="form-control" />
+                <span asp-validation-for="NameEn" class="text-danger" />
             </div>
             <div class="col-md-4">
-                <label asp-for="Name_SR" class="required form-label"></label>
-                <input asp-for="Name_SR" class="form-control" />
-                <span asp-validation-for="Name_SR" class="text-danger" />
+                <label asp-for="NameSr" class="required form-label"></label>
+                <input asp-for="NameSr" class="form-control" />
+                <span asp-validation-for="NameSr" class="text-danger" />
             </div>
         </div>
         <div class="row form-group">
@@ -69,12 +69,6 @@
                 <input asp-for="StaysOpenFor" class="form-control" />
                 <span asp-validation-for="StaysOpenFor" class="text-danger" />
             </div>
-            <div class="col-md-4">
-                @Html.Label("Has submenu", null, new { @class =  "required form-label" }) <br />
-                <div class="form-check form-switch form-switch-success">
-                    <input asp-for="HasSubMenu" class="form-check-input" type="checkbox">
-                </div>
-            </div>
         </div>
 
         <div class="modal-footer modal-footer-uniform w-full justify-content-between">
@@ -82,41 +76,26 @@
             <button type="submit" class="btn btn-outline-primary">Ndrysho</button>
         </div>
     </form>
-
-    @if (Model.HasSubMenu)
-    {
-        <div class="accordion accordion-flush" id="accordionFlushExample">
-            <div class="accordion-item">
-                <h5 class="accordion-header m-0" id="flush-headingOne">
-                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                        Lista e nen-menuve
-                    </button>
-                </h5>
-                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
-                    <div class="accordion-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <div id="listSubMenu" class="mt-4">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
 </div>
 
 
 <script type="text/javascript">
     var form = $('#frmEditMenu');
     form.removeData('validator');
-    form.removeData('unobtrusiveValidation');
+    form.removeData('unobtrusiveValidation'); 
     $.validator.unobtrusive.parse(form);
 
     $(document).ready(function() {
         SubmenuList();
-    })
+        function back(id){
+         $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Submenu")?mid=' + MId+ '&ide='+ide)
+        $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + id, function() {
+                $('#modal-center-large').modal('toggle')
+
+    }
+    });
+    
+   
 
     function SubmenuList() {
         $('#listSubMenu').load('@Url.Action("_Index", "Submenu")?id=@Model.Id')
