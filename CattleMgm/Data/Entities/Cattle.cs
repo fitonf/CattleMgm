@@ -9,6 +9,7 @@ namespace CattleMgm.Data.Entities
         {
             CattleBloodPressure = new HashSet<CattleBloodPressure>();
             CattleHumidity = new HashSet<CattleHumidity>();
+            CattleMilk = new HashSet<CattleMilk>();
             CattlePosition = new HashSet<CattlePosition>();
             CattleTemperature = new HashSet<CattleTemperature>();
         }
@@ -28,6 +29,7 @@ namespace CattleMgm.Data.Entities
         public virtual Farm Farm { get; set; } = null!;
         public virtual ICollection<CattleBloodPressure> CattleBloodPressure { get; set; }
         public virtual ICollection<CattleHumidity> CattleHumidity { get; set; }
+        public virtual ICollection<CattleMilk> CattleMilk { get; set; }
         public virtual ICollection<CattlePosition> CattlePosition { get; set; }
         public virtual ICollection<CattleTemperature> CattleTemperature { get; set; }
     }

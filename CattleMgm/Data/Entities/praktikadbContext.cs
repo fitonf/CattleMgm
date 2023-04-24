@@ -26,11 +26,14 @@ namespace CattleMgm.Data.Entities
         public virtual DbSet<Cattle> Cattle { get; set; } = null!;
         public virtual DbSet<CattleBloodPressure> CattleBloodPressure { get; set; } = null!;
         public virtual DbSet<CattleHumidity> CattleHumidity { get; set; } = null!;
+        public virtual DbSet<CattleMilk> CattleMilk { get; set; } = null!;
         public virtual DbSet<CattlePosition> CattlePosition { get; set; } = null!;
         public virtual DbSet<CattleTemperature> CattleTemperature { get; set; } = null!;
         public virtual DbSet<Farm> Farm { get; set; } = null!;
         public virtual DbSet<Farmer> Farmer { get; set; } = null!;
+        public virtual DbSet<Media> Media { get; set; } = null!;
         public virtual DbSet<Menu> Menu { get; set; } = null!;
+        public virtual DbSet<Municipality> Municipality { get; set; } = null!;
         public virtual DbSet<SubMenu> SubMenu { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -205,6 +208,19 @@ namespace CattleMgm.Data.Entities
                     .HasConstraintName("FK_CattleHumidity_Cattle");
             });
 
+            modelBuilder.Entity<CattleMilk>(entity =>
+            {
+                entity.Property(e => e.Created).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(256);
+
+                entity.HasOne(d => d.Cattle)
+                    .WithMany(p => p.CattleMilk)
+                    .HasForeignKey(d => d.CattleId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CattleMilk_Cattle");
+            });
+
             modelBuilder.Entity<CattlePosition>(entity =>
             {
                 entity.Property(e => e.CreatedBy).HasMaxLength(450);
@@ -284,6 +300,15 @@ namespace CattleMgm.Data.Entities
                     .HasConstraintName("FK_Farmer_AspNetUsers");
             });
 
+            modelBuilder.Entity<Media>(entity =>
+            {
+                entity.Property(e => e.Created).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(256);
+
+                entity.Property(e => e.Name).HasMaxLength(100);
+            });
+
             modelBuilder.Entity<Menu>(entity =>
             {
                 entity.Property(e => e.MenuId).HasColumnName("MenuID");
@@ -328,6 +353,13 @@ namespace CattleMgm.Data.Entities
                     .WithMany(p => p.MenuUpdatedFromNavigation)
                     .HasForeignKey(d => d.UpdatedFrom)
                     .HasConstraintName("FK_Menu_AspNetUsers1");
+            });
+
+            modelBuilder.Entity<Municipality>(entity =>
+            {
+                entity.Property(e => e.Emri).HasMaxLength(50);
+
+                entity.Property(e => e.Zip).HasColumnName("ZIP");
             });
 
             modelBuilder.Entity<SubMenu>(entity =>

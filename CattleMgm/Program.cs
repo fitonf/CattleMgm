@@ -5,6 +5,7 @@ using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
+using CattleMgm.Repository.Media;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -34,7 +35,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
-
+builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
