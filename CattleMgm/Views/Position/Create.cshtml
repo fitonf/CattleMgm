@@ -1,0 +1,40 @@
+﻿@model PositionCreateViewModel
+@{
+    ViewData["Title"] = "Regjistrimi i pozicionit";
+}
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte</h4>
+    </div>
+    <form id="createForm" method="post">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="required" asp-for="CattleId"></label>
+                    @Html.DropDownListFor(m=>m.CattleId, ViewBag.Cattles as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                    @*ekuivalente me dropdownlistfor*@
+                    @* <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control select2">
+                    <option></option>
+                    </select>*@
+                    <span asp-validation-for="CattleId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="required" asp-for="Lat"></label>
+                    <input asp-for="Lat" class="form-control" />
+                    <span asp-validation-for="Lat" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="required" asp-for="Long"></label>
+                    <input asp-for="Long" class="form-control" />
+                    <span asp-validation-for="Long" class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Regjistro" />
+        </div>
+    </form>
+
+</div>

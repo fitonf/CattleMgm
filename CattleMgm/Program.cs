@@ -5,6 +5,7 @@ using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
+using CattleMgm.Repository.Position;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -38,6 +39,7 @@ builder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyP
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
+builder.Services.AddScoped<IPositionRepository, PositionRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
