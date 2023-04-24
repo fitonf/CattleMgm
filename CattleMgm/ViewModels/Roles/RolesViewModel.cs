@@ -5,6 +5,7 @@ namespace CattleMgm.ViewModels.Roles
     public class RolesViewModel
     {
         
+        //aaaaaaa
         [Required]
         [Display(Name = "Emri")]
         public string Name { get; set; }
