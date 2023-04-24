@@ -9,7 +9,7 @@
 <form asp-action="Create" asp-controller="Roles" method="post">
     <div class="form-group">
         <label asp-for="Name">Emri Rolit</label>
-        <input type="text" asp-for="Name" class="form-control" id="Name" placeholder="Shkruani emrin">
+        <select asp-for="Name" class="form-control" id="roleNameSelect"></select>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
@@ -17,5 +17,17 @@
 </form>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#roleNameSelect').select2({
+                placeholder: "Shkruani emrin",
+                allowClear: true,
+                tags: true
+            });
+        });
+    </script>
 }
