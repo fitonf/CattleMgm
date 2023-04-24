@@ -1,0 +1,111 @@
+﻿@model List<CattleBloodPressureViewModel>
+@{
+    ViewData["Title"] = "Cattle Pressure";
+}
+
+<div class="card">
+    <div class="card-header"> 
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="CattleBloodPressure">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="cattle-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>CattleName</th>
+                    <th>PressureFrom</th>
+                    <th>PressureTO</th>
+                    <th>DateMeasured</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.CattleName</td>
+                        <td>@item.PressureFrom</td>
+                        <td>@item.PressureTo</td>
+                        <td>@item.DateMeasured</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="CattleBloodPressure">Edit</a>
+                            <a class="btn btn-sm btn-danger" onclick="deleteTest(event,'@item.Id')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        $('#cattle-table').DataTable({
+            "language": {
+                "emptyTable": "Nuk u shfaq asnjë e dhënë"
+            }
+        }); 
+            function deleteTest(event, id){
+            var rowToDelete = $(event.target).closest('tr');
+            //var rowToDelete;
+            Swal.fire({
+                title: 'Do you want to Delete the Cattle?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonColor: '#f5325c',
+                cancelButtonColor: '#1761fd',
+                confirmButtonText: 'Delete',
+                denyButtonText: `Cancel`,                
+            }).then((result) => {
+                debugger;                
+                if (result.value == true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","CattleBloodPressure")',
+                        data: { id: id },
+                        success: function (data) {                            
+                            Swal.fire({
+                                text: "Cattle u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }                                        
+                            }).then(t => {
+                                
+                                // var table = $('#cattle-table').DataTable();
+                                // table.ajax.reload();
+                                
+                                var table = $('#cattle-table').DataTable();
+                                table.row(rowToDelete).remove().draw();
+                                rowToDelete = '';
+                                debugger;
+
+                            });
+                            
+                        },
+
+                        error: function (xhr, status, error) {                            
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                    //Swal.fire('Saved!', '', 'success')
+                } else if (result.dismiss == 'cancel') {                    
+                    Swal.close();
+                    //Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+             }        
+    </script>
+}
