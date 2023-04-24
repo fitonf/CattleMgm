@@ -1,0 +1,52 @@
+﻿@model List<MilkViewModel>
+
+@{
+    ViewData["Title"] = "Lista e mbledhjes se qumeshtit";
+}
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Milk">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="milk-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Identifikuesi </th>
+                    <th>Emri i gjedhes</th>
+                    <th>Data e grumbullimit</th>
+                    <th>Litrat te mbledhura</th>
+                    <th>Cmimi</th>
+                    <th>Profiti</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Identifier</td>
+                        <td>@item.CattleName</td>
+                        <td>@item.DateCollected</td>
+                        <td>@item.LitersCollected l</td>
+                        <td>@item.Price $</td>
+                        <td>@item.TotalProfit $</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#milk-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}
