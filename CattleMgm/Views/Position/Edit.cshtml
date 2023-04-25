@@ -1,0 +1,69 @@
+﻿@model PositionEditViewModel
+@{
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">Editimi i pozicionit</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="Edit" asp-controller="Position" class="noLoading" id="frmEditPosition" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
+
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" hidden />
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="CattleId" class="required form-label"></label>
+                <input asp-for="CattleId" class="form-control" />
+                <span asp-validation-for="CattleId" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Lat" class="required form-label"></label>
+                <input asp-for="Lat" class="form-control" />
+                <span asp-validation-for="Lat" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Long" class="required form-label"></label>
+                <input asp-for="Long" class="form-control" />
+                <span asp-validation-for="Long" class="text-danger" />
+            </div>
+        </div>
+        <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mbyll</button>
+            <button type="submit" class="btn btn-outline-primary">Ndrysho</button>
+        </div>
+    </form>
+
+    
+</div>
+
+
+<script type="text/javascript">
+    var form = $('#frmEditPosition');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+    function EditSuccess(data) {
+        console.log(data);
+
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: 'Rekordi u ndryshua me sukses',
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>
+

@@ -216,10 +216,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Temperature\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
+    <Folder Include="Dokumentet\" />
   </ItemGroup>
 
 </Project>
