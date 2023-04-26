@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <div class="card-toolbar float-end">
-            <a class="btn btn-sm btn-primary" asp-action="_Edit" asp-controller="Milk">Edit</a>
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Milk">Regjistro</a>
         </div>
     </div>
     <div class="card-body">
@@ -19,8 +19,7 @@
                     <th>Litrat te mbledhura</th>
                     <th>Cmimi</th>
                     <th>Profiti</th>
-
-
+                    <th>Veprimet</th>
                 </tr>
             </thead>
             <tbody>
@@ -57,8 +56,9 @@
 
         });
         function EditMilk(Id) {
-            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Milk")?id=' + Id, function() {
-                $('#modal-center-large').modal('toggle'))
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Milk")?id=' + Id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
         }
         function DeleteMilk(Id) {
             debugger;
@@ -78,7 +78,7 @@
                         type: 'POST',
                         success: function (result) {
                             Swal.fire({
-                                title: 'Fshire!',
+                                title: 'Fshier!',
                                 text: 'E dhena u fshi me sukses!',
                                 icon: 'success',
                                 timer: 1500,
