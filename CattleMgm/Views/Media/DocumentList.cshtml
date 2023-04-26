@@ -1,0 +1,72 @@
+﻿@model List<MediaListViewModel>
+@{
+<div class="card">
+<div class="card-header">
+      <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="" asp-controller="Media">Upload</a>
+      </div>
+</div>
+    
+    <div class="card-body">
+        <table id="Media-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i dokumentit</th>
+                    <th>Path</th>
+                    <th>Tipi</th>
+                    <th>Krijuar</th>
+                    <th>Krijuar nga</th>
+                </tr>
+                <tbody>
+                        @foreach (var item in Model)
+                        {
+                            var span = "";
+                            if (item.Identifier != null && item.Identifier is string)
+                            {
+                                span = "<span class='badge badge-outline-succes'>Eshte fshire me suskes</span>";
+                            }
+                            else
+                            {
+                                span = "<span class='badge badge-outline-danger'>Nuk ka qka te Fshihet</span>";
+                            }
+                        <tr>
+                            <td>@item.Name</td> 
+                            <td>@item.Path </td>
+                            <td>@item.Type</td>
+                            <td>@item.Created</td>
+                            <td>@item.CreatedBy</td>
+                            <td>@Html.Raw(span)</td>
+                            <td><a class="btn btn-sm btn-danger" onclick="deleteFile(@item.id)">Delete</a></td>
+                        </tr>
+                        }
+                </tbody>
+            </thead>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#Document-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+
+        });
+
+        var deleteFile = function (id)
+        {
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Delete", "Media")/' + id,
+                data: id = id,
+                success: function(){
+                    location.reload()
+                }
+            })
+        }
+    </script>
+}
+}
