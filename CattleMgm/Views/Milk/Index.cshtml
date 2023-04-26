@@ -57,7 +57,8 @@
 
         });
         function EditMilk(Id) {
-            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Milk")?id=' + Id)
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Milk")?id=' + Id, function() {
+                $('#modal-center-large').modal('toggle'))
         }
         function DeleteMilk(Id) {
             debugger;
