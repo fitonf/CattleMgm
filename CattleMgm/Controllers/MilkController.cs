@@ -149,5 +149,27 @@ namespace CattleMgm.Controllers
             return Json(error);
 
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int Id)
+        {
+
+            if (Id == null)
+            {
+                return BadRequest();
+            }
+
+
+            var milk = _db.CattleMilk.Find(Id);
+            if (milk != null)
+            {
+                var result = _db.CattleMilk.Remove(milk);
+
+                await _db.SaveChangesAsync();
+
+            }
+
+            return Json("success");
+
+        }
     }
 }
