@@ -1,43 +1,68 @@
 ﻿@model MilkEditViewModel
 @{
-    ViewData["Title"] = "Regjistrimi i mbledhjes se qumeshtit";
+    int i = 1;
 }
 
-<div class="card">
-    <div class="card-header with-border">
-        <h4>Plotesoni te dhenat me poshte</h4>
-    </div>
-    <form id="createForm" method="post">
+<div class="modal-header">
+    <h5 class="modal-title">Editimi i formes se qumeshtit</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="Edit" asp-controller="Milk" class="noLoading" id="frmEditMilk" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
+
+        @Html.AntiForgeryToken()
         <input asp-for="Id" hidden />
-        <div class="card-body">
-            <div class="row">
-                <div class="col-md-4">
-                    
-                    <label class="required" asp-for="CattleId">Gjedhja</label>
-                    @Html.DropDownListFor(m=>m.CattleId, ViewBag.Cattles as SelectList, "Zgjedh", new { @class = "form-control select2"})
-                    @*ekuivalente me dropdownlistfor*@
-                    @* <select asp-for="RoleId" asp-items="ViewBag.Roles" class="form-control select2">
-                    <option></option>
-                    </select>*@
-                    <span asp-validation-for="CattleId" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="LitersCollected">Litrat e mbledhura</label>
-                    <input asp-for="LitersCollected" class="form-control" />
-                    <span asp-validation-for="LitersCollected" class="text-danger"></span>
-                </div>
-                <div class="col-md-4">
-                    <label asp-for="Price">Qmimi</label>
-                    <input asp-for="Price" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
-                </div>
-
-
+        <div class="row form-group">
+            <div class="col-md-4">
+                <label asp-for="CattleId" class="required form-label"></label>
+                <input asp-for="CattleId" class="form-control" />
+                <span asp-validation-for="CattleId" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="LitersCollected" class="required form-label"></label>
+                <input asp-for="LitersCollected" class="form-control" />
+                <span asp-validation-for="LitersCollected" class="text-danger" />
+            </div>
+            <div class="col-md-4">
+                <label asp-for="Price" class="required form-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger" />
             </div>
         </div>
-        <div class="card-footer">
-            <input type="submit" class="btn btn-sm btn-primary" value="Regjistro" />
+        <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mbyll</button>
+            <button type="submit" class="btn btn-outline-primary">Ndrysho</button>
         </div>
     </form>
 
+
 </div>
+
+<script type="text/javascript">
+    var form = $('#frmEditMilk');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+    function EditSuccess(data) {
+        console.log(data);
+
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: 'Rekordi u ndryshua me sukses',
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>

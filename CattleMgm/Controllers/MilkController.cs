@@ -12,32 +12,36 @@ using CattleMgm.Helpers.Security;
 using CattleMgm.ViewModels.Menu;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Submenu;
+using CattleMgm.Repository.Milk;
 
 namespace CattleMgm.Controllers
 {
     public class MilkController : BaseController
     {
-        public ICattleRepository _cattleRepository;
+        public IMilkRepository _MilkRepository;
         public MilkController(ApplicationDbContext context
             , praktikadbContext db
             , UserManager<ApplicationUser> userManager
-            , ICattleRepository cattleRepository) : base(context, db, userManager)
+            , IMilkRepository milkRepository) : base(context, db, userManager)
         {
-            _cattleRepository = cattleRepository;
+            _MilkRepository = milkRepository;
         }
-        public IActionResult Index()
+        public async  Task<IActionResult> Index()
         {
+            var milk = new List<CattleMilk>();
+            milk=await _MilkRepository.GetAllMilk();
 
-            var model = _db.CattleMilk.Include(x=>x.Cattle).Select(x=>new MilkViewModel { Identifier = x.Identifier.ToString()
-                                                           ,CattleName = x.Cattle.Name
-                                                           ,Id=x.Id
-                                                           ,CattleId=x.CattleId
-                                                           ,LitersCollected= x.LitersCollected
-                                                           ,Price = x.Price
-                                                           ,DateCollected = x.Created.ToShortDateString()
-                                                           ,TotalProfit = x.Price*x.LitersCollected}).ToList();
+            List<MilkViewModel> model = new List<MilkViewModel>();
 
-
+            foreach(var item in milk)
+            {
+                model.Add(new MilkViewModel
+                {
+                    Id = item.Id,
+                    LitersCollected = item.LitersCollected,
+                    Price = item.Price
+                });
+            }
             return View(model);
         }
 
@@ -46,14 +50,14 @@ namespace CattleMgm.Controllers
         {
             var cattles = new List<Cattle>();
             var farmerId = await _db.Farmer.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
-            if (!User.IsInRole("Administrator"))
-            {
-                cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
-            }
-            else
-            {
-                cattles = _cattleRepository.GetCattles();
-            }
+            //if (!User.IsInRole("Administrator"))
+            //{
+            //    cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
+            //}
+            //else
+            //{
+            //    cattles = _cattleRepository.GetCattles();
+            //}
             ViewBag.Cattles = new SelectList(cattles,"Id","Name");
             return View();
         }
@@ -83,15 +87,15 @@ namespace CattleMgm.Controllers
 
         }
         [HttpGet]
-        public IActionResult _Edit(int CattleId, int ide)
+        public IActionResult Edit(int? id)
         {
-            if (ide == null)
+            if (id == null)
             {
                 return BadRequest();
             }
             //int did = AesCrypto.Decrypt<int>(ide);
 
-            var milk = _db.CattleMilk.Find(ide);
+            var milk = _db.CattleMilk.Find(id);
 
 
             if (milk == null)
@@ -101,12 +105,13 @@ namespace CattleMgm.Controllers
 
             MilkEditViewModel editViewModel = new MilkEditViewModel
             {
-                CattleId = milk.CattleId,
+               Id=milk.Id,
+               CattleId = milk.CattleId,
                Price=milk.Price,
                LitersCollected=milk.LitersCollected
               
             };
-            return View(editViewModel);
+            return PartialView(editViewModel);
         }
 
         [HttpPost]

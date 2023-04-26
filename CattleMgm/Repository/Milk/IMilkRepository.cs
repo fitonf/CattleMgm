@@ -4,6 +4,6 @@ namespace CattleMgm.Repository.Milk
 {
     public interface IMilkRepository
     {
-        Task<List<CattleMilk>> GetAllMilk(int farmerId);
+        Task<List<CattleMilk>> GetAllMilk();
     }
 }
