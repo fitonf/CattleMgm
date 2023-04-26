@@ -16,32 +16,23 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Emri i Rolit</th>
-                    <th>Veprimet</th>
-                    <th></th>
+                    <th class="action-cell">Veprimet</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@item.Name</td>
-                        <td>
-                            <a asp-controller="Roles" asp-action="Edit"
+                        <tr>
+                            <td>@item.Name</td>
+                            <td class="action-cell">
+                                <a asp-controller="Roles" asp-action="Edit"
                            asp-route-id="@item.Id" class="btn btn-primary">
-                                Edit
-                            </a>
-                        </td>
-
-                        <!-- Butoni në SweetAlert -->
-                        <td><a class="btn btn-danger" href="javascript:;" onclick="DeleteRole('@item.Id')">Delete</a></td>
-
-                        <!-- Butoni Normal (Fshin rolin menjehere)-->
-                        @*<a asp-controller="Roles" asp-action="Delete"
-                    asp-route-id="@item.Id" class="btn btn-danger">
-                    Delete
-                    </a>
-                    *@
-                    </tr>
+                                    Edit
+                                </a>
+                                <!-- Butoni në SweetAlert -->
+                                <a class="btn btn-danger" href="javascript:;" onclick="DeleteRole('@item.Id')">Delete</a>
+                            </td>
+                        </tr>
                 }
             </tbody>
         </table>
@@ -96,3 +87,8 @@
         }
     </script>
 }
+<style>
+    .action-cell {
+        text-align: right;
+    }
+</style>

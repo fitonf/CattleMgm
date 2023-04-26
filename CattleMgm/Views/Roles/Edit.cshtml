@@ -10,6 +10,7 @@
     <div class="form-group">
         <label asp-for="Name">Emri Rolit</label>
         <input type="text" asp-for="Name" class="form-control" id="Name" placeholder="Shkruani emrin">
+        <span id="roleExistsError" class="text-danger d-none">You cannot use the same role name.</span>
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
@@ -18,4 +19,31 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                e.preventDefault();
+                var roleName = $('#Name').val();
+                var currentRoleId = '@Model.Id';
+
+                $.ajax({
+                    url: '@Url.Action("RoleNameExists", "Roles")',
+                    data: { roleName: roleName, currentRoleId: currentRoleId },
+                    success: function (result) {
+                        if (result.exists) {
+                            $('#roleExistsError').removeClass('d-none');
+                        } else {
+                            $('form').off('submit').submit();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('An error occurred while checking the role name: ' + error);
+                    }
+                });
+            });
+        });
+    </script>
 }
+
+
