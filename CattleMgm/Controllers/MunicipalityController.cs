@@ -122,6 +122,34 @@ namespace CattleMgm.Controllers
 
         }
 
+       // [HttpPost]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var municipality = _db.Municipality.Find(id);
+
+        //    if (municipality == null)
+        //    {
+        //        ViewBag.ErrorMessage = $"Municipality with Id = {id} cannot be found";
+        //        return View("Error");
+        //    }
+        //    else
+        //    {
+        //        var result = await Municipality.Remove(municipality);
+
+        //        if (result.Succeeded)
+        //        {
+        //            return RedirectToAction("Index");
+        //        }
+
+        //        foreach (var error in result.Errors)
+        //        {
+        //            ModelState.AddModelError("", error.Description);
+        //        }
+
+        //        return View("Index");
+        //    }
+
+        //}
         [HttpPost]
         public async Task<IActionResult> Delete(int Id)
         {
@@ -145,7 +173,7 @@ namespace CattleMgm.Controllers
 
         }
 
-        
+
         public IActionResult _Edit(MunicipalityEditViewModel model)
         {
             ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Komuna eshte modifikuar me sukses", Title = "Sukses" };
