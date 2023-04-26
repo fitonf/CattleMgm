@@ -7,5 +7,7 @@ namespace CattleMgm.Repository.Cattles
         List<Cattle> GetCattles();
 
         bool AddCattles(List<Cattle> cattles);
+
+        List<Cattle> GetCattlesByFarmerId (int farmerId);
     }
 }

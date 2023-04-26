@@ -13,5 +13,10 @@ namespace CattleMgm.Repository.Cattles
         {
             throw new NotImplementedException();
         }
+
+        public List<Cattle> GetCattlesByFarmerId(int farmerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

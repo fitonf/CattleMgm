@@ -68,6 +68,17 @@
             $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + id, function() {
                 $('#modal-center-large').modal('toggle')
             })
+
+        }
+        
+        function goBack(MId) {
+            
+             $('#modal-center-large').modal('toggle');
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Menu")?ide=' + MId, function() {
+                $('#modal-center-large').modal('toggle')
+            })
+
         }
 
         function AddSubmenu(id) {
