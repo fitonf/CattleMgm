@@ -11,13 +11,12 @@ namespace CattleMgm.Repository.Milk
             _db = db;
         }
 
-        public async Task<List<CattleMilk>> GetAllMilk(int farmerId)
+        public async Task<List<CattleMilk>> GetAllMilk()
         {
-            var farm = await _db.Farm.Where(x => x.FarmerId == farmerId).FirstOrDefaultAsync();
 
-            var milkCollected = await _db.CattleMilk.Where(x=>x.Cattle.FarmId == farm.Id).ToListAsync();
-
-            return milkCollected;
+            var milk= new List<CattleMilk>();
+            milk=await _db.CattleMilk.Include(x=>x.Cattle).ToListAsync();
+            return milk;
         }
     }
 }

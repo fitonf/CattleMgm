@@ -8,30 +8,40 @@ using Microsoft.EntityFrameworkCore;
 using CattleMgm.ViewModels.Milk;
 using CattleMgm.Repository.Cattles;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CattleMgm.Helpers.Security;
+using CattleMgm.ViewModels.Menu;
+using CattleMgm.ViewModels;
+using CattleMgm.ViewModels.Submenu;
+using CattleMgm.Repository.Milk;
 
 namespace CattleMgm.Controllers
 {
     public class MilkController : BaseController
     {
-        public ICattleRepository _cattleRepository;
+        public IMilkRepository _MilkRepository;
         public MilkController(ApplicationDbContext context
             , praktikadbContext db
             , UserManager<ApplicationUser> userManager
-            , ICattleRepository cattleRepository) : base(context, db, userManager)
+            , IMilkRepository milkRepository) : base(context, db, userManager)
         {
-            _cattleRepository = cattleRepository;
+            _MilkRepository = milkRepository;
         }
-        public IActionResult Index()
+        public async  Task<IActionResult> Index()
         {
+            var milk = new List<CattleMilk>();
+            milk=await _MilkRepository.GetAllMilk();
 
-            var model = _db.CattleMilk.Include(x=>x.Cattle).Select(x=>new MilkViewModel { Identifier = x.Identifier.ToString()
-                                                           ,CattleName = x.Cattle.Name
-                                                           ,LitersCollected= x.LitersCollected
-                                                           ,Price = x.Price
-                                                           ,DateCollected = x.Created.ToShortDateString()
-                                                           ,TotalProfit = x.Price*x.LitersCollected}).ToList();
+            List<MilkViewModel> model = new List<MilkViewModel>();
 
-
+            foreach(var item in milk)
+            {
+                model.Add(new MilkViewModel
+                {
+                    Id = item.Id,
+                    LitersCollected = item.LitersCollected,
+                    Price = item.Price
+                });
+            }
             return View(model);
         }
 
@@ -40,14 +50,14 @@ namespace CattleMgm.Controllers
         {
             var cattles = new List<Cattle>();
             var farmerId = await _db.Farmer.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
-            if (!User.IsInRole("Administrator"))
-            {
-                cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
-            }
-            else
-            {
-                cattles = _cattleRepository.GetCattles();
-            }
+            //if (!User.IsInRole("Administrator"))
+            //{
+            //    cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
+            //}
+            //else
+            //{
+            //    cattles = _cattleRepository.GetCattles();
+            //}
             ViewBag.Cattles = new SelectList(cattles,"Id","Name");
             return View();
         }
@@ -74,6 +84,69 @@ namespace CattleMgm.Controllers
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
+
+        }
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            //int did = AesCrypto.Decrypt<int>(ide);
+
+            var milk = _db.CattleMilk.Find(id);
+
+
+            if (milk == null)
+            {
+                return NotFound();
+            }
+
+            MilkEditViewModel editViewModel = new MilkEditViewModel
+            {
+               Id=milk.Id,
+               CattleId = milk.CattleId,
+               Price=milk.Price,
+               LitersCollected=milk.LitersCollected
+              
+            };
+            return PartialView(editViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult _Edit(SubmenuEditViewModel model)
+        {
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
+
+            if (!ModelState.IsValid)
+            {
+                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+                return Json(error);
+            }
+            var submenu = _db.SubMenu.Find(model.Id);
+            if (submenu == null)
+            {
+                return NotFound();
+
+            }
+            submenu.Action = model.Action;
+            submenu.Controller = model.Controller;
+            submenu.Area = model.Area;
+            submenu.Claim = model.Policy;
+            submenu.Icon = model.Icon;
+            submenu.NameSq = model.NameSq;
+            submenu.NameEn = model.NameEn;
+            submenu.NameSr = model.NameSr;
+            submenu.OrdinalNumber = model.OrdinalNumber;
+            submenu.StaysOpenFor = model.StaysOpenFor;
+            submenu.ParentSubId = model.ParentID;
+
+            _db.Update(submenu);
+
+            _db.SaveChanges();
+
+            return Json(error);
 
         }
     }
