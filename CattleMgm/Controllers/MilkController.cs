@@ -44,7 +44,7 @@ namespace CattleMgm.Controllers
                     DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
                     Price = item.Price,
-                    TotalProfit = decimal.Round((item.Price * item.LitersCollected).ToString(), 2, MidpointRounding.AwayFromZero)
+                    TotalProfit = item.Price * item.LitersCollected
                 }) ;
             }
 
