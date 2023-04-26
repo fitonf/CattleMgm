@@ -57,7 +57,13 @@ namespace CattleMgm.Controllers
                     NormalizedName = model.Name.ToUpper()
                 };
 
-                 IdentityResult result = await roleManager.CreateAsync(identityRole);
+                if (await roleManager.RoleExistsAsync(model.Name))
+                {
+                    ModelState.AddModelError("Name", "You cannot create the same role.");
+                    return View(model);
+                }
+
+                IdentityResult result = await roleManager.CreateAsync(identityRole);
 
                 if (result.Succeeded)
                 {
@@ -73,6 +79,19 @@ namespace CattleMgm.Controllers
             return View(model);
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> RoleNameExists(string roleName, string currentRoleId)
+        {
+            if (string.IsNullOrEmpty(roleName))
+            {
+                return Json(new { exists = false });
+            }
+
+            var role = await roleManager.FindByNameAsync(roleName);
+            return Json(new { exists = role != null && role.Id != currentRoleId });
+        }
+
 
 
         // Roles Edit

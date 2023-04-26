@@ -8,9 +8,10 @@
 
 <form asp-action="Create" asp-controller="Roles" method="post">
     <div class="form-group">
-        <label asp-for="Name">Emri Rolit</label>
-        <select asp-for="Name" class="form-control" id="roleNameSelect"></select>
+        <label asp-for="Name">Emri Rolit <span class="text-danger">*</span></label>
+        <input type="text" asp-for="Name" class="form-control" id="roleName" placeholder="Shkruani emrin">
         <span asp-validation-for="Name" class="text-danger"></span>
+        <span id="roleExistsError" class="text-danger d-none">You cannot create the same role.</span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create Role</button>
@@ -20,14 +21,5 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-
-    <script>
-        $(document).ready(function () {
-            $('#roleNameSelect').select2({
-                placeholder: "Shkruani emrin",
-                allowClear: true,
-                tags: true
-            });
-        });
-    </script>
 }
+
