@@ -23,6 +23,7 @@ namespace CattleMgm.Repository.Cattles
                 .Include(x => x.Farm)
                 .ThenInclude(x => x.Farmer)
                 .Include(x => x.Breed)
+                .Include(x => x.CreatedByNavigation)
                 .ToList();
 
             return cattles;

@@ -1,0 +1,95 @@
+﻿@model CattleDetailsViewModel
+@{
+    ViewData["Title"] = "Detajet e gjedhes: " + Model.Name;
+    double lat = 0;
+    double longitude = 0;
+    @if(Model.CattlePosition.Count > 0)
+    {
+        lat = Model.CattlePosition.OrderByDescending(q => q.Id).FirstOrDefault().Lat;
+        longitude = Model.CattlePosition.OrderByDescending(q => q.Id).FirstOrDefault().Long;
+    }
+}
+
+
+<div class="card">
+    <div id="map"></div>
+    <div class="card-body p-0">
+        @if(Model.CattlePosition.Count > 0)
+        {
+            
+        }
+    </div><!--end card-body-->
+    <div class="card-body">
+        <div class="dastone-profile">
+            <div class="row">
+                <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
+                    <div class="dastone-profile-main">
+                        <div class="dastone-profile_user-detail">
+                            <h5 class="dastone-user-name">@Model.Name</h5>
+                            <p class="mb-0 dastone-user-name-post">@Model.FarmName</p>
+                        </div>
+                    </div>
+                </div><!--end col-->
+
+                <div class="col-lg-4 ms-auto align-self-center">
+                    <ul class="list-unstyled personal-detail mb-0">
+                        <li class=""><i class="ti ti-key me-2 text-secondary font-16 align-middle"></i> <b> Id </b> : @Model.UniqueIdentifier</li>
+                        <li class="mt-2"><i class="fa fa-weight text-secondary font-16 align-middle me-2"></i> <b> Weight </b> : @Model.Weight</li>
+                        <li class="mt-2">
+                            <i class="ti ti-world text-secondary font-16 align-middle me-2"></i> <b> Breed </b> : @Model.Breed
+                        </li>
+                    </ul>
+
+                </div><!--end col-->
+                <div class="col-lg-4 ms-auto align-self-center">
+                    <ul class="list-unstyled personal-detail mb-0">
+                        <li class=""><i class="ti ti-user me-2 text-secondary font-16 align-middle"></i> <b> Farmer </b> : @Model.FarmerName</li>
+                        <li class="mt-2"><i class="fa fa-calendar text-secondary font-16 align-middle me-2"></i> <b> Birthdate </b> : @Model.BirthDate</li>
+                    </ul>
+
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end f_profile-->
+    </div><!--end card-body-->
+</div> <!--end card-->
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function(){
+            ShowInMap(@lat, @longitude);
+        });
+
+        function ShowInMap(lat, long) {
+
+            alert(lat + ":" + long);
+            var map = L.map('map').setView([lat, long], 12);
+
+            var singleMarker = L.marker([lat, long]);
+            singleMarker.addTo(map);
+            var popup = singleMarker.bindPopup('Pozicioni i gjedhes se zgjedhur');
+            popup.addTo(map);
+
+            // Google Map Layer
+
+            googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleStreets.addTo(map);
+
+            map.once("click", function () {
+                Swal.fire(
+                    'Informacion',
+                    'Shtypni ENTER per shfaqjen e pozicionit te gjedhes tjeter te zgjedhur',
+                    'OK'
+                )
+            });
+
+            document.addEventListener("keypress", function () {
+                if (event.key === "Enter") {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+}

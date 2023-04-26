@@ -1,0 +1,52 @@
+﻿@model CattleCreateViewModel
+@{
+    ViewData["Title"] = "Regjistrim i gjedheve";
+}
+
+@inject CattleMgm.Repository.Cattles.ICattleRepository cattleRep;
+
+<div class="card">
+    <div class="card-header with-border">
+        <h3>Plotesoni te dhenat me poshte</h3>
+    </div>
+    <div class="card-body">
+        <form method="post">
+            <div class="row">
+                <div class="col-md-3 form-group">
+                    <label asp-for="FarmId" class="control-label required"></label>
+                    @Html.DropDownListFor(m => m.FarmId, ViewBag.Farms as SelectList, "Zgjedh", new {@class="form-control select2" })
+                    <span asp-validation-for="FarmId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="BreedId" class="control-label required"></label>
+                    @Html.DropDownListFor(m => m.BreedId, ViewBag.Breed as SelectList, "Zgjedh", new {@class="form-control select2" })
+                    <span asp-validation-for="BreedId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Name" class="control-label required"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Weight" class="control-label required"></label>
+                    <input asp-for="Weight" class="form-control" />
+                    <span asp-validation-for="Weight" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="BirthDate" class="control-label required"></label>
+                    <input asp-for="BirthDate" class="form-control" type="datetime-local" />
+                    <span asp-validation-for="BirthDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label asp-for="Gender" class="control-label required"></label>
+                    @Html.DropDownListFor(m => m.Gender, ViewBag.Gender as SelectList, "Zgjedh", new {@class="form-control select2" })
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Regjistro" class="btn btn-primary btn-sm" />
+                </div>
+            </div>
+        </form>
+        
+    </div>
+</div>

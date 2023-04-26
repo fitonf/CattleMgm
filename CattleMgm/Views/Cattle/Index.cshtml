@@ -17,6 +17,8 @@
                     <th>Gjinia</th>
                     <th>Ferma</th>
                     <th>Emri i fermerit</th>
+                    <th>Krijuar nga</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +32,8 @@
                         <td>@item.Gender</td>
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
+                        <td>@item.CreatedBy</td>
+                        <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
                     </tr>
                 }
             </tbody>

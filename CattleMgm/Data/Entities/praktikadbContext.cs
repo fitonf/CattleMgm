@@ -163,9 +163,13 @@ namespace CattleMgm.Data.Entities
             {
                 entity.Property(e => e.BirthDate).HasColumnType("datetime");
 
+                entity.Property(e => e.Created).HasColumnType("datetime");
+
+                entity.Property(e => e.CreatedBy).HasMaxLength(450);
+
                 entity.Property(e => e.LastUpdated).HasColumnType("datetime");
 
-                entity.Property(e => e.LastUpdatedBy).HasMaxLength(256);
+                entity.Property(e => e.LastUpdatedBy).HasMaxLength(450);
 
                 entity.Property(e => e.Name).HasMaxLength(150);
 
@@ -175,11 +179,22 @@ namespace CattleMgm.Data.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cattle_Breed");
 
+                entity.HasOne(d => d.CreatedByNavigation)
+                    .WithMany(p => p.CattleCreatedByNavigation)
+                    .HasForeignKey(d => d.CreatedBy)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Cattle_AspNetUsers");
+
                 entity.HasOne(d => d.Farm)
                     .WithMany(p => p.Cattle)
                     .HasForeignKey(d => d.FarmId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Cattle_Farm");
+
+                entity.HasOne(d => d.LastUpdatedByNavigation)
+                    .WithMany(p => p.CattleLastUpdatedByNavigation)
+                    .HasForeignKey(d => d.LastUpdatedBy)
+                    .HasConstraintName("FK_Cattle_AspNetUsers1");
             });
 
             modelBuilder.Entity<CattleBloodPressure>(entity =>
