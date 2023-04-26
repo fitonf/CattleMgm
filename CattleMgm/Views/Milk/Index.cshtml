@@ -6,7 +6,7 @@
 <div class="card">
     <div class="card-header">
         <div class="card-toolbar float-end">
-            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Milk">Regjistro</a>
+            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-controller="Milk">Edit</a>
         </div>
     </div>
     <div class="card-body">
@@ -20,6 +20,7 @@
                     <th>Cmimi</th>
                     <th>Profiti</th>
 
+
                 </tr>
             </thead>
             <tbody>
@@ -32,6 +33,13 @@
                         <td>@item.LitersCollected l</td>
                         <td>@item.Price $</td>
                         <td>@item.TotalProfit $</td>
+                        <td class="button-td">
+                            <a class="btn btn-sm btn-primary" onclick="EditMilk(@item.CattleId, @item.Id)"><i class="fa fa-edit"></i>Edit</a>
+
+                            @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
+                        new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
+                        *@
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -48,5 +56,10 @@
             "ordering": false
 
         });
+        function EditMilk(CattleId, Id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Milk")?mid=' + CattleId + '&ide=' + ide)
+        }
+
     </script>
+
 }

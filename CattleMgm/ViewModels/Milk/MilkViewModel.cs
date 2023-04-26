@@ -2,8 +2,11 @@
 {
     public class MilkViewModel
     {
-        public string Identifier { get; set; }
+        public int CattleId { get; set; }
 
+        public int Id { get; set; }
+        public string Identifier { get; set; }
+       
         public string CattleName { get; set; }
 
         public double LitersCollected { get; set; }
@@ -13,7 +16,7 @@
         public double Price { get; set; }
 
         public double TotalProfit { get; set; }
-        
+
     }
 
     public class MilkCreateViewModel
@@ -23,9 +26,8 @@
 
         public double LitersCollected { get; set; }
     }
-    public class MilkEditViewModel
+    public class MilkEditViewModel :MilkCreateViewModel
     {
-        public int CattleId { get; set; }
-        public double Price { get; set; }
-        public double LitersCollected { get;set;}
+       public int Id { get; set; }
+    }
 }

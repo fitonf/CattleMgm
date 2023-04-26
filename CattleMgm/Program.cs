@@ -6,9 +6,11 @@ using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
 using CattleMgm.Repository.Media;
+using CattleMgm.Repository.Milk;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -40,6 +42,7 @@ builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IMilkRepository, MilkRepository>();
 
 var app = builder.Build();
 

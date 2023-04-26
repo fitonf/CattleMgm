@@ -8,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using CattleMgm.ViewModels.Milk;
 using CattleMgm.Repository.Cattles;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using CattleMgm.Helpers.Security;
+using CattleMgm.ViewModels.Menu;
+using CattleMgm.ViewModels;
+using CattleMgm.ViewModels.Submenu;
 
 namespace CattleMgm.Controllers
 {
@@ -26,6 +30,8 @@ namespace CattleMgm.Controllers
 
             var model = _db.CattleMilk.Include(x=>x.Cattle).Select(x=>new MilkViewModel { Identifier = x.Identifier.ToString()
                                                            ,CattleName = x.Cattle.Name
+                                                           ,Id=x.Id
+                                                           ,CattleId=x.CattleId
                                                            ,LitersCollected= x.LitersCollected
                                                            ,Price = x.Price
                                                            ,DateCollected = x.Created.ToShortDateString()
@@ -74,6 +80,68 @@ namespace CattleMgm.Controllers
             await _db.SaveChangesAsync();
 
             return RedirectToAction("Index");
+
+        }
+        [HttpGet]
+        public IActionResult _Edit(int CattleId, int ide)
+        {
+            if (ide == null)
+            {
+                return BadRequest();
+            }
+            //int did = AesCrypto.Decrypt<int>(ide);
+
+            var milk = _db.CattleMilk.Find(ide);
+
+
+            if (milk == null)
+            {
+                return NotFound();
+            }
+
+            MilkEditViewModel editViewModel = new MilkEditViewModel
+            {
+                CattleId = milk.CattleId,
+               Price=milk.Price,
+               LitersCollected=milk.LitersCollected
+              
+            };
+            return View(editViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult _Edit(SubmenuEditViewModel model)
+        {
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
+
+            if (!ModelState.IsValid)
+            {
+                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+                return Json(error);
+            }
+            var submenu = _db.SubMenu.Find(model.Id);
+            if (submenu == null)
+            {
+                return NotFound();
+
+            }
+            submenu.Action = model.Action;
+            submenu.Controller = model.Controller;
+            submenu.Area = model.Area;
+            submenu.Claim = model.Policy;
+            submenu.Icon = model.Icon;
+            submenu.NameSq = model.NameSq;
+            submenu.NameEn = model.NameEn;
+            submenu.NameSr = model.NameSr;
+            submenu.OrdinalNumber = model.OrdinalNumber;
+            submenu.StaysOpenFor = model.StaysOpenFor;
+            submenu.ParentSubId = model.ParentID;
+
+            _db.Update(submenu);
+
+            _db.SaveChanges();
+
+            return Json(error);
 
         }
     }
