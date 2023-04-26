@@ -19,6 +19,7 @@ namespace CattleMgm.Controllers
     public class MilkController : BaseController
     {
         public IMilkRepository _MilkRepository;
+        public ICattleRepository _CattleRepository;
         public MilkController(ApplicationDbContext context
             , praktikadbContext db
             , UserManager<ApplicationUser> userManager
@@ -43,8 +44,8 @@ namespace CattleMgm.Controllers
                     DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
                     Price = item.Price,
-                    TotalProfit=item.Price*item.LitersCollected
-                });
+                    TotalProfit = decimal.Round((item.Price * item.LitersCollected).ToString(), 2, MidpointRounding.AwayFromZero)
+                }) ;
             }
 
             return View(model);
@@ -53,15 +54,15 @@ namespace CattleMgm.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var cattles = new List<Cattle>();
+            var cattles = await _db.Cattle.Select(q => new { q.Id, Name = q.Name }).ToListAsync();
             var farmerId = await _db.Farmer.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
             //if (!User.IsInRole("Administrator"))
             //{
-            //    cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
+            //    cattles = _CattleRepository.GetCattlesByFarmerId(farmerId.Id);
             //}
             //else
             //{
-            //    cattles = _cattleRepository.GetCattles();
+            //    cattles = _CattleRepository.GetCattles();
             //}
             ViewBag.Cattles = new SelectList(cattles, "Id", "Name");
             return View();
