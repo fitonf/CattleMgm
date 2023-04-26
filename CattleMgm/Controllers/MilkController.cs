@@ -38,6 +38,9 @@ namespace CattleMgm.Controllers
                 model.Add(new MilkViewModel
                 {
                     Id = item.Id,
+                    CattleName = item.Cattle.Name,
+                    Identifier = item.Cattle.UniqueIdentifier.ToString(),
+                    DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
                     Price = item.Price
                 });
