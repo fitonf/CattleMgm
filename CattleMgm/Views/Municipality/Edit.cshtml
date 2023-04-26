@@ -1,5 +1,6 @@
 ﻿@model MunicipalityEditViewModel
 @{
+    ViewData["Title"] = "Edit Komunat";
 }
 
 
@@ -11,7 +12,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <label asp-for="Name">Emri i komunes</label>
+                    <label asp-for="Name" class="required form-label">Emri i komunes</label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
