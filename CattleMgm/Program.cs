@@ -3,8 +3,10 @@ using CattleMgm.Data.Entities;
 using CattleMgm.Helpers;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
+using CattleMgm.Repository.CattleTemperature;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
+using CattleMgm.Repository.Position;
 using CattleMgm.Repository.Media;
 using CattleMgm.Repository.Milk;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +14,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 
 using Microsoft.EntityFrameworkCore;
+using CattleMgm.Repository.CattleBloodPressures;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,8 +44,11 @@ builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
 builder.Services.AddScoped<IFunctionRepository, FunctionRepository>();
 builder.Services.AddScoped<IFarmRepository, FarmRepository>();
+builder.Services.AddScoped<IPositionRepository, PositionRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IMilkRepository, MilkRepository>();
+builder.Services.AddScoped<ICattleTempRepository, CattleTempRepository>();
+builder.Services.AddScoped<ICattleBloodPressureRepository, CattleBloodPressureRepository>();
 
 var app = builder.Build();
 

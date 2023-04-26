@@ -1,0 +1,20 @@
+﻿<div id="map"></div>
+
+<script type="text/javascript">
+    // Import the Leaflet library
+    import L from 'leaflet';
+
+    // Get a reference to the map <div> element
+    const mapElement = document.getElementById('map');
+
+    // Initialize the map
+    const map = L.map(mapElement).setView([51.505, -0.09], 13);
+
+    // Add a marker at the specified location
+    const marker = L.marker([51.5, -0.09]).addTo(map);
+
+    // Add a popup to the marker
+    marker.bindPopup('Hello, world!');
+
+
+</script>

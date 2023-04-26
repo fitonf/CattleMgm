@@ -6,6 +6,7 @@ namespace CattleMgm.Repository.Farm
     public class FarmRepository : IFarmRepository
     {
         public praktikadbContext _db;
+
         public FarmRepository(praktikadbContext db)
         {
             _db = db;

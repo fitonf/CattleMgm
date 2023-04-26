@@ -1,0 +1,60 @@
+﻿@model List<CattleTempViewModel>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Temperature">Regjistro</a>
+
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="CattleTemperature" class="table table-responsive">
+            <thead>
+                <tr>
+
+                    <th>Gjedhja</th>
+                    <th>Temperatura</th>
+                    <th>Data</th>
+                    <th>Krijuar nga</th>
+                    <th>Veprimet</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    
+                    <tr>
+                        <td>@item.CattleName</td>
+                        <td>@item.Temperature</td>
+                        <td>@item.DateMeasured</td>
+                        <td>@item.CreatedBy</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                        </td> 
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#CattleTemperature").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+
+        function EditMenu(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Temperature")?ide=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+    </script>
+}

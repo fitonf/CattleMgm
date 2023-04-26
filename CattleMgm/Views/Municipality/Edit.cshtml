@@ -1,0 +1,32 @@
+﻿@model MunicipalityEditViewModel
+@{
+}
+
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte</h4>
+    </div>
+    <form id="createForm" method="post">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Name">Emri i komunes</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Zip">Zip code</label>
+                    <input asp-for="Zip" class="form-control" />
+                    <span asp-validation-for="Zip" class="text-danger"></span>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Edito" />
+        </div>
+    </form>
+
+</div>

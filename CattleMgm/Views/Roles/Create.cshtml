@@ -1,0 +1,33 @@
+﻿@model RolesCreateViewModel
+
+@{
+    ViewData["Title"] = "Create Role";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" asp-controller="Roles" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Emri Rolit</label>
+        <select asp-for="Name" class="form-control" id="roleNameSelect"></select>
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create Role</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        $(document).ready(function () {
+            $('#roleNameSelect').select2({
+                placeholder: "Shkruani emrin",
+                allowClear: true,
+                tags: true
+            });
+        });
+    </script>
+}

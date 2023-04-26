@@ -1,0 +1,21 @@
+﻿@model RolesEditViewModel
+
+@{
+    ViewData["Title"] = "Create Role";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" asp-controller="Roles" method="post">
+    <div class="form-group">
+        <label asp-for="Name">Emri Rolit</label>
+        <input type="text" asp-for="Name" class="form-control" id="Name" placeholder="Shkruani emrin">
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirm</button>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
