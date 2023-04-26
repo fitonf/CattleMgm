@@ -10,7 +10,8 @@
         </div>
     <form id="editForm" method="post">
         <div class="card-body">
-            @Html.HiddenFor(x=>x.FarmerId)  
+            @Html.HiddenFor(x=>x.FarmerId)
+            
             <div class="row">
                     <div class="col-md-3">
                         <label class="required" asp-for="Name">Emri i Fermes</label>
@@ -29,13 +30,48 @@
                         <input asp-for="Address" class="form-control" />
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
-                    </div>
+                <div class="col-md-3">
+               @* <div class="checkbox checkbox-primary" asp-for="Active" class="form-control" />*@
+                    <label class="required" asp-for="Active">Active</label>
+                <input type="checkbox" asp-for="Active" class="checkbox" />
+                    <span asp-validation-for="Active" class="text-danger"></span>
+                </>
+
+            </div>
                 </div>
                 <div class="card-footer">
             <input type="submit" class="btn btn-sm btn-primary" value="Edito">
-
         </div>
     </form>
 
 </div>
-    
+
+<script type="text/javascript">
+    var form = $('#frmEditFarm');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+
+    function editSuccess(data) {
+        console.log(data);
+
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.errorDescription,
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>
