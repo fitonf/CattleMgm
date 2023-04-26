@@ -29,7 +29,7 @@ namespace CattleMgm.Controllers
         public async  Task<IActionResult> Index()
         {
             var milk = new List<CattleMilk>();
-            milk=await _MilkRepository.GetAllMilk();
+            milk= await _MilkRepository.GetAllMilk();
 
             List<MilkViewModel> model = new List<MilkViewModel>();
 
@@ -38,10 +38,14 @@ namespace CattleMgm.Controllers
                 model.Add(new MilkViewModel
                 {
                     Id = item.Id,
+                    CattleName = item.Cattle.Name,
+                    Identifier = item.Cattle.UniqueIdentifier.ToString(),
+                    DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
                     Price = item.Price
                 });
             }
+
             return View(model);
         }
 
@@ -87,7 +91,7 @@ namespace CattleMgm.Controllers
 
         }
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult _Edit(int? id)
         {
             if (id == null)
             {
@@ -111,11 +115,12 @@ namespace CattleMgm.Controllers
                LitersCollected=milk.LitersCollected
               
             };
+
             return PartialView(editViewModel);
         }
 
         [HttpPost]
-        public IActionResult _Edit(SubmenuEditViewModel model)
+        public IActionResult _Edit(MilkEditViewModel model)
         {
             ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
 
@@ -130,17 +135,18 @@ namespace CattleMgm.Controllers
                 return NotFound();
 
             }
-            submenu.Action = model.Action;
-            submenu.Controller = model.Controller;
-            submenu.Area = model.Area;
-            submenu.Claim = model.Policy;
-            submenu.Icon = model.Icon;
-            submenu.NameSq = model.NameSq;
-            submenu.NameEn = model.NameEn;
-            submenu.NameSr = model.NameSr;
-            submenu.OrdinalNumber = model.OrdinalNumber;
-            submenu.StaysOpenFor = model.StaysOpenFor;
-            submenu.ParentSubId = model.ParentID;
+
+            //submenu.Action = model.Action;
+            //submenu.Controller = model.Controller;
+            //submenu.Area = model.Area;
+            //submenu.Claim = model.Policy;
+            //submenu.Icon = model.Icon;
+            //submenu.NameSq = model.NameSq;
+            //submenu.NameEn = model.NameEn;
+            //submenu.NameSr = model.NameSr;
+            //submenu.OrdinalNumber = model.OrdinalNumber;
+            //submenu.StaysOpenFor = model.StaysOpenFor;
+            //submenu.ParentSubId = model.ParentID;
 
             _db.Update(submenu);
 
