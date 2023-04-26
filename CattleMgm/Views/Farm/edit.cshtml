@@ -1,0 +1,41 @@
+﻿@model FarmEditViewModel
+@{
+    ViewData["Title"] = "Editimi i fermes";
+}
+
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Editimi i Fermes</h4>
+        </div>
+    <form id="editForm" method="post">
+        <div class="card-body">
+            @Html.HiddenFor(x=>x.FarmerId)  
+            <div class="row">
+                    <div class="col-md-3">
+                        <label class="required" asp-for="Name">Emri i Fermes</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="required" asp-for="Place">Vendi</label>
+                        <input asp-for="Place" class="form-control" />
+                        <span asp-validation-for="Place" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="required" asp-for="Address">Adresa</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Edito">
+
+        </div>
+    </form>
+
+</div>
+    
