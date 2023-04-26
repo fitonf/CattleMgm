@@ -1,0 +1,121 @@
+﻿@using CattleMgm.ViewModels.Humidity;
+
+@model List<HumidityViewModel>
+
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Humidity">Regjistro</a>
+
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="CattleHumidity" class="table table-responsive">
+            <thead>
+                <tr>
+
+                    <th>Emri</th>
+                    <th>Lageshtia</th>
+                    <th>Data</th>
+                    <th>Krijuar nga</th>
+                    <th>Veprimet</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+
+                    <tr>
+                        <td>@item.CattleName</td>
+                        <td>@item.Humidity</td>
+                        <td>@item.DateMeasured</td>
+                        <td>@item.CreatedBy</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteHumidity('@item.Id')">Delete</a>
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#CattleHumidity").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+        });
+        function EditMenu(id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Humidity")?ide=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        var DeleteHumidity = function (id) {
+            Swal.fire({
+                title: 'A jeni te sigurt?',
+                text: "Kjo ben fshirjen e perdoruesit!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Jo, kthehu.',
+                buttonsStyling: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Po, deshiroj ta fshij!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                debugger;
+                if (result) {
+                    debugger;
+                    // Make the AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","Humidity")',
+                        data: { id: id },
+
+                        success: function (data) {
+                            debugger;
+                            Swal.fire({
+                                text: "Perdoruesi u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                if (result.isConfirmed) {
+                                    
+                                }
+                            });
+
+                        },
+                        error: function (xhr, status, error) {
+                            debugger;
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
+        }
+    </script>
+}

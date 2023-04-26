@@ -4,6 +4,7 @@ using CattleMgm.Helpers;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.CattleTemperature;
+using CattleMgm.Repository.Humidity;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
 using CattleMgm.Repository.Position;
@@ -52,6 +53,7 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IMilkRepository, MilkRepository>();
 builder.Services.AddScoped<ICattleTempRepository, CattleTempRepository>();
 builder.Services.AddScoped<ICattleBloodPressureRepository, CattleBloodPressureRepository>();
+builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 
 var app = builder.Build();
 
