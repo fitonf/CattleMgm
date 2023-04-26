@@ -42,7 +42,8 @@ namespace CattleMgm.Controllers
                     Identifier = item.Cattle.UniqueIdentifier.ToString(),
                     DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
-                    Price = item.Price
+                    Price = item.Price,
+                    TotalProfit=item.Price*item.LitersCollected
                 });
             }
 
@@ -130,6 +131,7 @@ namespace CattleMgm.Controllers
                 return Json(error);
             }
             var milk = _db.CattleMilk.Find(model.Id);
+
             if (milk == null)
             {
                 return NotFound();

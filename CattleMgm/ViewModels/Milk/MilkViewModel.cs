@@ -26,7 +26,7 @@
 
         public double LitersCollected { get; set; }
 
-        public string Identifier { get; set; }
+        public string? Identifier { get; set; }
     }
     public class MilkEditViewModel :MilkCreateViewModel
     {
