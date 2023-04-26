@@ -1,19 +1,27 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
+using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
 using CattleMgm.Repository.Farm;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Farm;
+using CattleMgm.ViewModels.Menu;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.DotNet.Scaffolding.Shared.Project;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CattleMgm.Controllers
 {
     public class FarmController : BaseController
     {
         public IFarmRepository _farmRepository;
+        private object farm;
+        private object model;
+
         public FarmController(ApplicationDbContext context,
             praktikadbContext db,
             UserManager<ApplicationUser> userManager,
@@ -29,19 +37,20 @@ namespace CattleMgm.Controllers
             var farmerId = await _db.Farmer.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
             if (!User.IsInRole("Administrator"))
             {
-                 farms = await _farmRepository.GetAllFarms(farmerId.Id);
+                farms = await _farmRepository.GetAllFarms(farmerId.Id);
             }
             else
             {
                 farms = await _farmRepository.GetAllFarms();
             }
 
-            List <FarmViewModel> model = new List<FarmViewModel>();
+            List<FarmViewModel> model = new List<FarmViewModel>();
 
             foreach (var item in farms)
             {
                 model.Add(new FarmViewModel
                 {
+                    Id = item.Id,
                     FarmerName = $"{item.Farmer.FirstName} {item.Farmer.LastName}",
                     FarmName = item.Name,
                     Place = item.Place,
@@ -57,7 +66,7 @@ namespace CattleMgm.Controllers
         public async Task<IActionResult> Create()
         {
             var farmers = await _db.Farmer.Where(x => x.UserId != null)
-                                .Select(q=> new {q.Id, FullName = q.FirstName + " " + q.LastName})
+                                .Select(q => new { q.Id, FullName = q.FirstName + " " + q.LastName })
                                 .ToListAsync();
             ViewBag.Farmers = new SelectList(farmers, "Id", "FullName");
 
@@ -69,8 +78,8 @@ namespace CattleMgm.Controllers
         {
             if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("","Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
-                return View(model);            
+                ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
+                return View(model);
             }
 
             Farm farm = new Farm();
@@ -88,5 +97,69 @@ namespace CattleMgm.Controllers
             return RedirectToAction("Index");
 
         }
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+
+            if (id == null)
+            {
+                return BadRequest();
+            }
+
+            //int did = AesCrypto.Decrypt<int>(ide);
+
+            var item = _db.Farm.Find(id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            FarmEditViewModel editViewModel = new FarmEditViewModel
+            {
+                Id = item.Id,
+                Name = item.Name,
+                Place = item.Place,
+                Address = item.Address
+            };
+
+            return View(editViewModel);
+        }
+
+
+        [HttpPost]
+        public IActionResult Edit(FarmEditViewModel model)
+        {
+
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Ferma eshte modifikuar me sukses", Title = "Sukses" };
+
+            if (!ModelState.IsValid)
+            {
+                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+                return Json(error);
+            }
+
+            var item = _db.Farm.Find(model.Id);
+
+            if (item == null)
+            {
+                return NotFound();
+            }
+
+            Farm farm = new Farm();
+            item.FarmerId = model.FarmerId;
+            item.Name = model.FarmName;
+            item.Place = model.Place;
+            item.Address = model.Address;
+            item.Created = DateTime.Now;
+            item.CreatedBy = user.Id;
+
+            _db.Update(item);
+
+            _db.SaveChanges();
+
+            return Json(error);
+        }
+    
     }
 }
