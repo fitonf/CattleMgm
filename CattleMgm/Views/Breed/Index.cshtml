@@ -1,0 +1,126 @@
+﻿@model List<BreedViewModel>
+@{
+    ViewData["Title"] = "Lista e llojit te gjedheve";
+}
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Breed">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="breed-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i gjedhes</th>
+                    <th>Tipi i gjedhes</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var breed in Model)
+                {
+                    <tr>
+                        <td>@breed.Name</td>
+                        <td>@breed.Type</td>
+                        <td class="button-td">
+                            <div class="d-flex">
+                            <a class="btn btn-sm btn-primary me-2" onclick="EditBreed('@AesCrypto.Enkrypt(breed.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" onclick="deleteBreed(event,'@breed.Id')">Delete</a>
+                                </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $("#breed-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    
+
+ function CreateBreed() {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Create", "Breed")', function() {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        function EditBreed(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Breed")?ide=' + id, function() {
+                $('#modal-center-large').modal('toggle')
+            })
+
+        }
+      
+    
+            function deleteBreed(event, id){
+            var rowToDelete = $(event.target).closest('tr');
+         
+            Swal.fire({
+                title: 'A jeni te sigurt?',
+                text: "Kjo ben fshirjen e llojit!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Jo, kthehu.',
+                buttonsStyling: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Po, deshiroj ta fshij!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                debugger;                
+                if (result.value == true) {
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","Breed")',
+                        data: { id: id },
+                        success: function (data) {                            
+                            Swal.fire({
+                                text: "Lloji u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }                                        
+                            }).then(t => {
+                                var table = $('#breed-table').DataTable();
+                                table.row(rowToDelete).remove().draw();
+                                rowToDelete = '';
+                                debugger;
+                            });
+                            
+                        },
+                        error: function (xhr, status, error) {                            
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                   
+                } else if (result.dismiss == 'cancel') {                    
+                    Swal.close();
+                   
+                }
+            })
+             }        
+    </script>
+    
+}

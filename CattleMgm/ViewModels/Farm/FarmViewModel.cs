@@ -3,7 +3,9 @@
 namespace CattleMgm.ViewModels.Farm
 {
     public class FarmViewModel
+
     {
+        public int Id { get; set; }
         public string FarmerName { get; set; }
 
         public string FarmName { get; set; }
@@ -31,4 +33,14 @@ namespace CattleMgm.ViewModels.Farm
         public string Address { get; set; }
 
     }
+
+    public class FarmEditViewModel : FarmCreateViewModel
+
+    {
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
+    }
+
 }

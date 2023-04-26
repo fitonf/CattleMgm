@@ -1,0 +1,112 @@
+﻿@model List<PositionViewModel>
+@{
+    ViewData["Title"] = "Lista e pozicioneve";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaflet Tutorial</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+    <style>
+        #map {
+            height: 100vh;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-toolbar float-end">
+                <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Position">Regjistro</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table id="position-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Emri i Gjedhes</th>
+                        <th id="lat">Latitude</th>
+                        <th id="long">Longitude</th>
+                        <th>Veprimet</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.CattleName</td>
+                            <td>@item.Lat</td>
+                            <td>@item.Long</td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" onclick="EditMenu(@item.Id)"><i class="fa fa-edit"></i> Edit</a>
+
+                                <a class="btn btn-sm btn-primary" onclick="EditMap(@item.Lat,@item.Long)"><i class="fa fa-map-marked-alt"></i> Map</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div id="map"></div>
+</body>
+</html>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#position-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+        });
+
+
+        function EditMenu(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Position")?id=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        function EditMap(lat,long) {
+
+            var map = L.map('map').setView([42.37061653922137, 21.15829162015968], 12);
+
+            var singleMarker = L.marker([lat, long]);
+            singleMarker.addTo(map);
+            var popup = singleMarker.bindPopup('Pozicioni i gjedhes se zgjedhur');
+            popup.addTo(map);
+
+            // Google Map Layer
+
+            googleStreets = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleStreets.addTo(map);
+
+            map.once("click",function(){
+                Swal.fire(
+                    'Informacion',
+                    'Shtypni ENTER per shfaqjen e pozicionit te gjedhes tjeter te zgjedhur',
+                    'OK'
+                )
+            });
+
+            document.addEventListener("keypress",function(){
+                if (event.key === "Enter") {
+                    location.reload();
+                }
+            });
+        }
+
+    </script>
+}

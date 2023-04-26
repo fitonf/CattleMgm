@@ -1,0 +1,63 @@
+﻿@model BreedEditViewModel
+
+@{
+}
+<div class="card">
+    <div class="modal-header">
+        <h5 class="modal-title">Editimi i llojit te gjedhes</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+    <form asp-action="Edit" asp-controller="Breed" class="noLoading" id="frmEditBreed" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
+        <div class="card-body">
+            @Html.AntiForgeryToken()
+            <input asp-for="Id" hidden />
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Name">Emri i Gjedhes</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Type">Tipi </label>
+                    <input asp-for="Type" class="form-control" />
+                    <span asp-validation-for="Type" class="text-danger"></span>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Edito" />
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript">
+    var form = $('#frmEditBreed');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+
+    function EditSuccess(data) {
+        console.log(data);
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.errorDescription,
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>
