@@ -115,34 +115,26 @@ namespace CattleMgm.Controllers
         }
 
         [HttpPost]
-        public IActionResult _Edit(SubmenuEditViewModel model)
+        public IActionResult _Edit(MilkEditViewModel model)
         {
-            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Milk forma eshte modifikuar me sukses", Title = "Sukses" };
 
             if (!ModelState.IsValid)
             {
                 error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
                 return Json(error);
             }
-            var submenu = _db.SubMenu.Find(model.Id);
-            if (submenu == null)
+            var milk = _db.CattleMilk.Find(model.Id);
+            if (milk == null)
             {
                 return NotFound();
 
             }
-            submenu.Action = model.Action;
-            submenu.Controller = model.Controller;
-            submenu.Area = model.Area;
-            submenu.Claim = model.Policy;
-            submenu.Icon = model.Icon;
-            submenu.NameSq = model.NameSq;
-            submenu.NameEn = model.NameEn;
-            submenu.NameSr = model.NameSr;
-            submenu.OrdinalNumber = model.OrdinalNumber;
-            submenu.StaysOpenFor = model.StaysOpenFor;
-            submenu.ParentSubId = model.ParentID;
-
-            _db.Update(submenu);
+            milk.Id = model.Id;
+            milk.Price = model.Price;
+            milk.LitersCollected = model.LitersCollected;
+   
+            _db.Update(milk);
 
             _db.SaveChanges();
 
