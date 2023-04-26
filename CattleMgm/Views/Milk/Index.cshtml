@@ -35,7 +35,7 @@
                         <td>@item.TotalProfit $</td>
                         <td class="button-td">
                             <a class="btn btn-sm btn-primary" onclick="EditMilk(@item.Id)"><i class="fa fa-edit"></i>Edit</a>
-
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteMilk('@item.Id')">Delete</a>
                             @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
                         new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
                         *@
