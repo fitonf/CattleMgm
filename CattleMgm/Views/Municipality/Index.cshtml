@@ -1,0 +1,44 @@
+﻿@model List<MunicipalityViewModel>
+
+@{
+    ViewData["Title"] = "Komunat";
+}
+<div class="card">
+    <div class="card-header">
+        <div class="card-toolbar float-end">
+            <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="Municipality">Regjistro</a>
+        </div>
+    </div>
+    <div class="card-body">
+        <table id="municipality-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>Emri i Komunes</th>
+                    <th>Zip kodi</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Name</td>
+                        <td>@item.Zip</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#municipality-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}

@@ -1,0 +1,27 @@
+﻿@model MediaViewModel
+@{
+    ViewData["Title"] = "Ngarkimi i dokumenteve";
+}
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte</h4>
+    </div>
+    <form id="uploadForm" enctype="multipart/form-data" method="post" asp-controller="Media" asp-action="Upload">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="document">Dokumenti</label>
+                    <input asp-for="document" class="form-control" />
+                    <span asp-validation-for="document" class="text-danger"></span>
+                </div>
+                
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Ngarko" />
+        </div>
+    </form>
+
+</div>

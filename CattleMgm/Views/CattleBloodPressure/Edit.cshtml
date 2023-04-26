@@ -1,0 +1,46 @@
+﻿@model CattleBloodPressureEditViewModel
+@{
+    ViewData["Title"] = "Editimi i perdoruesit";
+}
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte</h4>
+    </div>
+    <form id="editForm" method="post">
+        <div class="card-body">
+            @Html.HiddenFor(x=>x.Id)
+            <div class="row">
+                <div class="col-md-3">
+                    <label class="required" asp-for="CattleId"></label>
+                    @Html.DropDownListFor(m=>m.CattleId, ViewBag.CattleId as SelectList, "Choose", new { @class = "form-control select2"})
+                    <span asp-validation-for="CattleId" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="required" asp-for="PressureFrom"></label>
+                    <input asp-for="PressureFrom" class="form-control" />
+                    <span asp-validation-for="PressureFrom" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="required" asp-for="PressureTo"></label>
+                    <input asp-for="PressureTo" class="form-control" />
+                    <span asp-validation-for="PressureTo" class="text-danger"></span>
+                </div>
+                <div class="col-md-3">
+                    <label class="required" asp-for="DateMeasured"></label>
+                    <input asp-for="DateMeasured" class="form-control" />
+                    <span asp-validation-for="DateMeasured" class="text-danger"></span>
+                </div>  
+            </div>
+       
+
+        </div>
+        <div class="card-footer">
+            <input type="submit" class="btn btn-sm btn-primary" value="Edito">
+
+        </div>
+    </form>
+
+</div>
+
