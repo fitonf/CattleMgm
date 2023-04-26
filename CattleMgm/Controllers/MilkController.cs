@@ -26,14 +26,14 @@ namespace CattleMgm.Controllers
         {
             _MilkRepository = milkRepository;
         }
-        public async  Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             var milk = new List<CattleMilk>();
-            milk=await _MilkRepository.GetAllMilk();
+            milk = await _MilkRepository.GetAllMilk();
 
             List<MilkViewModel> model = new List<MilkViewModel>();
 
-            foreach(var item in milk)
+            foreach (var item in milk)
             {
                 model.Add(new MilkViewModel
                 {
@@ -45,6 +45,7 @@ namespace CattleMgm.Controllers
                     Price = item.Price
                 });
             }
+
             return View(model);
         }
 
@@ -61,18 +62,18 @@ namespace CattleMgm.Controllers
             //{
             //    cattles = _cattleRepository.GetCattles();
             //}
-            ViewBag.Cattles = new SelectList(cattles,"Id","Name");
+            ViewBag.Cattles = new SelectList(cattles, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(MilkCreateViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-				ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
-				return View(model);
-			}
+                ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
+                return View(model);
+            }
 
             CattleMilk cattleMilk = new CattleMilk();
             cattleMilk.Identifier = Guid.NewGuid();
@@ -90,7 +91,7 @@ namespace CattleMgm.Controllers
 
         }
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public IActionResult _Edit(int? id)
         {
             if (id == null)
             {
@@ -108,36 +109,46 @@ namespace CattleMgm.Controllers
 
             MilkEditViewModel editViewModel = new MilkEditViewModel
             {
-               Id=milk.Id,
-               CattleId = milk.CattleId,
-               Price=milk.Price,
-               LitersCollected=milk.LitersCollected
-              
+                Id = milk.Id,
+                CattleId = milk.CattleId,
+                Price = milk.Price,
+                LitersCollected = milk.LitersCollected
+
             };
+
             return PartialView(editViewModel);
         }
 
         [HttpPost]
         public IActionResult _Edit(MilkEditViewModel model)
         {
-            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Milk forma eshte modifikuar me sukses", Title = "Sukses" };
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
 
             if (!ModelState.IsValid)
             {
                 error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
                 return Json(error);
             }
-            var milk = _db.CattleMilk.Find(model.Id);
-            if (milk == null)
+            var submenu = _db.SubMenu.Find(model.Id);
+            if (submenu == null)
             {
                 return NotFound();
 
             }
-            milk.Id = model.Id;
-            milk.Price = model.Price;
-            milk.LitersCollected = model.LitersCollected;
-   
-            _db.Update(milk);
+
+            //submenu.Action = model.Action;
+            //submenu.Controller = model.Controller;
+            //submenu.Area = model.Area;
+            //submenu.Claim = model.Policy;
+            //submenu.Icon = model.Icon;
+            //submenu.NameSq = model.NameSq;
+            //submenu.NameEn = model.NameEn;
+            //submenu.NameSr = model.NameSr;
+            //submenu.OrdinalNumber = model.OrdinalNumber;
+            //submenu.StaysOpenFor = model.StaysOpenFor;
+            //submenu.ParentSubId = model.ParentID;
+
+            _db.Update(submenu);
 
             _db.SaveChanges();
 
