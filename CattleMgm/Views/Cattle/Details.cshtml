@@ -16,14 +16,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leaflet Tutorial</title>
+    <title></title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
     <style>
         #map {
             height: 220px;
-            width: 1100px;
+            width: 100%;
             border-bottom-left-radius: 80px;
             border-bottom-right-radius: 80px;
         }
@@ -69,7 +69,6 @@
             </div><!--end f_profile-->
         </div><!--end card-body-->
     </div> <!--end card-->
-    <div id="map"></div>
 </body>
 </html>
 
@@ -85,7 +84,7 @@
 
                 var singleMarker = L.marker([lat, long]);
                 singleMarker.addTo(map);
-                var popup = singleMarker.bindPopup('Pozicioni i gjedhes se zgjedhur');
+                var popup = singleMarker.bindPopup('Pozicioni i gjedhes');
                 popup.addTo(map);
 
                 // Google Map Layer
@@ -95,20 +94,6 @@
                     subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
                 });
                 googleStreets.addTo(map);
-
-                map.once("click", function () {
-                    Swal.fire(
-                        'Informacion',
-                        'Shtypni ENTER per shfaqjen e pozicionit te gjedhes tjeter te zgjedhur',
-                        'OK'
-                    )
-                });
-
-                document.addEventListener("keypress", function () {
-                    if (event.key === "Enter") {
-                        location.reload();
-                    }
-                });
             }
         </script>
 }
