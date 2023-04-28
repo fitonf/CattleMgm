@@ -37,5 +37,7 @@ namespace CattleMgm.Controllers
         {
             return View(new ViewModels.ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+       
     }
 }
