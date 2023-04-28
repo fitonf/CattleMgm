@@ -34,15 +34,11 @@ namespace CattleMgm.Controllers
         {
             var temp = await _db.CattleTemperature.Include(q=> q.Cattle).ToListAsync();
 
-            
-
-            //var username = _db.AspNetUsers.Select(x => new { Id = x.Id, Name = x.FirstName }).ToList();
-            //ViewBag.UserName = username;
-
-         
-
 
             foreach (var item in temp) {
+                //Gjen userin i cila ka regjistruar te dhena 
+                var user = _db.AspNetUsers.Where(t => t.Id == item.CreatedBy).FirstOrDefault();
+
 
                 model.Add(new CattleTempViewModel
                 {
@@ -51,9 +47,7 @@ namespace CattleMgm.Controllers
                     CattleId = item.CattleId,
                     Temperature = item.Temperature,
                     DateMeasured = item.DateMeasured,
-                    CreatedBy = item.CreatedBy
-                   // CreatedBy = item.User.FirstName + " "+item.User.LastName,
-                    //CreatedBy = item.Cattle.Farm.Farmer.FirstName
+                    CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName
                 });
             }      
             return View(model);
