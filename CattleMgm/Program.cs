@@ -76,7 +76,10 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseStaticFiles();
 
 app.UseRouting();

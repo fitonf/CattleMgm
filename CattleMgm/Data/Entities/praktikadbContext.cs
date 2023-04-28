@@ -31,6 +31,7 @@ namespace CattleMgm.Data.Entities
         public virtual DbSet<CattleTemperature> CattleTemperature { get; set; } = null!;
         public virtual DbSet<Farm> Farm { get; set; } = null!;
         public virtual DbSet<Farmer> Farmer { get; set; } = null!;
+        public virtual DbSet<Log> Log { get; set; } = null!;
         public virtual DbSet<Media> Media { get; set; } = null!;
         public virtual DbSet<Menu> Menu { get; set; } = null!;
         public virtual DbSet<Municipality> Municipality { get; set; } = null!;
@@ -318,6 +319,35 @@ namespace CattleMgm.Data.Entities
                     .WithMany(p => p.Farmer)
                     .HasForeignKey(d => d.UserId)
                     .HasConstraintName("FK_Farmer_AspNetUsers");
+            });
+
+            modelBuilder.Entity<Log>(entity =>
+            {
+                entity.Property(e => e.LogId).HasColumnName("LogID");
+
+                entity.Property(e => e.Action).HasMaxLength(128);
+
+                entity.Property(e => e.BError).HasColumnName("bError");
+
+                entity.Property(e => e.Controller).HasMaxLength(128);
+
+                entity.Property(e => e.DescriptionTitle).HasMaxLength(256);
+
+                entity.Property(e => e.Developer).HasMaxLength(128);
+
+                entity.Property(e => e.HostName).HasMaxLength(128);
+
+                entity.Property(e => e.HttpMethod).HasMaxLength(64);
+
+                entity.Property(e => e.Ip)
+                    .HasMaxLength(64)
+                    .HasColumnName("IP");
+
+                entity.Property(e => e.Url).HasMaxLength(2048);
+
+                entity.Property(e => e.UserId)
+                    .HasMaxLength(256)
+                    .HasColumnName("UserID");
             });
 
             modelBuilder.Entity<Media>(entity =>
