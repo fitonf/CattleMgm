@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.DotNet.Scaffolding.Shared.Project;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Net;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CattleMgm.Controllers
@@ -120,7 +121,8 @@ namespace CattleMgm.Controllers
                 Id = item.Id,
                 Name = item.Name,
                 Place = item.Place,
-                Address = item.Address
+                Address = item.Address,
+                Active = item.Active,
             };
 
             return View(editViewModel);
@@ -128,37 +130,39 @@ namespace CattleMgm.Controllers
 
 
         [HttpPost]
-        public IActionResult Edit(FarmEditViewModel model)
+        public async Task<IActionResult> EditAsync(FarmEditViewModel model)
         {
 
-            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Ferma eshte modifikuar me sukses", Title = "Sukses" };
+            //ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Ferma eshte modifikuar me sukses", Title = "Sukses" };
 
             if (!ModelState.IsValid)
             {
-                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
-                return Json(error);
+                ModelState.AddModelError("", "Plotesoni fushat obligative");
+                return View(model);
+              //  error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+               // return Json(error);
             }
 
             var item = _db.Farm.Find(model.Id);
 
             if (item == null)
             {
-                return NotFound();
+                ModelState.AddModelError("", "Ferma nuk ekziston");
+                return View(model);
             }
 
-            Farm farm = new Farm();
-            item.FarmerId = model.FarmerId;
-            item.Name = model.FarmName;
+            item.Id = model.Id;
+            item.Name = model.Name;
             item.Place = model.Place;
             item.Address = model.Address;
-            item.Created = DateTime.Now;
-            item.CreatedBy = user.Id;
+            item.Active = model.Active;
+
 
             _db.Update(item);
 
             _db.SaveChanges();
 
-            return Json(error);
+            return RedirectToAction("Index", "Farm");
         }
     
     }
