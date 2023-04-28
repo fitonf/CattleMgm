@@ -60,5 +60,18 @@
             "ordering": false
 
         });
+
+        function editFarm(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("edit", "Farm")?id=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+
+        }
+         
+      
+
+
+
     </script>
 }

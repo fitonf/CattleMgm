@@ -24,7 +24,7 @@ namespace CattleMgm.ViewModels.Farm
         public int FarmerId { get; set; }
 
         [Display(Name = "Emri i fermes")]
-        public string FarmName { get; set; }
+        public string? FarmName { get; set; }
 
         [Display(Name = "Vendi")]
         public string Place { get; set; }
@@ -37,9 +37,12 @@ namespace CattleMgm.ViewModels.Farm
     public class FarmEditViewModel : FarmCreateViewModel
 
     {
+      
         public int Id { get; set; }
 
         public string Name { get; set; }
+
+        public bool Active { get; set; }
 
     }
 
