@@ -18,6 +18,7 @@ namespace CattleMgm.Data.Entities
         public Guid UniqueIdentifier { get; set; }
         public int FarmId { get; set; }
         public int BreedId { get; set; }
+        public int? MunicipalityId { get; set; }
         public string? Name { get; set; }
         public int Gender { get; set; }
         public DateTime BirthDate { get; set; }
@@ -31,6 +32,7 @@ namespace CattleMgm.Data.Entities
         public virtual AspNetUsers CreatedByNavigation { get; set; } = null!;
         public virtual Farm Farm { get; set; } = null!;
         public virtual AspNetUsers? LastUpdatedByNavigation { get; set; }
+        public virtual Municipality? Municipality { get; set; }
         public virtual ICollection<CattleBloodPressure> CattleBloodPressure { get; set; }
         public virtual ICollection<CattleHumidity> CattleHumidity { get; set; }
         public virtual ICollection<CattleMilk> CattleMilk { get; set; }

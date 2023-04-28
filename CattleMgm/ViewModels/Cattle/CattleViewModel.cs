@@ -70,6 +70,8 @@ namespace CattleMgm.ViewModels.Cattle
 
         public string UniqueIdentifier { get; set; }
 
+        public bool MilkCollectedToday { get; set; }
+
         public string Name { get; set; }
 
         public double Weight { get; set; }

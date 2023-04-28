@@ -195,6 +195,11 @@ namespace CattleMgm.Data.Entities
                     .WithMany(p => p.CattleLastUpdatedByNavigation)
                     .HasForeignKey(d => d.LastUpdatedBy)
                     .HasConstraintName("FK_Cattle_AspNetUsers1");
+
+                entity.HasOne(d => d.Municipality)
+                    .WithMany(p => p.Cattle)
+                    .HasForeignKey(d => d.MunicipalityId)
+                    .HasConstraintName("FK_Cattle_Municipality");
             });
 
             modelBuilder.Entity<CattleBloodPressure>(entity =>

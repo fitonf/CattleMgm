@@ -50,6 +50,170 @@
                 </div><!--end col-->
             </div><!--end row-->
         </div><!--end f_profile-->
+        <br />
+        <br />
+        <div class="row">
+            <h4>Temperatura</h4>
+            <table id="cattle-temp-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Temperatura</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleTemp)
+                    {
+                       @* var span = "";
+                        if (item.Active == true)
+                        {
+                            span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                        }
+                        else
+                        {
+                            span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                        }*@
+                        <tr>
+                            <td>@item.Temperature</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Lageshtia e ajrit</h4>
+            <table id="cattle-humidity-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Lageshtia e ajrit</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleHumidity)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Humidity</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Pozicioni i gjedhes</h4>
+            <table id="cattle-position-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattlePosition)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Lat</td>
+                            <td>@item.Long</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Qumeshti</h4>
+            <table id="cattle-milk-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Date collected</th>
+                        <th>Liters collected</th>
+                        <th>Price</th>
+                        <th>Total profit</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleMilk)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Identifier</td>
+                            <td>@item.DateCollected</td>
+                            <td>@item.LitersCollected</td>
+                            <td>@item.Price</td>
+                            <td>@item.TotalProfit</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Shtypja e gjakut</h4>
+            <table id="cattle-pressure-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Shtypja e gjakut</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleBloodPressure)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@($"{item.PressureFrom}/{item.PressureTo}")</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div><!--end card-body-->
 </div> <!--end card-->
 
@@ -91,5 +255,43 @@
                 }
             });
         }
+    </script>
+
+    <script type="text/javascript">
+        $("#cattle-temp-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-humidity-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-position-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-milk-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-pressure-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
     </script>
 }

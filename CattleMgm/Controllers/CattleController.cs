@@ -158,6 +158,7 @@ namespace CattleMgm.Controllers
             model.FarmName = cattle.Farm.Name;
             model.Breed = cattle.Breed.Name;
             model.BirthDate = cattle.BirthDate.ToString("dd/MM/yyyy HH:mm:ss");
+            model.MilkCollectedToday = cattle.CattleMilk.Where(x => x.Created.Day == DateTime.Now.Day && x.Id == model.Id).Any();
 
 
             var bloodPressure = cattle.CattleBloodPressure.ToList();
