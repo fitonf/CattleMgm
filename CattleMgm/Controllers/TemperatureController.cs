@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CattleMgm.Controllers
 {
     
@@ -33,6 +34,14 @@ namespace CattleMgm.Controllers
         {
             var temp = await _db.CattleTemperature.Include(q=> q.Cattle).ToListAsync();
 
+            
+
+            //var username = _db.AspNetUsers.Select(x => new { Id = x.Id, Name = x.FirstName }).ToList();
+            //ViewBag.UserName = username;
+
+         
+
+
             foreach (var item in temp) {
 
                 model.Add(new CattleTempViewModel
@@ -43,6 +52,8 @@ namespace CattleMgm.Controllers
                     Temperature = item.Temperature,
                     DateMeasured = item.DateMeasured,
                     CreatedBy = item.CreatedBy
+                   // CreatedBy = item.User.FirstName + " "+item.User.LastName,
+                    //CreatedBy = item.Cattle.Farm.Farmer.FirstName
                 });
             }      
             return View(model);
@@ -61,8 +72,6 @@ namespace CattleMgm.Controllers
         }
 
 
-
-
         [HttpPost]
         public async Task<IActionResult> Create(CattleTempCreateViewModel model)
         {
@@ -74,7 +83,7 @@ namespace CattleMgm.Controllers
 
             CattleTemperature temp = new CattleTemperature();
             temp.CattleId = model.CattleId;
-            temp.Temperature= model.Temperature;
+            temp.Temperature = model.Temperature;
             temp.DateMeasured = DateTime.Now;
             temp.CreatedBy = user.Id;
 
@@ -154,7 +163,28 @@ namespace CattleMgm.Controllers
 
 
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int Id)
+        {
 
+            if (Id == null)
+            {
+                return BadRequest();
+            }
+
+
+            var temp = _db.CattleTemperature.Find(Id);
+            if (temp != null)
+            {
+                var result = _db.CattleTemperature.Remove(temp);
+
+                await _db.SaveChangesAsync();
+
+            }
+
+            return Json("success");
+
+        }
 
 
 
