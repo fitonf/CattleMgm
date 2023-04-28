@@ -9,12 +9,16 @@ namespace CattleMgm.ViewModels.CattleTemperature
 
         public int CattleId { get; set; }
 
+        [Display(Name = "Emri Gjedhes")]
         public string CattleName { get; set; }
 
+        [Display(Name = "Temperatura e Gjedhes")]
         public double Temperature { get; set; }
 
+        [Display(Name = "Data e matjes")]
         public DateTime DateMeasured { get; set; }
 
+        [Display(Name = "Krijuar nga")]
         public string CreatedBy { get;set; }
     }
 

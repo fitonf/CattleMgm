@@ -1,5 +1,8 @@
 ﻿@model List<CattleTempViewModel>
 
+    @{
+        ViewData["Title"] = "Temperatura e Gjedheve";
+     }
 <div class="card">
     <div class="card-header">
         <div class="card-toolbar float-end">
@@ -16,6 +19,7 @@
                     <th>Temperatura</th>
                     <th>Data</th>
                     <th>Krijuar nga</th>
+                    
                     <th>Veprimet</th>
                     
                 </tr>
@@ -23,6 +27,8 @@
             <tbody>
                 @foreach (var item in Model)
                 {
+                   // @Html.DropDownListFor(m=> m.CreatedBy, ViewBag.UserName as SelectList, "Zgjedh", new { @class = "form-control select2"})
+
                     
                     <tr>
                         <td>@item.CattleName</td>
@@ -31,6 +37,7 @@
                         <td>@item.CreatedBy</td>
                         <td>
                             <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteTemp('@item.Id')">Delete</a>
                         </td> 
                         
                     </tr>
@@ -55,6 +62,45 @@
             $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Temperature")?ide=' + id, function () {
                 $('#modal-center-large').modal('toggle')
             })
+        }
+
+        function DeleteTemp(Id) {
+            debugger;
+            Swal.fire({
+                title: 'A jeni të sigurt?',
+                text: "Ju nuk do mund të ktheheni prapa!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Fshij'
+            }).then((result) => {
+                debugger;
+                if (result.value) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Temperature")/' + Id,
+                        type: 'POST',
+                        success: function (result) {
+                            Swal.fire({
+                                title: 'Fshier!',
+                                text: 'E dhena u fshi me sukses!',
+                                icon: 'success',
+                                timer: 1500,
+                                timerProgressBar: true,
+                            }).then((result) => {
+                                location.reload();
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'An error occurred while deleting the role: ' + error,
+                                icon: 'error'
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
 }

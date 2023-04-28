@@ -1,5 +1,6 @@
 ﻿@model CattleTempCreateViewModel
 @{
+    ViewData["Title"] = "Regjistrimi i Temperatures";
 }
 
 <div class="card">
@@ -19,7 +20,7 @@
                     <span asp-validation-for="CattleId" class="text-danger"></span>
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="Temperature"></label>
+                    <label class="required" asp-for="Temperature"></label>
                     <input asp-for="Temperature" class="form-control" />
                     <span asp-validation-for="Temperature" class="text-danger"></span>
                 </div>
