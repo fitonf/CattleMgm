@@ -4,6 +4,7 @@ using CattleMgm.ViewModels.CattleBloodPressure;
 using CattleMgm.ViewModels.CattleTemperature;
 using CattleMgm.ViewModels.Humidity;
 using CattleMgm.ViewModels.Milk;
+using CattleMgm.ViewModels.Municipality;
 using CattleMgm.ViewModels.Position;
 using System.ComponentModel.DataAnnotations;
 
@@ -90,6 +91,10 @@ namespace CattleMgm.ViewModels.Cattle
         public List<PositionViewModel> CattlePosition { get; set; }
         public List<MilkViewModel> CattleMilk { get; set; }
 
+    }
+    public class CattleEditViewModel : CattleCreateViewModel
+    {
+        public int Id { get; set; }
     }
 
 

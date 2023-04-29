@@ -33,7 +33,10 @@
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
                         <td>@item.CreatedBy</td>
-                        <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
+                        <td><a class="btn btn-sm btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
+                        <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteCattle('@item.Id')">Delete</a>
+                        </td>
                     </tr>
                 }
             </tbody>
@@ -50,5 +53,62 @@
             "ordering": false
 
         });
+        var DeleteCattle = function (id) {
+            Swal.fire({
+                title: 'A jeni te sigurt?',
+                text: "Kjo ben fshirjen e gjedhes!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Jo, kthehu.',
+                buttonsStyling: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Po, deshiroj ta fshij!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                debugger;
+                if (result.value) {
+                    debugger;
+                    // Make the AJAX request
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Delete","Cattle")/' + id,//
+                        data: { id: id },
+
+                        success: function (data) {
+                            debugger;
+                            Swal.fire({
+                                text: "Gjedhi u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                location.href = location.href;
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            debugger;
+                            Swal.fire({
+                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                }
+
+            });
+
+        }
     </script>
 }
