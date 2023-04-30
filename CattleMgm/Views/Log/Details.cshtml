@@ -1,0 +1,47 @@
+﻿@model LogDetailsViewModel
+@{
+}
+
+<div class="modal-header">
+    <h5 class="modal-title">Detajet e erroreve</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <table id="log-table1" class="table table-responsive">
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Controller</th>
+                <th>Action</th>
+                <th>Http Method</th>
+                <th>Url</th>
+                <th>Form Content</th>
+                <th>Inserted Date</th>
+            </tr>
+        </thead>
+        <tbody>
+                <tr>
+                    <td>@Model.UserId</td>
+                    <td>@Model.Controller</td>
+                    <td>@Model.Action</td>
+                    <td>@Model.HttpMethod</td>
+                    <td>@Model.Url</td>
+                    <td>@Model.FormContent</td>
+                    <td>@Model.Date</td>
+                </tr>
+        </tbody>
+    </table>
+    <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mbyll</button>
+    </div>
+
+</div>
+
+
+<script type="text/javascript">
+    var form = $('#log-table1');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+</script>
+
