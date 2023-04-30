@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore;
 using CattleMgm.Repository.CattleBloodPressures;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 using Microsoft.AspNetCore.Mvc;
+using CattleMgm.Repository.Log;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +55,7 @@ builder.Services.AddScoped<IMilkRepository, MilkRepository>();
 builder.Services.AddScoped<ICattleTempRepository, CattleTempRepository>();
 builder.Services.AddScoped<ICattleBloodPressureRepository, CattleBloodPressureRepository>();
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 var app = builder.Build();
 
