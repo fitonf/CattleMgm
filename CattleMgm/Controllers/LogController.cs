@@ -43,6 +43,7 @@ namespace CattleMgm.Controllers
                     Controller = log.Controller,
                     Action = log.Action,
                     HttpMethod = log.HttpMethod,
+                    Date=log.InsertedDate.ToShortDateString(),
                     Url = log.Url
                 });
             }
@@ -80,7 +81,6 @@ namespace CattleMgm.Controllers
             model.HttpMethod = log.HttpMethod;
             model.Url = log.Url.Substring(0,index);
             model.Exception = log.Exception.Substring(1,index1);
-            model.Date = log.InsertedDate.ToShortDateString();
 
 
             return PartialView(model);

@@ -12,6 +12,8 @@
 
         public string HttpMethod { get; set; }
 
+        public string Date { get; set; }
+
         public string Url { get; set; }
 
     }
@@ -31,8 +33,6 @@
         public string Url { get; set; }
 
         public string Exception { get; set; }
-
-        public string Date { get; set; }
 
     }
 }
