@@ -76,7 +76,17 @@ namespace CattleMgm.Controllers
                 return View(media);
             }
 
-           var success = await _mediaRepository.UploadFile(media.document, Directory.GetCurrentDirectory() + $"\\Dokumentet\\");
+            // Check the file type
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".txt", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+            var fileExtension = Path.GetExtension(media.document.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                ModelState.AddModelError("", "Formati i dokumentit nuk lejohet. Lejohen vetem fotografi, tekst dhe dokumente te Microsoft Office.");
+                return View(media);
+            }
+
+            var success = await _mediaRepository.UploadFile(media.document, Directory.GetCurrentDirectory() + $"\\Dokumentet\\");
 
             if (!success)
             {
@@ -88,5 +98,6 @@ namespace CattleMgm.Controllers
 
             return RedirectToAction("DocumentList");
         }
+
     }
 }

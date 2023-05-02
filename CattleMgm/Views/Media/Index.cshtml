@@ -12,16 +12,32 @@
             <div class="row">
                 <div class="col-md-6">
                     <label asp-for="document">Dokumenti</label>
-                    <input asp-for="document" class="form-control" />
-                    <span asp-validation-for="document" class="text-danger"></span>
+                    <input asp-for="document" class="form-control" id="fileInput" />
+                    <span class="text-danger" id="fileTypeError"></span>
                 </div>
-                
-
             </div>
         </div>
         <div class="card-footer">
-            <input type="submit" class="btn btn-sm btn-primary" value="Ngarko" />
+            <input type="submit" class="btn btn-sm btn-primary" value="Ngarko" id="submitButton" />
         </div>
     </form>
-
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        document.getElementById('submitButton').addEventListener('click', function (event) {
+            var fileInput = document.getElementById('fileInput');
+            var fileTypeError = document.getElementById('fileTypeError');
+            var fileExtension = fileInput.value.split('.').pop().toLowerCase();
+            // Lejohen vetem keto tipe te fajllave te uploadohen
+            var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                event.preventDefault();
+                fileTypeError.textContent = 'Formati i dokumentit nuk lejohet. Lejohen vetem fotografi, tekst dhe dokumente te Microsoft Office.';
+            } else {
+                fileTypeError.textContent = '';
+            }
+        });
+    </script>
+}
