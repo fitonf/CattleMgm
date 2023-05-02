@@ -42,7 +42,6 @@
         </table>
     </div>
 </div>
-
 @section Scripts{
     <script type="text/javascript">
         $("#CattleHumidity").DataTable({
@@ -60,7 +59,7 @@
         var DeleteHumidity = function (id) {
             Swal.fire({
                 title: 'A jeni te sigurt?',
-                text: "Kjo ben fshirjen e perdoruesit!",
+                text: "Kjo ben fshirjen e lageshtise!",
                 icon: 'warning',
                 showCancelButton: true,
                 cancelButtonText: 'Jo, kthehu.',
@@ -74,18 +73,18 @@
                 }
             }).then((result) => {
                 debugger;
-                if (result) {
+                if (result.value) {
                     debugger;
                     // Make the AJAX request
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("Delete","Humidity")',
+                        url: '@Url.Action("Delete","Humidity")/' + id,//
                         data: { id: id },
 
                         success: function (data) {
                             debugger;
                             Swal.fire({
-                                text: "Perdoruesi u fshi me sukses!",
+                                text: "Lageshtia u fshi me sukses!",
                                 icon: "success",
                                 buttonsStyling: false,
                                 confirmButtonText: "Ne rregull!",
@@ -93,14 +92,17 @@
                                     confirmButton: "btn btn-primary"
                                 }
                             }).then(function (result) {
-                                if (result.isConfirmed) {
-                                    
-                                }
+                                location.href = location.href;
                             });
+
+
+
+
 
                         },
                         error: function (xhr, status, error) {
                             debugger;
+                            // Show popup warning. For more info check the plugin's official documentation: https://sweetalert2.github.io/
                             Swal.fire({
                                 text: "Sorry, looks like there are some errors detected, please try again.",
                                 icon: "error",

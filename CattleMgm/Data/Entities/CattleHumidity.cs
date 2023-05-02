@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CattleMgm.Models;
+using System;
 using System.Collections.Generic;
 
 namespace CattleMgm.Data.Entities
@@ -9,8 +10,13 @@ namespace CattleMgm.Data.Entities
         public int CattleId { get; set; }
         public double Humidity { get; set; }
         public DateTime DateMeasured { get; set; }
+       
         public string CreatedBy { get; set; } = null!;
-
+     
         public virtual Cattle Cattle { get; set; } = null!;
+
+        // public Cattle Cattle { get; set; }
+        
     }
 }
+

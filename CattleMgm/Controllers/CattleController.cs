@@ -40,9 +40,9 @@ namespace CattleMgm.Controllers
         {
             ViewData["Title"] = "Lista e gjedheve";
 
-            var lista = _cattleRepository.GetCattles();
+            var lista = _cattleRepository.GetCattles(); //Cattle 
 
-            List<CattleViewModel> listaViewModel = new List<CattleViewModel>();
+            List<CattleViewModel> listaViewModel = new List<CattleViewModel>(); // 
 
             foreach (var cattle in lista)
             {
@@ -58,9 +58,11 @@ namespace CattleMgm.Controllers
                     Breed = cattle.Breed.Name,
                     UniqueIdentifier = cattle.UniqueIdentifier.ToString(),
                     Weight = cattle.Weight,
-                    CreatedBy = cattle.CreatedByNavigation.FirstName + cattle.CreatedByNavigation.LastName
+                    CreatedBy = cattle.CreatedByNavigation.FirstName + cattle.CreatedByNavigation.LastName,
+                    Komuna=cattle.Municipality.Emri
+
                 });
-            }
+            } //cattleviewmodel
 
             listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
 
@@ -119,6 +121,8 @@ namespace CattleMgm.Controllers
                 CreatedBy = user.Id,
                 Created = DateTime.Now,
                 Weight = model.Weight,
+               
+                
             };
 
             await _db.Cattle.AddAsync(cattle);
@@ -144,6 +148,7 @@ namespace CattleMgm.Controllers
                                          .Include(q => q.CattleTemperature)
                                          .Include(q => q.CattlePosition)
                                          .Include(q => q.CattleHumidity)
+                                         .Include(q=>q.Municipality)
                                          .Include(q => q.CattleMilk).Where(q => q.Id == id).FirstOrDefaultAsync();
 
 
@@ -163,7 +168,9 @@ namespace CattleMgm.Controllers
             model.FarmName = cattle.Farm.Name;
             model.Breed = cattle.Breed.Name;
             model.BirthDate = cattle.BirthDate.ToString("dd/MM/yyyy HH:mm:ss");
-            model.MilkCollectedToday = cattle.CattleMilk.Where(x => x.Created.Day == DateTime.Now.Day && x.Id == model.Id).Any();
+            model.MilkCollectedToday = cattle.CattleMilk.Where(x => x.Created.Date == DateTime.Now.Date && x.CattleId == model.Id).Any();
+            model.Komuna = cattle.Municipality.Emri;
+
 
 
             var bloodPressure = cattle.CattleBloodPressure.ToList();

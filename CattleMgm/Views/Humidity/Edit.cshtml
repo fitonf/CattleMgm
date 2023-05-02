@@ -19,7 +19,7 @@
                 <select asp-for="CattleId" asp-items="ViewBag.Cattles" class="form-control select2">
                     <option></option>
                 </select>
-
+                <span asp-validation-for="CattleId" class="text-danger"></span>
             </div>
             <div class="col-md-3">
                 <label asp-for="Humidity" class="required form-label"></label>

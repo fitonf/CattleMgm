@@ -31,6 +31,8 @@ namespace CattleMgm.ViewModels.Cattle
         public string Gender { get; set; }
 
         public string CreatedBy { get; set; }
+
+        public string Komuna { get; set; }
     }
 
     public class CattleCreateViewModel
@@ -54,6 +56,9 @@ namespace CattleMgm.ViewModels.Cattle
         [Required]
         [Display(Name = "Data lindjes")]
         public string BirthDate { get; set; }
+
+        [Required]
+        public int  Municipality { get; set; }
     }
 
     public class CattleDetailsViewModel
@@ -85,6 +90,7 @@ namespace CattleMgm.ViewModels.Cattle
 
         public string BirthDate { get; set; }
 
+        public string Komuna { get; set; }
         public List<CattleTempViewModel> CattleTemp { get; set; }
         public List<CattleBloodPressureViewModel> CattleBloodPressure { get; set; }
         public List<HumidityViewModel> CattleHumidity { get; set; }

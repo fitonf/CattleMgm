@@ -18,7 +18,7 @@
                     <th>Ferma</th>
                     <th>Emri i fermerit</th>
                     <th>Krijuar nga</th>
-                    <th></th>
+                    <th>Komuna</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,6 +37,8 @@
                         <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
                             <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteCattle('@item.Id')">Delete</a>
                         </td>
+                        <td>@item.Komuna</td>
+                        <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
                     </tr>
                 }
             </tbody>
