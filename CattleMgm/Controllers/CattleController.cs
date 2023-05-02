@@ -35,9 +35,9 @@ namespace CattleMgm.Controllers
         {
             ViewData["Title"] = "Lista e gjedheve";
 
-            var lista = _cattleRepository.GetCattles();
+            var lista = _cattleRepository.GetCattles(); //Cattle 
 
-            List<CattleViewModel> listaViewModel = new List<CattleViewModel>();
+            List<CattleViewModel> listaViewModel = new List<CattleViewModel>(); // 
 
             foreach (var cattle in lista)
             {
@@ -55,7 +55,7 @@ namespace CattleMgm.Controllers
                     Weight = cattle.Weight,
                     CreatedBy = cattle.CreatedByNavigation.FirstName + cattle.CreatedByNavigation.LastName
                 });
-            }
+            } //cattleviewmodel
 
             listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
 
