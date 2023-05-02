@@ -17,6 +17,7 @@ namespace CattleMgm.ViewModels.Humidity
         public DateTime DateMeasured { get; set; }
 
         public string CreatedBy { get; set; }
+        public string CreatedByUserName { get; set; }
     }
 
     public class HumidityCreateViewModel
