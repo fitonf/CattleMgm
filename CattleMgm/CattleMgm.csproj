@@ -219,7 +219,6 @@
 
   <ItemGroup>
     <Folder Include="Dokumentet\" />
-    <Folder Include="Reports\" />
     <Folder Include="Services\" />
   </ItemGroup>
 
