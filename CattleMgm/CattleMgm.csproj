@@ -214,10 +214,13 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.13" />
+    <PackageReference Include="ReportViewerCore.NETCore" Version="15.1.17" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Dokumentet\" />
+    <Folder Include="Reports\" />
+    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>
