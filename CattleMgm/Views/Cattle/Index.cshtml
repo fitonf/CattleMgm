@@ -18,7 +18,7 @@
                     <th>Ferma</th>
                     <th>Emri i fermerit</th>
                     <th>Krijuar nga</th>
-                    <th></th>
+                    <th>Komuna</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +33,7 @@
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
                         <td>@item.CreatedBy</td>
+                        <td>@item.Komuna</td>
                         <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
                     </tr>
                 }
