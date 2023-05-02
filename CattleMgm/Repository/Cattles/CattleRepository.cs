@@ -23,6 +23,7 @@ namespace CattleMgm.Repository.Cattles
                 .Include(x => x.Farm)
                 .ThenInclude(x => x.Farmer)
                 .Include(x => x.Breed)
+                .Include(x=>x.Municipality)
                 .Include(x => x.CreatedByNavigation)
                 .ToList();
 
@@ -36,6 +37,7 @@ namespace CattleMgm.Repository.Cattles
                 .Include(x => x.Farm)
                 .ThenInclude(x => x.Farmer)
                 .Include(x => x.Breed)
+                .Include(x => x.Municipality)
                 .Where(x=>x.FarmId == farm.Id)
                 .ToList();
 
