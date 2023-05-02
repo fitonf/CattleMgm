@@ -1,0 +1,114 @@
+﻿@model List<LogViewModel>
+@{
+    ViewData["Title"] = "Lista e erroreve";
+}
+
+<div class="card">
+    <div class="card-header with-border">
+        <h4>Plotesoni te dhenat me poshte per filtrim te tabeles</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <label for="UserId">User id:</label>
+                <input type="text" id="UserId" />
+            </div>
+            <div class="col-md-3">
+                <label for="Controller">Controller:</label>
+                <input type="text" id="Controller" />
+            </div>
+            <div class="col-md-3">
+                <label for="Action">Action:</label>
+                <input type="text" id="Action" />
+            </div>
+            <div class="col-md-3">
+                <label for="Date">Inserted Date:</label>
+                <input type="text" id="Date" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        <table id="log-table" class="table table-responsive">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Controller</th>
+                    <th>Action</th>
+                    <th>Http Method</th>
+                    <th>Inserted Date</th>
+                    <th>Veprimet</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.UserId</td>
+                        <td>@item.Controller</td>
+                        <td>@item.Action</td>
+                        <td>@item.HttpMethod</td>
+                        <td>@item.Date</td>
+                        <td>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu(@item.Id)"><i class="fa fa-info-circle"></i> Details</a>
+                        </td>
+                        
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $("#log-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+
+        function EditMenu(id) {
+
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Details", "Log")?id=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+
+        $(document).ready(function () {
+            $("#UserId, #Date, #Controller, #Action").on('input', function () {
+
+                var user = $("#UserId").val().toLowerCase();
+                var date = $("#Date").val().toLowerCase();
+                var con = $("#Controller").val().toLowerCase();
+                var action = $("#Action").val().toLowerCase();
+
+                $("#log-table tbody tr").filter(function () {
+
+                    var rowUser = $(this).find("td:eq(0)").text().toLowerCase();
+                    var rowDate = $(this).find("td:eq(4)").text().toLowerCase();
+                    var rowCon = $(this).find("td:eq(1)").text().toLowerCase();
+                    var rowAction = $(this).find("td:eq(2)").text().toLowerCase();
+
+                    return (rowUser.indexOf(user) === -1 || rowDate.indexOf(date) === -1 || rowCon.indexOf(con) === -1 || rowAction.indexOf(action) === -1);
+
+                }).hide();
+
+                $("#log-table tbody tr").filter(function () {
+
+                    var rowUser = $(this).find("td:eq(0)").text().toLowerCase();
+                    var rowDate = $(this).find("td:eq(4)").text().toLowerCase();
+                    var rowCon = $(this).find("td:eq(1)").text().toLowerCase();
+                    var rowAction = $(this).find("td:eq(2)").text().toLowerCase();
+
+                    return (rowUser.indexOf(user) !== -1 && rowDate.indexOf(date) !== -1 && rowCon.indexOf(con) !== -1 && rowAction.indexOf(action) !== -1);
+
+                }).show();
+            });
+        });
+
+    </script>
+}
