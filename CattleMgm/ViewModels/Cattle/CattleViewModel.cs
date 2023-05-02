@@ -4,6 +4,7 @@ using CattleMgm.ViewModels.CattleBloodPressure;
 using CattleMgm.ViewModels.CattleTemperature;
 using CattleMgm.ViewModels.Humidity;
 using CattleMgm.ViewModels.Milk;
+using CattleMgm.ViewModels.Municipality;
 using CattleMgm.ViewModels.Position;
 using System.ComponentModel.DataAnnotations;
 
@@ -30,6 +31,8 @@ namespace CattleMgm.ViewModels.Cattle
         public string Gender { get; set; }
 
         public string CreatedBy { get; set; }
+
+        public string Komuna { get; set; }
     }
 
     public class CattleCreateViewModel
@@ -53,6 +56,9 @@ namespace CattleMgm.ViewModels.Cattle
         [Required]
         [Display(Name = "Data lindjes")]
         public string BirthDate { get; set; }
+
+        [Required]
+        public int  Municipality { get; set; }
     }
 
     public class CattleDetailsViewModel
@@ -84,12 +90,17 @@ namespace CattleMgm.ViewModels.Cattle
 
         public string BirthDate { get; set; }
 
+        public string Komuna { get; set; }
         public List<CattleTempViewModel> CattleTemp { get; set; }
         public List<CattleBloodPressureViewModel> CattleBloodPressure { get; set; }
         public List<HumidityViewModel> CattleHumidity { get; set; }
         public List<PositionViewModel> CattlePosition { get; set; }
         public List<MilkViewModel> CattleMilk { get; set; }
 
+    }
+    public class CattleEditViewModel : CattleCreateViewModel
+    {
+        public int Id { get; set; }
     }
 
 

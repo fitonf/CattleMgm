@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
+
 namespace CattleMgm.Controllers
 {
     public class HumidityController : BaseController
@@ -25,6 +26,7 @@ namespace CattleMgm.Controllers
         public async Task<IActionResult> Index()
         {
             var hum = await _db.CattleHumidity.Include(q => q.Cattle).ToListAsync();
+            List<HumidityViewModel> model = new List<HumidityViewModel>();
 
             foreach (var item in hum)
             {
@@ -36,13 +38,14 @@ namespace CattleMgm.Controllers
                     CattleId = item.CattleId,
                     Humidity = item.Humidity,
                     DateMeasured = item.DateMeasured,
-                    CreatedBy = item.CreatedBy
+                    CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName
                 });
             }
+            model  = model.OrderByDescending(q => q.Id).ToList();
             return View(model);
         }
 
-        List<HumidityViewModel> model = new List<HumidityViewModel>();
+       
 
 
         [HttpGet]
@@ -145,23 +148,26 @@ namespace CattleMgm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(int Id)
         {
-            if (id == 0)
+
+            if (Id == null)
             {
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Kjo id nuk ekziston");
+                return BadRequest();
             }
 
-            var cattle = await _db.CattleHumidity.FindAsync(id);
 
-            if (cattle is not null)
+            var cattle = _db.CattleHumidity.Find(Id);
+            if (cattle != null)
             {
-                _db.CattleHumidity.Remove(cattle);
+                var result = _db.CattleHumidity.Remove(cattle);
+
                 await _db.SaveChangesAsync();
+
             }
 
             return Json("success");
+
         }
     }
 }
