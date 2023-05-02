@@ -1,0 +1,91 @@
+﻿@model CattleEditViewModel
+@{
+    //ViewData["Title"] = "Editimi i gjedheve";
+}
+
+@*@inject CattleMgm.Repository.Cattles.ICattleRepository cattleRep;*@
+
+<div class="modal-header">
+    <h5 class="modal-title">Editimi i Gjedheve</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form asp-action="Edit" asp-controller="Cattle" class="noLoading" id="frmEditCat" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
+
+        @Html.AntiForgeryToken()
+        <input asp-for="Id" hidden />
+        <div class="row">
+
+            <div class="col-md-3 form-group">
+                <label asp-for="FarmId" class="control-label required"></label>
+                @Html.DropDownListFor(m => m.FarmId, ViewBag.Farms as SelectList, "Zgjedh", new { @class = "form-control select2" })
+                <span asp-validation-for="FarmId" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label asp-for="BreedId" class="control-label required"></label>
+                @Html.DropDownListFor(m => m.BreedId, ViewBag.Breed as SelectList, "Zgjedh", new { @class = "form-control select2" })
+                <span asp-validation-for="BreedId" class="text-danger"></span>
+            </div>
+
+             <div class="col-md-3 form-group">
+                <label asp-for="Name" class="control-label required"></label>
+                <input asp-for="Name" class="form-control"/>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label asp-for="Weight" class="control-label required"></label>
+                <input asp-for="Weight" class="form-control"/>
+                <span asp-validation-for="Weight" class="text-danger"></span>
+            </div>
+
+           <div class="col-md-3 form-group">
+                <label asp-for="BirthDate" class="control-label required"></label>
+                <input asp-for="BirthDate" class="form-control" type="datetime-local"/>
+                <span asp-validation-for="BirthDate" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-3 form-group">
+                <label asp-for="Gender" class="control-label required"></label>
+                @Html.DropDownListFor(m => m.Gender, ViewBag.Gender as SelectList, "Zgjedh", new { @class = "form-control select2" })
+
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+
+            <div class="modal-footer modal-footer-uniform w-full justify-content-between">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mbyll</button>
+                <button type="submit" class="btn btn-outline-primary">Ndrysho</button>
+            </div>
+        </div>
+        </form>
+
+    </div>
+<script type="text/javascript">
+    var form = $('#frmEditCat');
+    form.removeData('validator');
+    form.removeData('unobtrusiveValidation');
+    $.validator.unobtrusive.parse(form);
+
+
+    function EditSuccess(data) {
+        console.log(data);
+        if (data.errorNumber == ErrorNumber.SUCCESS) {
+            Swal.fire({
+                icon: 'success',
+                title: data.title,
+                text: data.errorDescription,
+                confirmButtonText: "Okay"
+            }).then(t => {
+                window.location.reload()
+            })
+        } else if (data.errorNumber == ErrorNumber.WARNING) {
+            Swal.fire({
+                icon: 'warning',
+                title: data.title,
+                text: data.ErrorDescription,
+                confirmButtonText: "Okay"
+            })
+        }
+    }
+</script>

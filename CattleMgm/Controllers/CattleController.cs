@@ -1,18 +1,23 @@
 ﻿using CattleMgm.Data;
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers;
+using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
+using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Cattle;
 using CattleMgm.ViewModels.CattleTemperature;
 using CattleMgm.ViewModels.Humidity;
+using CattleMgm.ViewModels.Municipality;
 using CattleMgm.ViewModels.Position;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace CattleMgm.Controllers
 {
@@ -213,6 +218,118 @@ namespace CattleMgm.Controllers
             }).ToList();
 
             return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult Edit(string ide)
+        {
+            if (ide == null)
+            {
+                return BadRequest();
+            }
+
+            int id = AesCrypto.Decrypt<int>(ide);
+            var cat = _db.Cattle.Find(id);
+
+            // Gender ViewBag
+            var genderList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "Mashkull", Text = "Mashkull" },
+        new SelectListItem { Value = "Femer", Text = "Femer" }
+    };
+            ViewBag.Gender = genderList;
+
+            // Breed ViewBag
+            var breeds = _db.Breed.ToList();
+            var breedList = new SelectList(breeds, "Id", "Name", cat.BreedId);
+            ViewBag.Breed = breedList;
+
+            // Farm ViewBag
+            var farms = _db.Farm.ToList();
+            var farmList = new SelectList(farms, "Id", "Name", cat.FarmId);
+            ViewBag.Farms = farmList;
+
+            if (cat == null)
+            {
+                return NotFound();
+            }
+
+            CattleEditViewModel editViewModel = new CattleEditViewModel
+            {
+                Id = cat.Id,
+                Name = cat.Name,
+                Weight = cat.Weight,
+                BreedId = cat.BreedId,
+                BirthDate = cat.BirthDate.ToShortDateString(),
+                Gender = cat.Gender,
+                FarmId = cat.FarmId
+            };
+
+            return PartialView(editViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(CattleEditViewModel viewModel)
+        {
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Lageshtia u ndryshua me sukses", Title = "Sukses" };
+            if (!ModelState.IsValid)
+            {
+                var cat = _db.Cattle.Find(viewModel.Id);
+                if (cat == null)
+                {
+                    return NotFound();
+                }
+
+                cat.Name = viewModel.Name;
+                cat.Weight = viewModel.Weight;
+                cat.BreedId = viewModel.BreedId;
+                cat.BirthDate = DateTime.Parse(viewModel.BirthDate);
+                cat.Gender = viewModel.Gender;
+                cat.FarmId = viewModel.FarmId;
+                _db.Update(cat);
+                _db.SaveChanges();
+                return Json(error);
+            }
+
+            var genderList = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "Mashkull", Text = "Mashkull" },
+        new SelectListItem { Value = "Femer", Text = "Femer" }
+    };
+            ViewBag.Gender = genderList;
+
+            var breeds = _db.Breed.ToList();
+            var breedList = new SelectList(breeds, "Id", "Name", viewModel.BreedId);
+            ViewBag.Breed = breedList;
+
+            var farms = _db.Farm.ToList();
+            var farmList = new SelectList(farms, "Id", "Name", viewModel.FarmId);
+            ViewBag.Farms = farmList;
+
+            return PartialView(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int Id)
+        {
+
+            if (Id == null)
+            {
+                return BadRequest();
+            }
+
+
+            var cattle = _db.Cattle.Find(Id);
+            if (cattle != null)
+            {
+                var result = _db.Cattle.Remove(cattle);
+
+                await _db.SaveChangesAsync();
+
+            }
+
+            return Json("success");
+
         }
     }
 }
