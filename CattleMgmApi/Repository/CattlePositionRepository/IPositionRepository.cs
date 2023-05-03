@@ -12,6 +12,6 @@ namespace CattleMgmApi.Repository.CattlePositionRepository
 
         Task CreatePosition(CattlePosition position);
 
-        //void DeleteCattle(CattlePosition position);
+        void UpdatePosition(CattlePosition position, int Id);
     }
 }

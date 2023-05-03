@@ -125,6 +125,21 @@ app.MapPost("api/v1/position", async (IPositionRepository repo, IMapper mapper, 
     return Results.NoContent();
 });
 
+app.MapPut("api/v1/position/{id}", async (IPositionRepository repo, IMapper mapper, PositionUpdateDto pos, int id) =>
+{
+    if (pos is not null)
+    {
+        var mapped_object = mapper.Map<CattlePosition>(pos);
+        repo.UpdatePosition(mapped_object,id);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<PositionReadDto>(mapped_object);
+
+        return Results.Created($"Gjedhja me id {result.Id} u editua!", result);
+    }
+    return Results.NoContent();
+});
+
 //app.MapGet("/", () => "Hello World!");
 
 app.Run();

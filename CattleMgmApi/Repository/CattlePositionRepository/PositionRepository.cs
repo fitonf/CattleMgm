@@ -1,5 +1,6 @@
 ﻿using CattleMgmApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CattleMgmApi.Repository.CattlePositionRepository
 {
@@ -19,6 +20,18 @@ namespace CattleMgmApi.Repository.CattlePositionRepository
             //insertimi ne databaze me EFCore
 
             await _context.CattlePosition.AddAsync(position);
+        }
+
+        public void UpdatePosition(CattlePosition position, int id)
+        {
+            if (position == null)
+            {
+                throw new ArgumentNullException(nameof(position));
+            }
+
+            position.Id = id;
+
+            _context.CattlePosition.Update(position);
         }
 
         public async Task<IEnumerable<CattlePosition>> GetAllPositions()
