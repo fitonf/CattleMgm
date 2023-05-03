@@ -81,9 +81,6 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
     return Results.NoContent();
 });
 
-
-
-
 ///
 
 app.MapGet("api/v1/humidity", async (IHumidityRepository repo, IMapper mapper) =>
@@ -145,10 +142,20 @@ app.MapGet("api/v1/humiditys/{id}", async (IHumidityRepository repo, IMapper map
     }
 });
 
-//krijimi i api per editimin e gjedhes
+app.MapDelete("api/v1/humidity/{id}", async (IHumidityRepository repo, int id) =>
+{
+    var humidity = await repo.GetHumidityById(id);
 
+    if (humidity is null)
+    {
+        return Results.NotFound(new { error = "Humidity not found" });
+    }
 
+    repo.DeleteHumidity(humidity);
+    await repo.SaveChanges();
 
-//app.MapGet("/", () => "Hello World!");
+    return Results.NoContent();
+});
+
 
 app.Run();
