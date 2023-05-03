@@ -8,6 +8,8 @@ namespace CattleMgmApi.Repository.CattlePositionRepository
 
         Task<CattlePosition?> GetPositionById(int id);
 
+        Task<CattlePosition?> GetLastPosition(int id);
+
         Task<IEnumerable<CattlePosition>> GetAllPositions();
 
         Task CreatePosition(CattlePosition position);

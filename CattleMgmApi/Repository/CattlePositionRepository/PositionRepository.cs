@@ -1,5 +1,8 @@
 ﻿using CattleMgmApi.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
+using System.Linq;
+using System.Security.Claims;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace CattleMgmApi.Repository.CattlePositionRepository
@@ -46,6 +49,11 @@ namespace CattleMgmApi.Repository.CattlePositionRepository
         {
             //gjetja e nje gjedhe sipas id's se caktuar
             return await _context.CattlePosition.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<CattlePosition?> GetLastPosition(int id)
+        {
+            return await _context.CattlePosition.Where(x => x.CattleId == id).OrderByDescending(x => x.DateMeasured).FirstOrDefaultAsync();
         }
 
         public async Task SaveChanges()

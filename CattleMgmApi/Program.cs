@@ -140,6 +140,21 @@ app.MapPut("api/v1/position/{id}", async (IPositionRepository repo, IMapper mapp
     return Results.NoContent();
 });
 
+
+app.MapGet("api/v1/positions/{id}", async (IPositionRepository repo, IMapper mapper, int id) =>
+{
+    var pos = await repo.GetLastPosition(id);
+    if (pos is not null)
+    {
+        return Results.Ok(mapper.Map<PositionReadDto>(pos));
+    }
+    else
+    {
+        return Results.NotFound(new { error = "not found" });
+    }
+
+});
+
 //app.MapGet("/", () => "Hello World!");
 
 app.Run();
