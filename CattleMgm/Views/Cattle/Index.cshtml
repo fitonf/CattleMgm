@@ -33,12 +33,14 @@
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
                         <td>@item.CreatedBy</td>
-                        <td><a class="btn btn-sm btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
-                        <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
-                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteCattle('@item.Id')">Delete</a>
-                        </td>
                         <td>@item.Komuna</td>
-                        <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
+                        <td>
+                            <a class="btn btn-sm btn-secondary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="deleteCattle('@item.Id')">Delete</a>
+                        </td>
+                        
+                       
                     </tr>
                 }
             </tbody>
@@ -55,7 +57,13 @@
             "ordering": false
 
         });
-        var DeleteCattle = function (id) {
+
+        function EditMenu(id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Cattle")?ide=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+        function deleteCattle(id) {
             Swal.fire({
                 title: 'A jeni te sigurt?',
                 text: "Kjo ben fshirjen e gjedhes!",
@@ -71,17 +79,12 @@
                     cancelButton: "btn btn-secondary"
                 }
             }).then((result) => {
-                debugger;
                 if (result.value) {
-                    debugger;
-                    // Make the AJAX request
                     $.ajax({
+                        url: '@Url.Action("Delete", "Cattle")',
                         type: 'POST',
-                        url: '@Url.Action("Delete","Cattle")/' + id,//
                         data: { id: id },
-
                         success: function (data) {
-                            debugger;
                             Swal.fire({
                                 text: "Gjedhi u fshi me sukses!",
                                 icon: "success",
@@ -95,9 +98,9 @@
                             });
                         },
                         error: function (xhr, status, error) {
-                            debugger;
+                            console.log(xhr.responseText); // Log the full error response
                             Swal.fire({
-                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                text: "Sorry, there was an error deleting the cattle. Please try again later.",
                                 icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "Ok, got it!",
@@ -108,9 +111,7 @@
                         }
                     });
                 }
-
             });
-
         }
     </script>
 }

@@ -58,7 +58,8 @@ namespace CattleMgm.ViewModels.Cattle
         public string BirthDate { get; set; }
 
         [Required]
-        public int  Municipality { get; set; }
+        [Display(Name = "Komuna")]
+        public int? MunicipalityId { get; set; }
     }
 
     public class CattleDetailsViewModel
