@@ -18,7 +18,7 @@
                 <div class="col-md-2">
                     <div class="mb-3">
                         <label asp-for="Role" class="form-label mb-lg-0"></label>
-                        @Html.DropDownListFor(m=>m.Role, ViewBag.Farmers as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                        @Html.DropDownListFor(m=>m.Role, ViewBag.Roles as SelectList, "Zgjedh", new { @class = "form-control select2"})
                     </div>
                 </div>
 

@@ -37,7 +37,7 @@ namespace CattleMgm.Controllers
             var roles = _db.AspNetRoles
                                 .Select(q => new { q.Id, q.Name })
                                 .ToList();
-            ViewBag.Farmers = new SelectList(roles, "Id", "Name");
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
             return View();
         }
 
