@@ -13,6 +13,7 @@ using CattleMgm.ViewModels.Menu;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Submenu;
 using CattleMgm.Repository.Milk;
+using CattleMgm.Models.Session;
 
 namespace CattleMgm.Controllers
 {
@@ -177,5 +178,28 @@ namespace CattleMgm.Controllers
             return Json("success");
 
         }
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var milk = _db.CattleMilk.Include(q=>q.Cattle).ToList();
+            var query = milk
+
+               .Select(q => new CattleMilkReportModel
+               {
+                   CattleName = q.Cattle.Name,
+                   LitersCollected = q.LitersCollected,
+                   Price = q.Price,
+                   TotalProfit = q.LitersCollected * q.Price
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\CattleMilkReportModel.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+
+
     }
 }

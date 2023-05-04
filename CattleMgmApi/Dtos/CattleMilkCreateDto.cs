@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CattleMgmApi.Data.Entities;
 
-namespace CattleMgm.Data.Entities
+namespace CattleMgmApi.Profiles
 {
-    public partial class CattleMilk
+    internal class CattleMilkCreateDto
     {
-        public int Id { get; set; }
         public Guid Identifier { get; set; }
+
         public int CattleId { get; set; }
 
         public DateTime Created { get; set; }
-        public string CreatedBy { get; set; }
+
+        public string CreatedBy { get; set; } = null!;
+
         public double LitersCollected { get; set; }
+
         public double Price { get; set; }
 
         public virtual Cattle Cattle { get; set; } = null!;
