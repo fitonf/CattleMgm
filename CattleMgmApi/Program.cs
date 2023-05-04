@@ -127,6 +127,22 @@ app.MapPost("api/v1/roles", async (HttpContext context) =>
     return mapper.Map<RolesCreateDto>(result);
 });
 
+app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
+{
+    var serviceProvider = context.RequestServices;
+    var repo = serviceProvider.GetRequiredService<IRolesRepository>();
+    var roleId = context.GetRouteValue("id").ToString();
+
+    var role = await repo.GetRoleById(roleId);
+
+    var result = await repo.DeleteRole(roleId);
+    return Results.Ok();
+});
+
+
+
+
+
 
 //krijimi i api per editimin e gjedhes
 

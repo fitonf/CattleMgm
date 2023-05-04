@@ -18,33 +18,46 @@ namespace CattleMgmApi.Repository
             _context = context;
         }
 
-        public async Task<string> CreateRole(string roleName)
+        public async Task<ApplicationRole> CreateRole(string roleName)
         {
-            // Krijon nje ApplicationRole object me emrin e specifikuar.
             var role = new ApplicationRole { Name = roleName };
-            // Perdor RoleManager per te krijuar nje rol te ri.
             var result = await _roleManager.CreateAsync(role);
-
-            // Ne qofte se procesi ka qene i pa suksesshem, dergon nje exception.
-            if (!result.Succeeded) 
+            if (!result.Succeeded)
             {
-                throw new ApplicationException("Error creating role: " + result.Errors.First().Description);
+                throw new Exception("Failed to create role");
             }
-
-            // Nqs ka sukses, kthen ID rolin.
-            return role.Id; 
+            return role;
         }
 
-        // Jo implementuar kompletisht
-        public Task<AspNetRoles> GetRoleById(int id) 
+        // 
+        public async Task<AspNetRoles> GetRoleById(string id)
         {
-            throw new NotImplementedException();
+            return await _context.AspNetRoles.FirstOrDefaultAsync(r => r.Id == id);
         }
+
 
         // Kthen listen e te gjitha roleve ne Databaze
         public async Task<List<AspNetRoles>> GetRoles() 
         {
             return await _context.AspNetRoles.ToListAsync();
+        }
+
+        public async Task<IdentityResult> DeleteRole(string roleId)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role == null)
+            {
+                throw new ApplicationException("Role not found");
+            }
+
+            var result = await _roleManager.DeleteAsync(role);
+
+            if (!result.Succeeded)
+            {
+                throw new ApplicationException("Error deleting role: " + result.Errors.First().Description);
+            }
+
+            return result;
         }
     }
 }
