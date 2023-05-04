@@ -127,17 +127,24 @@ app.MapPost("api/v1/roles", async (HttpContext context) =>
     return mapper.Map<RolesCreateDto>(result);
 });
 
+
+// DELETE request e cila fshin rolin nga Databaza ne baze te ID te shenuar ne path.
 app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
 {
     var serviceProvider = context.RequestServices;
     var repo = serviceProvider.GetRequiredService<IRolesRepository>();
     var roleId = context.GetRouteValue("id").ToString();
 
+    // Merr rolin nga databaza duke perdorur ID-ne nga URL path.
     var role = await repo.GetRoleById(roleId);
 
+    // Fshin rolin nga databaza duke perdorur ID-ne ne URL.
     var result = await repo.DeleteRole(roleId);
+
+    // Kthen sukses-pergjigjje.
     return Results.Ok();
 });
+
 
 
 

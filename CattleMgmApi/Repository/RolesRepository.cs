@@ -44,20 +44,27 @@ namespace CattleMgmApi.Repository
 
         public async Task<IdentityResult> DeleteRole(string roleId)
         {
+            // Gjen rolin ne Databaze duke perdorur ID.
             var role = await _roleManager.FindByIdAsync(roleId);
+
+            // Ne qofte se roli nuk gjindet, dergon nje exception.
             if (role == null)
             {
                 throw new ApplicationException("Role not found");
             }
 
+            // Fshin rolin nga databaza.
             var result = await _roleManager.DeleteAsync(role);
 
+            // Ne qofte se haset ndonje error gjate procesit, dergon nje exception.
             if (!result.Succeeded)
             {
                 throw new ApplicationException("Error deleting role: " + result.Errors.First().Description);
             }
 
+            // Kthen rezultatet e operacionit delete.
             return result;
         }
+
     }
 }
