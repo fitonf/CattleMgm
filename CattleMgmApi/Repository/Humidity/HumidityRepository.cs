@@ -56,30 +56,12 @@ namespace CattleMgmApi.Repository.Humidity
             return await _context.CattleHumidity.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public void UpdateHumidity(CattleHumidity humidity, int id)
-        {
-            if (humidity == null)
-            {
-                throw new ArgumentNullException(nameof(humidity));
-            }
-
-            humidity.Id = id;
-
-            _context.CattleHumidity.Update(humidity);
-
-        }
+       
 
         public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
         }
-        Task IHumidityRepository.DeleteHumidity(CattleHumidity humidity)
-        {
-            throw new NotImplementedException();
-        }
-        public Task UpdateHumidity(CattleHumidity existing_humidity)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }
