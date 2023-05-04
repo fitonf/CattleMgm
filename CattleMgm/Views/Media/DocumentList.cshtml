@@ -1,82 +1,124 @@
-﻿@model List<MediaListViewModel>
+﻿@model SearchMediaModel
 @{
-<div class="card">
-<div class="card-header">
-      <div class="card-toolbar float-end">
-            <a class="btn btn-sm btn-primary" asp-action="" asp-controller="Media">Upload</a>
-      </div>
-            <div class="dropdown-menu">
-                <button class="dropdown-item" onclick="Report(ReportType.PDF)">
-                    <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
-                    <span class="title text-center w-100">PDF</span>
-                </button>
-                <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
-                    <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
-                    <span class="title text-center w-100">Excel</span>
-                </button>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-toolbar float-end">
+                <a class="btn btn-sm btn-primary" asp-action="" asp-controller="Media">Upload</a>
             </div>
-</div>
-    
-    <div class="card-body">
-        <table id="Media-table" class="table table-responsive">
-            <thead>
-                <tr>
-                    <th>Emri i dokumentit</th>
-                    <th>Path</th>
-                    <th>Tipi</th>
-                    <th>Krijuar</th>
-                    <th>Krijuar nga</th>
-                </tr>
+            <div class="card-body">
+                <form asp-action="_DocumentList" asp-controller="Media" method="post" data-ajax="true" data-ajax-success="kt_ajax_success" data-ajax-method="POST" id="frmSearch">
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("type")
+                    <div class="row">
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label asp-for="Name" class="form-label mb-lg-0"></label>
+                                @Html.DropDownListFor(m=>m.Name, ViewBag.Names as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label asp-for="Name" class="form-label mb-lg-0"></label>
+                                <input asp-for="Name" type="text" class="form-control" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label asp-for="Type" class="form-label mb-lg-0"></label>
+                                <input asp-for="Type" type="text" class="form-control" />
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label asp-for="Name" style="visibility:hidden"></label><br />
+                                <button type="submit" name="button" class="btn btn-primary">Kerko</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-body">
+                <div class="button-items" style="float:right;">
+                    <div class="btn-group dropstart">
+                        <button style="margin:0 5px 7px 0" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="mdi mdi-chevron-left"></i>Shkarko
+                        </button>
+                        <div class="dropdown-menu">
+                            <button class="dropdown-item" onclick="Report(ReportType.PDF)">
+                                <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                                <span class="title text-center w-100">PDF</span>
+                            </button>
+                            <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
+                                <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                                <span class="title text-center w-100">Excel</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+
+
+            <table id="Media-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Emri i dokumentit</th>
+                        <th>Path</th>
+                        <th>Tipi</th>
+                        <th>Krijuar</th>
+                        <th>Krijuar nga</th>
+                    </tr>
+                </thead>
                 <tbody>
-                        @foreach (var item in Model)
-                        {
-                            var span = "";
-                            if (item.Identifier != null && item.Identifier is string)
-                            {
-                                span = "<span class='badge badge-outline-succes'>Eshte fshire me suskes</span>";
-                            }
-                            else
-                            {
-                                span = "<span class='badge badge-outline-danger'>Nuk ka qka te Fshihet</span>";
-                            }
-                        <tr>
-                            <td>@item.Name</td> 
-                            <td>@item.Path </td>
-                            <td>@item.Type</td>
-                            <td>@item.Created</td>
-                            <td>@item.CreatedBy</td>
-                            <td>@Html.Raw(span)</td>
-                            <td><a class="btn btn-sm btn-danger" onclick="deleteFile(@item.id)">Delete</a></td>
-                        </tr>
-                        }
                 </tbody>
-            </thead>
-        </table>
+            </table>
+        </div>
     </div>
-</div>
 
-@section Scripts{
-    <script type="text/javascript">
-        $("#Document-table").DataTable({
-            keys: true,
-            responsive: true,
-            pageLength: 10,
-            "ordering": false
+    @section Scripts{
+        <script type="text/javascript">
+            $("#Document-table").DataTable({
+                keys: true,
+                responsive: true,
+                pageLength: 10,
+                "ordering": false
 
 
-        });
+            });
 
-        var deleteFile = function (id)
-        {
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("Delete", "Media")/' + id,
-                data: id = id,
-                success: function(){
-                    location.reload()
+            var deleteFile = function (id) {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("Delete", "Media")/' + id,
+                    data: id = id,
+                    success: function () {
+                        location.reload()
+                    }
+                })
+            }
+            function Report(type) {
+                if (type == '@((int)ReportType.PDF)' || type == '@((int)ReportType.Excel)') {
+                    $.ajax({
+                        url: "/Media/OpenIndexReport",
+                        cache: false,
+                        type: "POST",
+                        dataType: "json",
+                        success: function () {
+                            if (type == '@((int)ReportType.Excel)')
+                                window.open("/Reports/Design/?format=excel", '_blank');
+                            else {
+                                let W = window.open("/Reports/Design/?format=pdf", '_blank');
+                                W.onload = function () { this.document.title = 'Raporti'; }
+                            }
+                        }
+                    });
                 }
-            })
-        }
-    </script>
-}
+            }
+        </script>
+    }
 }
