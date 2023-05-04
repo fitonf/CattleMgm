@@ -8,6 +8,7 @@ using CattleMgmApi.Repository;
 using CattleMgmApi.Repository.Humidity;
 using Microsoft.OpenApi.Validations;
 using CattleMgmApi.Dtos.Humidity;
+using CattleMgmApi.Repository.Humidity;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,6 +23,7 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
 
@@ -85,7 +87,6 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
     return Results.NoContent();
 });
 
-///
 
 
 app.MapGet("api/v1/humidity", async (IHumidityRepository repo1, IMapper mapper1) =>
@@ -94,7 +95,7 @@ app.MapGet("api/v1/humidity", async (IHumidityRepository repo1, IMapper mapper1)
     return Results.Ok(mapper1.Map<IEnumerable<HumidityReadDto>>(humidity));
 });
 
-app.MapGet("api/v1/humidity/{id}", async (IHumidityRepository repo, IMapper mapper, int id) =>
+app.MapGet("api/v1/humiditys/{id}", async (int id, IHumidityRepository repo, IMapper mapper) =>
 {
     var humidity = await repo.GetHumidityById(id);
     if (humidity is not null)
@@ -136,7 +137,8 @@ app.MapPut("api/v1/Humidity/{id}", async (IHumidityRepository repo, IMapper mapp
 });
 
 
-app.MapDelete("api/v1/humidity/{id}", async (IHumidityRepository repo, int id) =>
+
+app.MapDelete("api/v1/humiditys/{id}", async (int id, IHumidityRepository repo) =>
 {
     var humidity = repo.GetHumidityById(id);
     if (humidity is not null)
@@ -147,6 +149,7 @@ app.MapDelete("api/v1/humidity/{id}", async (IHumidityRepository repo, int id) =
     }
     return Results.NoContent();
 });
+
 
 
 app.Run();

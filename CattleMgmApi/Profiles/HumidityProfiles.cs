@@ -16,8 +16,7 @@ namespace CattleMgmApi.Profiles
             CreateMap<HumidityCreateDto, CattleHumidity>();
             //update
             CreateMap<HumidityUpdateDto, CattleHumidity>();
-            //delete
-            CreateMap<HumidityDeleteDto, CattleHumidity>();
+            
         }
     }
 }

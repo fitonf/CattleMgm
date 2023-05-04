@@ -22,6 +22,16 @@ namespace CattleMgmApi.Repository.Humidity
 
             await _context.CattleHumidity.AddAsync(humidity);
         }
+        public void UpdateHumidity(CattleHumidity humidity, int id)
+        {
+            if (humidity == null)
+            {
+                throw new ArgumentNullException(nameof(humidity));
+            }
+            humidity.Id = id;
+
+            _context.CattleHumidity.Update(humidity);
+        }
 
         public void DeleteHumidity(CattleHumidity humidity)
         {
@@ -38,6 +48,8 @@ namespace CattleMgmApi.Repository.Humidity
 
             return humidity;
         }
+        
+      
 
         public async Task<CattleHumidity?> GetHumidityById(int id)
         {
@@ -60,6 +72,14 @@ namespace CattleMgmApi.Repository.Humidity
         public async Task SaveChanges()
         {
             await _context.SaveChangesAsync();
+        }
+        Task IHumidityRepository.DeleteHumidity(CattleHumidity humidity)
+        {
+            throw new NotImplementedException();
+        }
+        public Task UpdateHumidity(CattleHumidity existing_humidity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
