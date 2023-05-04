@@ -184,7 +184,7 @@ namespace CattleMgm.Controllers
         {
             var roles = _db.AspNetRoles.ToList();
             var query = roles
-               .Select(q => new UserReportModel
+               .Select(q => new IdentityRole
                {
                    Id = q.Id,
                    Name = q.Name,
