@@ -83,17 +83,13 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
     return Results.NoContent();
 });
 
-///shfaqja
 
-app.MapGet("api/v1/humiditys", async (IHumidityRepository repo, IMapper mapper) =>
+app.MapGet("api/v1/humidity", async (IHumidityRepository repo, IMapper mapper) =>
 {
-    var humiditys = await repo.GetAllHumiditys();
-
-    return Results.Ok(mapper.Map<IEnumerable<HumidityReadDto>>(humiditys));
+    var humidity = await repo.GetAllHumidity();
+    return Results.Ok(mapper.Map<IEnumerable<HumidityReadDto>>(humidity));
 });
 
-
-//
 app.MapGet("api/v1/humiditys/{id}", async (IHumidityRepository repo, IMapper mapper, int id) =>
 {
     var humidity = await repo.GetHumidityById(id);
@@ -105,10 +101,9 @@ app.MapGet("api/v1/humiditys/{id}", async (IHumidityRepository repo, IMapper map
     {
         return Results.NotFound(new { error = "not found" });
     }
-
 });
 
-//
+
 app.MapPost("api/v1/humiditys", async (IHumidityRepository repo, IMapper mapper, HumidityCreateDto humidity) =>
 {
     if (humidity is not null)
@@ -116,43 +111,40 @@ app.MapPost("api/v1/humiditys", async (IHumidityRepository repo, IMapper mapper,
         var mapped_object = mapper.Map<CattleHumidity>(humidity);
         await repo.CreateHumidity(mapped_object);
         await repo.SaveChanges();
-
         var result = mapper.Map<HumidityReadDto>(mapped_object);
-
-        return Results.Created($"Gjedhja me id {result.Id} u krijua!", result);
+        return Results.Created($"Lloji me id {result.Id} u krijua!", result);
     }
     return Results.NoContent();
 });
 
 
-app.MapPut("api/v1/humiditys", async (IHumidityRepository repo, IMapper mapper, HumidityUpdateDto humidity) =>
+app.MapPut("api/v1/humiditys/{id}", async (int id, IHumidityRepository repo, IMapper mapper, HumidityUpdateDto humidity) =>
 {
-    if (humidity is not null)
+    var existing_humidity = await repo.GetHumidityById(id);
+    if (existing_humidity is null)
     {
-        var mapped_object = mapper.Map<CattleHumidity>(humidity);
-        await repo.CreateHumidity(mapped_object);
-        await repo.SaveChanges();
-
-        var result = mapper.Map<HumidityReadDto>(mapped_object);
-
-        return Results.Created($"Gjedhja me id {result.Id} u editua!", result);
+        return Results.NotFound($"Lloji me id {id} nuk u gjet!");
     }
+    mapper.Map(humidity, existing_humidity);
+    await repo.UpdateHumidity(existing_humidity);
+    await repo.SaveChanges();
+    var result = mapper.Map<HumidityReadDto>(existing_humidity);
+    return Results.Ok(result);
+});
+
+
+app.MapDelete("api/v1/humiditys/{id}", async (int id, IHumidityRepository repo) =>
+{
+    var existing_humidity = await repo.GetHumidityById(id);
+    if (existing_humidity is null)
+    {
+        return Results.NotFound($"Lloji me id {id} nuk u gjet!");
+    }
+    await repo.DeleteHumidity(existing_humidity);
+    await repo.SaveChanges();
     return Results.NoContent();
 });
 
-app.MapGet("api/v1/humiditys/{id}", async (IHumidityRepository repo, IMapper mapper, int id) =>
-{
-    var humidity = await repo.GetLastHumidity(id);
-    if (humidity is not null)
-    {
-        return Results.Ok(mapper.Map<HumidityReadDto>(humidity));
-    }
-    else
-    {
-        return Results.NotFound(new { error = "not found" });
-    }
-
-});
 
 
 

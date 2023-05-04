@@ -8,12 +8,15 @@ namespace CattleMgmApi.Repository.Humidity
 
         Task<CattleHumidity?> GetHumidityById(int id);
 
-        Task<IEnumerable<CattleHumidity>> GetAllHumiditys();
+        Task<IEnumerable<CattleHumidity>> GetAllHumidity();
 
         Task CreateHumidity(CattleHumidity humidity);
 
         Task<CattleHumidity?> GetLastHumidity(int id);
-        void UpdateHumidity(CattleHumidity humidity, int Id);
+
+        Task DeleteHumidity(CattleHumidity humidity);
+        void UpdateHumidity(CattleHumidity mapped_object, int Id);
+        Task UpdateHumidity(CattleHumidity existing_humidity);
         //void DeleteCattle(CattleHumidity humidity);
     }
 }
