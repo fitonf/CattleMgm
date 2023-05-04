@@ -1,5 +1,5 @@
-﻿@model List<UserViewModel>
-
+﻿@model SearchUsers
+@*@model List<UserViewModel>*@
 @{
     ViewData["Title"] = "Perdoruesit";
 }
@@ -9,6 +9,54 @@
         <div class="card-toolbar float-end">
             <a class="btn btn-sm btn-primary" asp-action="Create" asp-controller="User">Regjistro</a>
         </div>
+    </div>
+    <div class="card-body">
+        <form asp-action="_Index" asp-controller="User" method="post" data-ajax="true" data-ajax-success="kt_ajax_success" data-ajax-method="POST" id="frmSearch">
+            @Html.AntiForgeryToken()
+            @Html.Hidden("type")
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="Role" class="form-label mb-lg-0"></label>
+                        <input asp-for="Role" type="text" class="form-control" />
+                        @*@Html.DropDownListFor(m => m.Role, await repo.Roles(), "Zgjedhe...", new { @class = "form-control select2", @multiple = "multiple" })*@
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label mb-lg-0"></label>
+                        <input asp-for="Name" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="Surname" class="form-label mb-lg-0"></label>
+                        <input asp-for="Surname" type="text" class="form-control" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label mb-lg-0"></label>
+                        <input asp-for="Email" type="text" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="PhoneNumber" class="form-label mb-lg-0"></label>
+                        <input asp-for="PhoneNumber" type="text" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="Name" style="visibility:hidden"></label><br />
+                        <button type="submit" name="button" class="btn btn-primary">Kerko</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <div class="card-body">
         <div class="button-items" style="float:right;">
@@ -28,20 +76,21 @@
                 </div>
             </div>
         </div>
-        <table id="user-table" class="table table-responsive">
+        <table class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;" id="tblResult">
             <thead>
                 <tr>
-                    <th>Perdoruesi</th>
-                    <th>E-mail</th>
+                    <th>#</th>
+                    <th>UserName</th>
+                    <th>Email</th>
                     <th>Emri</th>
                     <th>Mbiemri</th>
-                    <th>Nr. i telefonit</th>
+                    <th>Tel</th>
                     <th>Roli i konfirmuar</th>
-                    <th>Veprimet</th>
+                    <th data-priority="1">Veprimet</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model)
+                 @* @foreach (var item in Model)
                 {
                     var span = "";
                     if (item.isRoleConfirmed == true)
@@ -65,7 +114,7 @@
                         </td>
 
                     </tr>
-                }
+                }*@
             </tbody>
         </table>
     </div>
@@ -166,6 +215,63 @@
                     }
                 });
             }
+        }
+
+
+        function kt_ajax_success(data) {
+            var rowno = 0;
+            $('#tblResult').DataTable({
+                "destroy": true,
+                keys: true,
+                responsive: true,
+                pageLength: 10,
+                data: data,
+                columns: [
+                    {
+                        'data': function (row, type, set) {
+                            rowno++;
+                            return rowno;
+                        }
+                    },
+                    { "data": "userName" },
+                    { "data": "email" },
+                    { "data": "firstName" },
+                    { "data": "lastName" },
+                    { "data": "phoneNumber" },                   
+                    {
+                        "data": function (row, type, set) {
+                            return row.isRoleConfirmed ? 'Po' : 'Jo'
+                        }
+                    },
+                    {
+                        "data": function (row, type, set) {
+                            let currentDate = new Date();
+                            var lockDate = new Date(row.LockoutEnd);
+                            var dropdown = '<div class="button-items table-button-items" style="float:right;">' +
+                                '<div class="btn-group dropstart">' +
+                                '<button type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">' +
+                                '<i class="mdi mdi-chevron-left"></i>' + 'Vipremet' +
+                                '</button>' +
+
+                                '<div class="dropdown-menu">' +
+                                '<a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="\'' + row.Id + '\'" asp-controller="User">Edit</a>';
+
+
+                            dropdown += '<button class="dropdown-item" type="button" onclick="DeleteUser(\'' + row.Id + '\')">' +
+                                ' <span class="title" style=" margin-top: 3px; margin-left: 10px;">Delete</span>' +
+                                '</button>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>';
+
+                            return dropdown;
+                        }
+                    }
+                ],
+                initComplete: function () {
+                    $('.table-button-items').parent().addClass('button-td');
+                }
+            })
         }
     </script>
 }

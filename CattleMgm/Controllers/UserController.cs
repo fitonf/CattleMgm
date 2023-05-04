@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Net;
 
 namespace CattleMgm.Controllers
@@ -32,38 +33,8 @@ namespace CattleMgm.Controllers
 
         public IActionResult Index()
         {
-            var users = _db.AspNetUsers.ToList();
-            List<UserViewModel> model = new List<UserViewModel>();
-
-            //foreach method
-            //foreach (var item in users)
-            //{
-            //    model.Add(new UserViewModel
-            //    {
-            //        Id = item.Id,
-            //        UserName = item.UserName,
-            //        Email = item.Email,
-            //        FirstName = item.FirstName,
-            //        LastName = item.LastName,
-            //        PhoneNumber = item.PhoneNumber,
-            //        isRoleConfirmed = item.IsRoleConfirmed == null ?false : item.IsRoleConfirmed.Value,
-            //    });
-            //}
-
-            //linq method same as foreach method
-            model = (from item in users
-                     select new UserViewModel
-                     {
-                         Id = AesCrypto.EncryptString(item.Id),
-                         UserName = item.UserName,
-                         Email = item.Email,
-                         FirstName = item.FirstName,
-                         LastName = item.LastName,
-                         PhoneNumber = item.PhoneNumber,
-                         isRoleConfirmed = item.IsRoleConfirmed == null ? false : item.IsRoleConfirmed.Value,
-                     }).ToList();
-
-            return View(model);
+           
+            return View();
         }
 
         //[Authorize(Policy = "uc:1")]
@@ -224,6 +195,27 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchUsers search)
+        {
+            var users = _db.AspNetUsers.ToList();
+            List<UserViewModel> model = new List<UserViewModel>();
+
+            model = (from item in users
+                     select new UserViewModel
+                     {
+                         Id = AesCrypto.EncryptString(item.Id),
+                         UserName = item.UserName,
+                         Email = item.Email,
+                         FirstName = item.FirstName,
+                         LastName = item.LastName,
+                         PhoneNumber = item.PhoneNumber,
+                         isRoleConfirmed = item.IsRoleConfirmed == null ? false : item.IsRoleConfirmed.Value,
+                     }).ToList();
+     
+
+            return Json(model);
         }
 
         #region Report
