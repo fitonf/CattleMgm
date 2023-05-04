@@ -1,6 +1,7 @@
 ﻿@model BreedEditViewModel
 
 @{
+    ViewData["Title"] = "Editimi i llojit te gjedheve";
 }
 <div class="card">
     <div class="modal-header">
@@ -14,7 +15,7 @@
             <input asp-for="Id" hidden />
             <div class="row">
                 <div class="col-md-6">
-                    <label asp-for="Name">Emri i Gjedhes</label>
+                    <label  class="required" asp-for="Name">Emri i Gjedhes</label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>

@@ -2,13 +2,12 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
-using CattleMgm.Repository.Cattles;
+using CattleMgm.Models.Session;
 using CattleMgm.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System.Net;
 
 namespace CattleMgm.Controllers
@@ -226,5 +225,29 @@ namespace CattleMgm.Controllers
             return Json("success");
 
         }
+
+        #region Report
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var users = _db.AspNetUsers.ToList();
+            var query = users
+               .Select(q => new UserReportModel
+               {
+                   Id = q.Id,
+                   FirstName = q.FirstName,
+                   LastName = q.LastName,
+                   Username = q.UserName
+               }).ToList();
+
+
+                HttpContext.Session.SetString("Path", "Reports\\UsersReport.rdl");
+                HttpContext.Session.Set("queryresult", query);
+         
+
+            return Json(true);
+        }
+        #endregion
     }
 }

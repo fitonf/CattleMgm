@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.CattleTemperature;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.CattleTemperature;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis.VisualBasic.Syntax;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace CattleMgm.Controllers
 {
@@ -33,7 +35,11 @@ namespace CattleMgm.Controllers
         {
             var temp = await _db.CattleTemperature.Include(q=> q.Cattle).ToListAsync();
 
+
             foreach (var item in temp) {
+                //Gjen userin i cila ka regjistruar te dhena 
+                var user = _db.AspNetUsers.Where(t => t.Id == item.CreatedBy).FirstOrDefault();
+
 
                 model.Add(new CattleTempViewModel
                 {
@@ -42,7 +48,7 @@ namespace CattleMgm.Controllers
                     CattleId = item.CattleId,
                     Temperature = item.Temperature,
                     DateMeasured = item.DateMeasured,
-                    CreatedBy = item.CreatedBy
+                    CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName
                 });
             }      
             return View(model);
@@ -61,8 +67,6 @@ namespace CattleMgm.Controllers
         }
 
 
-
-
         [HttpPost]
         public async Task<IActionResult> Create(CattleTempCreateViewModel model)
         {
@@ -74,7 +78,7 @@ namespace CattleMgm.Controllers
 
             CattleTemperature temp = new CattleTemperature();
             temp.CattleId = model.CattleId;
-            temp.Temperature= model.Temperature;
+            temp.Temperature = model.Temperature;
             temp.DateMeasured = DateTime.Now;
             temp.CreatedBy = user.Id;
 
@@ -154,9 +158,59 @@ namespace CattleMgm.Controllers
 
 
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(int Id)
+        {
+
+            if (Id == null)
+            {
+                return BadRequest();
+            }
 
 
+            var temp = _db.CattleTemperature.Find(Id);
+            if (temp != null)
+            {
+                var result = _db.CattleTemperature.Remove(temp);
 
+                await _db.SaveChangesAsync();
+
+            }
+
+            return Json("success");
+
+        }
+
+        #region Report
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var temp = _db.CattleTemperature.Include(x=> x.Cattle).ToList();
+          
+            var query = temp
+               .Select(q => new CattleTempReportModel
+
+               {
+                   Id = q.Id,
+                   Cattle = q.Cattle.Name,
+                   Temperature = q.Temperature,
+                   DateMeasured = q.DateMeasured.ToShortDateString(),
+                  // CreatedBy = q.CreatedBy,
+                   CreatedByName = _db.AspNetUsers.Where(u =>u.Id ==q.CreatedBy)
+                                                  .Select(u => u.FirstName)
+                                                  .FirstOrDefault()
+
+
+               });
+
+            HttpContext.Session.SetString("Path", "Reports\\TempReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+        #endregion
 
     }
 }

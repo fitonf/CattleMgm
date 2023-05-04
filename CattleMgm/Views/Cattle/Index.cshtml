@@ -7,6 +7,25 @@
         </div>
     </div>
     <div class="card-body">
+
+        <div class="button-items" style="float:right;">
+            <div class="btn-group dropstart">
+                <button style="margin:0 5px 7px 0" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-chevron-left"></i>Shkarko
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" onclick="Report(ReportType.PDF)">
+                        <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">PDF</span>
+                    </button>
+                    <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
+                        <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">Excel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <table id="cattle-table" class="table table-responsive">
             <thead>
                 <tr>
@@ -17,6 +36,8 @@
                     <th>Gjinia</th>
                     <th>Ferma</th>
                     <th>Emri i fermerit</th>
+                    <th>Krijuar nga</th>
+                    <th>Komuna</th>
                 </tr>
             </thead>
             <tbody>
@@ -30,6 +51,15 @@
                         <td>@item.Gender</td>
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
+                        <td>@item.CreatedBy</td>
+                        <td>@item.Komuna</td>
+                        <td>
+                            <a class="btn btn-sm btn-secondary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="deleteCattle('@item.Id')">Delete</a>
+                        </td>
+                        
+                       
                     </tr>
                 }
             </tbody>
@@ -46,5 +76,80 @@
             "ordering": false
 
         });
+
+        function EditMenu(id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Cattle")?ide=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+        function deleteCattle(id) {
+            Swal.fire({
+                title: 'A jeni te sigurt?',
+                text: "Kjo ben fshirjen e gjedhes!",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonText: 'Jo, kthehu.',
+                buttonsStyling: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Po, deshiroj ta fshij!',
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-secondary"
+                }
+            }).then((result) => {
+                if (result.value) {
+                    $.ajax({
+                        url: '@Url.Action("Delete", "Cattle")',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (data) {
+                            Swal.fire({
+                                text: "Gjedhi u fshi me sukses!",
+                                icon: "success",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ne rregull!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            }).then(function (result) {
+                                location.href = location.href;
+                            });
+                        },
+                        error: function (xhr, status, error) {
+                            console.log(xhr.responseText); // Log the full error response
+                            Swal.fire({
+                                text: "Sorry, there was an error deleting the cattle. Please try again later.",
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: "Ok, got it!",
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+        function Report(type) {
+            if (type == '@((int)ReportType.PDF)' || type == '@((int)ReportType.Excel)') {
+                $.ajax({
+                    url: "/Cattle/OpenIndexReport",
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    success: function () {
+                        if (type == '@((int)ReportType.Excel)')
+                            window.open("/Reports/Design/?format=excel", '_blank');
+                        else {
+                            let W = window.open("/Reports/Design/?format=pdf", '_blank');
+                            W.onload = function () { this.document.title = 'Raporti'; }
+                        }
+                    }
+                });
+            }
+        }
+
     </script>
 }

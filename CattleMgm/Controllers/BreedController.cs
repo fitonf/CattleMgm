@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Breed;
@@ -51,6 +52,25 @@ namespace CattleMgm.Controllers
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
+                return View(model);
+            }
+            var existingBreed = await _db.Breed.FirstOrDefaultAsync(b => b.Name == model.Name || b.Type == model.Type);
+
+            if (existingBreed != null)
+            {
+                if (existingBreed.Name == model.Name && existingBreed.Type == model.Type)
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete emer dhe tip ekziston tashme");
+                }
+                else if (existingBreed.Name == model.Name)
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete emer ekziston tashme");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete tip ekziston tashme");
+                }
+
                 return View(model);
             }
 
@@ -114,11 +134,34 @@ namespace CattleMgm.Controllers
             {
                 return NotFound();
             }
+            var existingBreed = _db.Breed.FirstOrDefault(b => b.Id != model.Id && (b.Name == model.Name || b.Type == model.Type));
+
+            if (existingBreed != null)
+            {
+                if (existingBreed.Name == model.Name && existingBreed.Type == model.Type)
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete emer dhe tip ekziston tashme");
+                }
+                else if (existingBreed.Name == model.Name)
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete emer ekziston tashme");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Nje kafshe me kete tip ekziston tashme");
+                }
+
+                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Nje kafshe me kete emer ose tip ekziston tashme", Title = "Lajmerim" };
+                return Json(error);
+            }
+
 
             breed.Name = model.Name;
             breed.Type = model.Type;
             breed.LastUpdated = DateTime.Now;
             breed.LastUpdatedBy = user.Id;
+
+
 
             _db.Update(breed);
 
@@ -146,6 +189,26 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var breed = _db.Breed.ToList();
+            var query = breed
+               .Select(q => new BreedReportModel
+               {
+                   Id = q.Id,
+                   Name = q.Name,
+                   Type = q.Type
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\BreedReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
 

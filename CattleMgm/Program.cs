@@ -4,6 +4,7 @@ using CattleMgm.Helpers;
 using CattleMgm.Models;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.CattleTemperature;
+using CattleMgm.Repository.Humidity;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.General;
 using CattleMgm.Repository.Position;
@@ -15,6 +16,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
 using Microsoft.EntityFrameworkCore;
 using CattleMgm.Repository.CattleBloodPressures;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using Microsoft.AspNetCore.Mvc;
+using CattleMgm.Repository.Log;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,7 +42,9 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
   .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddRazorPages();
+builder.Services.AddMvc().AddRazorRuntimeCompilation();
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 builder.Services.AddScoped<IMediaRepository, MediaRepository>();
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
@@ -49,6 +55,8 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IMilkRepository, MilkRepository>();
 builder.Services.AddScoped<ICattleTempRepository, CattleTempRepository>();
 builder.Services.AddScoped<ICattleBloodPressureRepository, CattleBloodPressureRepository>();
+builder.Services.AddScoped<IHumidityRepository, HumidityRepository>();
+builder.Services.AddScoped<ILogRepository, LogRepository>();
 
 var app = builder.Build();
 
@@ -71,10 +79,14 @@ else
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();

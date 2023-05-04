@@ -15,7 +15,9 @@ namespace CattleMgm.Repository.Milk
         {
 
             var milk= new List<CattleMilk>();
+
             milk=await _db.CattleMilk.Include(x=>x.Cattle).ToListAsync();
+
             return milk;
         }
     }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CattleMgm.ViewModels.Media;
 using CattleMgm.Repository.Media;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CattleMgm.Controllers
 {
@@ -20,10 +21,51 @@ namespace CattleMgm.Controllers
         {
             _mediaRepository = mediaRepository;
         }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var success = await _mediaRepository.DeleteFile(id);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", "Dokumenti nuk eshte fshire.");
+                return View("Index");
+            }
+
+            return RedirectToAction("DocumentList");
+        }
         public IActionResult Index()
         {
             return View();
         }
+
+        public async Task<IActionResult> DocumentListAsync()
+        {
+            ViewData["Title"] = "Lista e dokumenteve";
+
+            var lista = await _mediaRepository.GetAllFiles();
+
+            List<MediaListViewModel> listaViewModel = new List<MediaListViewModel>();
+
+            foreach (var media in lista)
+            {
+                listaViewModel.Add(new MediaListViewModel
+                {
+                    id = media.id,
+                    Name = media.Name,
+                    Identifier = media.Identifier,
+                    Path = media.Path,
+                    Type = media.Type,
+                    Created = media.Created,
+                    CreatedBy = media.CreatedBy,
+                }); ;
+            }
+
+            listaViewModel = listaViewModel.OrderByDescending(q => q.Name).ToList();
+
+            return View(listaViewModel);
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> Upload(MediaViewModel media)
@@ -34,7 +76,17 @@ namespace CattleMgm.Controllers
                 return View(media);
             }
 
-           var success = await _mediaRepository.UploadFile(media.document, Directory.GetCurrentDirectory() + $"\\Dokumentet\\");
+            // Check the file type
+            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".txt", ".doc", ".docx", ".xls", ".xlsx", ".ppt", ".pptx" };
+            var fileExtension = Path.GetExtension(media.document.FileName).ToLowerInvariant();
+
+            if (!allowedExtensions.Contains(fileExtension))
+            {
+                ModelState.AddModelError("", "Formati i dokumentit nuk lejohet. Lejohen vetem fotografi, tekst dhe dokumente te Microsoft Office.");
+                return View(media);
+            }
+
+            var success = await _mediaRepository.UploadFile(media.document, Directory.GetCurrentDirectory() + $"\\Dokumentet\\");
 
             if (!success)
             {
@@ -44,7 +96,8 @@ namespace CattleMgm.Controllers
 
             await _mediaRepository.AddFiletoDb(media.document, Directory.GetCurrentDirectory() + $"\\Dokumentet\\", user.Id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("DocumentList");
         }
+
     }
 }

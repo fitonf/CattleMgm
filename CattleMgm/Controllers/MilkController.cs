@@ -30,7 +30,8 @@ namespace CattleMgm.Controllers
         public async Task<IActionResult> Index()
         {
             var milk = new List<CattleMilk>();
-            milk = await _MilkRepository.GetAllMilk();
+            
+            milk= await _MilkRepository.GetAllMilk();
 
             List<MilkViewModel> model = new List<MilkViewModel>();
 

@@ -1,0 +1,326 @@
+﻿@model CattleDetailsViewModel
+@{
+    ViewData["Title"] = "Detajet e gjedhes: " + Model.Name;
+    double lat = 0;
+    double longitude = 0;
+    @if (Model.CattlePosition.Count > 0)
+    {
+        lat = Model.CattlePosition.OrderByDescending(q => q.Id).FirstOrDefault().Lat;
+        longitude = Model.CattlePosition.OrderByDescending(q => q.Id).FirstOrDefault().Long;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+
+    <style>
+        #map {
+            height: 220px;
+            width: 100%;
+            border-bottom-left-radius: 80px;
+            border-bottom-right-radius: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="card-body p-0">
+            @if (Model.CattlePosition.Count > 0)
+            {
+                    <div id="map"></div>
+            }
+        <div class="card-body">
+            <div class="dastone-profile">
+                <div class="row">
+                    <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
+                        <div class="dastone-profile-main">
+                            <div class="dastone-profile_user-detail">
+                                <h5 class="dastone-user-name">@Model.Name</h5>
+                                <p class="mb-0 dastone-user-name-post">@Model.FarmName</p>
+
+                                    @if(Model.MilkCollectedToday == true)
+                                    {
+                                        <p>Qumeshti eshte nxjerrur sot</p>
+                                    }
+                                    else
+                                    {
+                                         <p>Qumeshti  nuk eshte nxjerrur sot</p>
+                                    }
+
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <div class="col-lg-4 ms-auto align-self-center">
+                        <ul class="list-unstyled personal-detail mb-0">
+                            <li class=""><i class="ti ti-key me-2 text-secondary font-16 align-middle"></i> <b> Id </b> : @Model.UniqueIdentifier</li>
+                            <li class="mt-2"><i class="fa fa-weight text-secondary font-16 align-middle me-2"></i> <b> Weight </b> : @Model.Weight</li>
+                            <li class="mt-2">
+                                <i class="ti ti-world text-secondary font-16 align-middle me-2"></i> <b> Breed </b> : @Model.Breed
+                            </li>
+                        </ul>
+
+                    </div><!--end col-->
+                    <div class="col-lg-4 ms-auto align-self-center">
+                        <ul class="list-unstyled personal-detail mb-0">
+                            <li class=""><i class="ti ti-user me-2 text-secondary font-16 align-middle"></i> <b> Farmer </b> : @Model.FarmerName</li>
+                            <li class="mt-2"><i class="fa fa-calendar text-secondary font-16 align-middle me-2"></i> <b> Birthdate </b> : @Model.BirthDate</li>
+                            <li class="mt-2"><i class="fa fa-city text-secondary font-16 align-middle me-2"></i> <b> Municipality </b> : @Model.Komuna</li>
+
+
+                        </ul>
+
+                </div><!--end col-->
+            </div><!--end row-->
+        </div><!--end f_profile-->
+        <br />
+        <br />
+        <div class="row">
+            <h4>Temperatura</h4>
+            <table id="cattle-temp-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Temperatura</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleTemp)
+                    {
+                       @* var span = "";
+                        if (item.Active == true)
+                        {
+                            span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                        }
+                        else
+                        {
+                            span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                        }*@
+                        <tr>
+                            <td>@item.Temperature</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Lageshtia e ajrit</h4>
+            <table id="cattle-humidity-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Lageshtia e ajrit</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleHumidity)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Humidity</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Pozicioni i gjedhes</h4>
+            <table id="cattle-position-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattlePosition)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.Lat</td>
+                            <td>@item.Long</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Qumeshti</h4>
+            <table id="cattle-milk-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Identifier</th>
+                        <th>Date collected</th>
+                        <th>Liters collected</th>
+                        <th>Price</th>
+                        <th>Total profit</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleMilk)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@item.Identifier</td>
+                            <td>@item.DateCollected</td>
+                            <td>@item.LitersCollected</td>
+                            <td>@item.Price</td>
+                            <td>@item.TotalProfit</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <br />
+        <div class="row">
+            <h4>Shtypja e gjakut</h4>
+            <table id="cattle-pressure-table" class="table table-responsive">
+                <thead>
+                    <tr>
+                        <th>Shtypja e gjakut</th>
+                        <th>Data e matjes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CattleBloodPressure)
+                    {
+                        @* var span = "";
+                    if (item.Active == true)
+                    {
+                    span = "<span class='badge badge-outline-success'>Aktiv</span>";
+                    }
+                    else
+                    {
+                    span = "<span class='badge badge-outline-danger'>Deaktiv</span>";
+                    }*@
+                        <tr>
+                            <td>@($"{item.PressureFrom}/{item.PressureTo}")</td>
+                            <td>@item.DateMeasured</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div><!--end card-body-->
+</div> <!--end card-->
+</body>
+@section Scripts{
+        <script type="text/javascript">
+            $(document).ready(function(){
+                ShowInMap(@lat, @longitude);
+            });
+
+            function ShowInMap(lat, long) {
+
+                var map = L.map('map').setView([lat, long], 12);
+
+                var singleMarker = L.marker([lat, long]);
+                singleMarker.addTo(map);
+                var popup = singleMarker.bindPopup('Pozicioni i gjedhes');
+                popup.addTo(map);
+
+                // Google Map Layer
+
+            googleStreets = L.tileLayer('https://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+                maxZoom: 20,
+                subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+            });
+            googleStreets.addTo(map);
+
+            map.once("click", function () {
+                Swal.fire(
+                    'Informacion',
+                    'Shtypni ENTER per shfaqjen e pozicionit te gjedhes tjeter te zgjedhur',
+                    'OK'
+                )
+            });
+
+            document.addEventListener("keypress", function () {
+                if (event.key === "Enter") {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+
+    <script type="text/javascript">
+        $("#cattle-temp-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-humidity-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-position-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-milk-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+        $("#cattle-pressure-table").DataTable({
+            keys: true,
+            responsive: true,
+            pageLength: 10,
+            "ordering": false
+
+        });
+    </script>
+}

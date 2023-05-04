@@ -20,4 +20,17 @@
         English = 2,
         Serbian = 3
     }
+
+    public enum ReportType
+    {
+        PDF = 1,
+        Excel = 2,
+        Word = 3,
+        PowerPoint = 4,
+        Xml = 5,
+        Csv = 6,
+        JSON = 7,
+        IMAGE = 8,
+        HTML = 9
+    }
 }

@@ -38,7 +38,7 @@
 </div>
 @section Scripts{
     <script type="text/javascript">
-        $("#user-table").DataTable({
+        $("#municipality-table").DataTable({
             keys: true,
             responsive: true,
             pageLength: 10,
@@ -63,12 +63,12 @@
                 }
             }).then((result) => {
                 debugger;
-                if (result) {
+                if (result.value) {
                     debugger;
                     // Make the AJAX request
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("Delete","Municipality")', //
+                        url: '@Url.Action("Delete","Municipality")/' + id,//
                         data: { id: id },
 
                         success: function (data) {
@@ -82,7 +82,7 @@
                                     confirmButton: "btn btn-primary"
                                 }
                             }).then(function (result) {
-                                location.href = location.href;                             
+                                location.href = location.href;
                             });
 
 
@@ -106,8 +106,9 @@
                     });
                 }
 
-                });
+            });
 
         }
     </script>
     }
+    
