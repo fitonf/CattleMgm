@@ -33,12 +33,23 @@ namespace CattleMgmApi.Repository.Humidity
             _context.CattleHumidity.Remove(humidity);
         }
 
-        public async Task<IEnumerable<CattleHumidity>> GetAllHumidity()
+        public async Task<IEnumerable<CattleHumidity>> GetAllHumiditys()
         {
             //listimi i tabeles me EFCore
             var humiditys = await _context.CattleHumidity.ToListAsync();
 
             return humiditys;
+        }
+        
+        public void UpdateHumidity(CattleHumidity humidity, int id)
+        {
+            if (humidity == null)
+            {
+                throw new ArgumentNullException(nameof(humidity));
+            }
+            humidity.Id = id;
+
+            _context.CattleHumidity.Update(humidity);
         }
 
         public async Task<CattleHumidity?> GetHumidityById(int id)
@@ -47,7 +58,11 @@ namespace CattleMgmApi.Repository.Humidity
             return await _context.CattleHumidity.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task SaveChanges()
+        public async Task<CattleHumidity?> GetLastHumidity(int id)
+        {
+            return await _context.CattleHumidity.Where(x => x.CattleId == id).OrderByDescending(x => x.DateMeasured).FirstOrDefaultAsync();
+        }
+            public async Task SaveChanges()
         {
             // ruajtja ne databaze
             await _context.SaveChangesAsync();
