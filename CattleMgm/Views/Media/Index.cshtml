@@ -30,7 +30,7 @@
             var fileTypeError = document.getElementById('fileTypeError');
             var fileExtension = fileInput.value.split('.').pop().toLowerCase();
             // Lejohen vetem keto tipe te fajllave te uploadohen
-            var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
+            var allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf'];
 
             if (!allowedExtensions.includes(fileExtension)) {
                 event.preventDefault();

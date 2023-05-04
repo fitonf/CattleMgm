@@ -4,6 +4,8 @@ using CattleMgmApi.Dtos;
 using CattleMgmApi.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using CattleMgmApi.Dtos.Roles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,11 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
+
+
+
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IRolesRepository, RoleRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -49,10 +55,11 @@ app.MapGet("api/v1/cattles", async (ICattleRepository repo, IMapper mapper) =>
 //});
 
 
+// Cattle
 app.MapGet("api/v1/cattles/{id}", async (ICattleRepository repo, IMapper mapper, int id) =>
 {
     var cattle = await repo.GetCattleById(id);
-    if(cattle is not null)
+    if (cattle is not null)
     {
         return Results.Ok(mapper.Map<CattleReadDto>(cattle));
     }
@@ -65,18 +72,33 @@ app.MapGet("api/v1/cattles/{id}", async (ICattleRepository repo, IMapper mapper,
 
 app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, CattleCreateDto cattle) =>
 {
-    if(cattle is not null)
+    if (cattle is not null)
     {
         var mapped_object = mapper.Map<Cattle>(cattle);
         await repo.CreateCattle(mapped_object);
         await repo.SaveChanges();
 
         var result = mapper.Map<CattleReadDto>(mapped_object);
-        
-        return Results.Created($"Gjedhja me id {result.Id} u krijua!",result);
+
+        return Results.Created($"Gjedhja me id {result.Id} u krijua!", result);
     }
     return Results.NoContent();
 });
+
+
+
+// Roles
+app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
+{
+    var roles = await repo.GetRoles();
+    var mapped_object = mapper.Map<List<RolesReadDto>>(roles);
+
+    return Results.Ok(mapped_object);
+});
+
+
+
+
 
 //krijimi i api per editimin e gjedhes
 
