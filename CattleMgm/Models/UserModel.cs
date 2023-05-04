@@ -1,4 +1,8 @@
 ﻿using CattleMgm.Helpers;
+using Microsoft.Reporting.Map.WebForms.BingMaps;
+using System.ComponentModel.DataAnnotations;
+using System.Security.AccessControl;
+using System.Xml.Linq;
 
 namespace CattleMgm.Models
 {
@@ -35,10 +39,25 @@ namespace CattleMgm.Models
         public string Username { get; set; }
 
         public string PhoneNumber { get; set; }
-
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
 
+    }
+
+    public class SearchUsers
+    {
+        
+        public string? Name { get; set; }
+        
+        public string? Surname { get; set; }
+
+   
+        public string? Email { get; set; }
+   
+        public string? PhoneNumber { get; set; }
+    
+        public string? Role { get; set; }
+        //public List<string>? Role { get; set; }
     }
 }

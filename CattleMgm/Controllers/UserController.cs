@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.ReportingServices.ReportProcessing.ReportObjectModel;
 using System.Net;
 
 namespace CattleMgm.Controllers
@@ -32,38 +34,11 @@ namespace CattleMgm.Controllers
 
         public IActionResult Index()
         {
-            var users = _db.AspNetUsers.ToList();
-            List<UserViewModel> model = new List<UserViewModel>();
-
-            //foreach method
-            //foreach (var item in users)
-            //{
-            //    model.Add(new UserViewModel
-            //    {
-            //        Id = item.Id,
-            //        UserName = item.UserName,
-            //        Email = item.Email,
-            //        FirstName = item.FirstName,
-            //        LastName = item.LastName,
-            //        PhoneNumber = item.PhoneNumber,
-            //        isRoleConfirmed = item.IsRoleConfirmed == null ?false : item.IsRoleConfirmed.Value,
-            //    });
-            //}
-
-            //linq method same as foreach method
-            model = (from item in users
-                     select new UserViewModel
-                     {
-                         Id = AesCrypto.EncryptString(item.Id),
-                         UserName = item.UserName,
-                         Email = item.Email,
-                         FirstName = item.FirstName,
-                         LastName = item.LastName,
-                         PhoneNumber = item.PhoneNumber,
-                         isRoleConfirmed = item.IsRoleConfirmed == null ? false : item.IsRoleConfirmed.Value,
-                     }).ToList();
-
-            return View(model);
+            var roles = _db.AspNetRoles
+                                .Select(q => new { q.Id, q.Name })
+                                .ToList();
+            ViewBag.Roles = new SelectList(roles, "Id", "Name");
+            return View();
         }
 
         //[Authorize(Policy = "uc:1")]
@@ -123,7 +98,7 @@ namespace CattleMgm.Controllers
             }
             var user = await _userManager.FindByIdAsync(did);
 
-            if(user ==null)
+            if (user == null)
             {
                 ModelState.AddModelError("", "Ky user nuk ekziston");
                 return NotFound();
@@ -142,10 +117,15 @@ namespace CattleMgm.Controllers
 
             var roleName = await _userManager.GetRolesAsync(user);
             //gjetja e rolit sipas emrit
-            var roleUser = await _roleManager.FindByNameAsync(roleName.First());
 
-            model.RoleId = roleUser.Id;
-            
+            if (roleName.Count > 0)
+            {
+                var roleUser = await _roleManager.FindByNameAsync(roleName.First());
+
+                model.RoleId = roleUser.Id;
+            }
+
+
             return View(model);
         }
 
@@ -224,6 +204,31 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchUsers search)
+        {
+            List<UserViewModel> model = (from item in _db.AspNetUsers.Include(q => q.Role)
+                                             //join ur in _context.UserRoles on item.Id equals ur.UserId
+                                         where
+                                         ((item.Role.Where(q => q.Id == search.Role).Any() || search.Role == null) &&
+                                         (item.FirstName == search.Name || search.Name == null) &&
+                                         (item.LastName == search.Surname || search.Surname == null) &&
+                                         (item.Email == search.Email || search.Email == null) &&
+                                         (item.PhoneNumber == search.PhoneNumber || search.PhoneNumber == null))
+                                         select new UserViewModel
+                                         {
+                                             Id = AesCrypto.EncryptString(item.Id),
+                                             UserName = item.UserName,
+                                             Email = item.Email,
+                                             FirstName = item.FirstName,
+                                             LastName = item.LastName,
+                                             PhoneNumber = item.PhoneNumber,
+                                             isRoleConfirmed = item.IsRoleConfirmed == null ? false : item.IsRoleConfirmed.Value,
+                                         }).ToList();
+     
+
+            return Json(model);
         }
 
         #region Report
