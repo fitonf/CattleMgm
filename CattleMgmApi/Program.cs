@@ -211,7 +211,7 @@ app.MapGet("api/v1/positions/{id}", async (IPositionRepository repo, IMapper map
         return Results.NotFound(new { error = "not found" });
     }
 
-
+});
 //perdorimi i repository, mapper per mshefjen e struktures se databazes 
 
 
