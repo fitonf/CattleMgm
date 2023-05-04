@@ -98,25 +98,35 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
 
 
 // Roles
+// GET request per te kerkuar te gjitha rolet nga databaza
 app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
 {
+    // Metoda GetRoles qe therret te gjitha rolet.
     var roles = await repo.GetRoles();
+
+    // Kryen Map-imin e listes se kthyer ne nje liste e objektit RolesReadDto.
     var mapped_object = mapper.Map<List<RolesReadDto>>(roles);
 
+    // Kthen te gjitha objektet e Map-uara me HTTP 200 (OK) status code.
     return Results.Ok(mapped_object);
 });
 
 
+// POST request e cila krijon rol te ri ne Databaze.
 app.MapPost("api/v1/roles", async (HttpContext context) =>
 {
+    // Merr serviset e nevojitura.
     var serviceProvider = context.RequestServices;
     var repo = serviceProvider.GetRequiredService<IRolesRepository>();
     var mapper = serviceProvider.GetRequiredService<IMapper>();
 
-    // Call CreateRole method and return the result
+    // Therret metoden CreateRole then e kalon emrin e rolit si argument.
     var result = await repo.CreateRole("Some Role Name");
+
+    // Kryen Map-min e rezultatit tek nje objekt RolesCreateDto dhe e kthen.
     return mapper.Map<RolesCreateDto>(result);
 });
+
 
 //krijimi i api per editimin e gjedhes
 

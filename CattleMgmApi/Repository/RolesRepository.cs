@@ -1,16 +1,16 @@
-﻿using CattleMgm.Models;
-using CattleMgmApi.Data.Entities;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
+﻿using CattleMgm.Models; // The ApplicationRole model is defined here.
+using CattleMgmApi.Data.Entities; // The AspNetRoles model is defined here.
+using Microsoft.AspNetCore.Identity; // The RoleManager class is defined here.
+using Microsoft.EntityFrameworkCore; // The DbContext class is defined here.
 
 namespace CattleMgmApi.Repository
 {
     public class RoleRepository : IRolesRepository
     {
+        // RoleManager naj qasje ne metodat per te menaxhuar rolet
         private RoleManager<ApplicationRole> _roleManager;
-        private PraktikadbContext _context;
-
+        // PraktikaDbContext jep qasje ne Databaze.
+        private PraktikadbContext _context; 
 
         public RoleRepository(RoleManager<ApplicationRole> roleManager, PraktikadbContext context)
         {
@@ -20,24 +20,29 @@ namespace CattleMgmApi.Repository
 
         public async Task<string> CreateRole(string roleName)
         {
+            // Krijon nje ApplicationRole object me emrin e specifikuar.
             var role = new ApplicationRole { Name = roleName };
+            // Perdor RoleManager per te krijuar nje rol te ri.
             var result = await _roleManager.CreateAsync(role);
 
-            if (!result.Succeeded)
+            // Ne qofte se procesi ka qene i pa suksesshem, dergon nje exception.
+            if (!result.Succeeded) 
             {
                 throw new ApplicationException("Error creating role: " + result.Errors.First().Description);
             }
 
-            return role.Id;
+            // Nqs ka sukses, kthen ID rolin.
+            return role.Id; 
         }
 
-
-        public Task<AspNetRoles> GetRoleById(int id)
+        // Jo implementuar kompletisht
+        public Task<AspNetRoles> GetRoleById(int id) 
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<AspNetRoles>> GetRoles()
+        // Kthen listen e te gjitha roleve ne Databaze
+        public async Task<List<AspNetRoles>> GetRoles() 
         {
             return await _context.AspNetRoles.ToListAsync();
         }
