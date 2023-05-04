@@ -41,12 +41,7 @@ app.MapGet("api/v1/cattles", async (ICattleRepository repo, IMapper mapper) =>
     return Results.Ok(mapper.Map<IEnumerable<CattleReadDto>>(cattles));
 });
 
-app.MapGet("api/v1/cattles", async (ICattleMilkRepository repo, IMapper mapper) =>
-{
-    var cattles = await repo.GetAllCattlesMilk();
 
-    return Results.Ok(mapper.Map<IEnumerable<CattleMilkReadDto>>(cattles));
-});
 
 //perdorimi i dbcontextit per nxjerrje te te dhenave nga databaza pa readdto
 //app.MapGet("api/v1/cattles", async (PraktikadbContext context) =>
@@ -55,6 +50,7 @@ app.MapGet("api/v1/cattles", async (ICattleMilkRepository repo, IMapper mapper) 
 
 //    return Results.Ok(cattles);
 //});
+
 
 
 app.MapGet("api/v1/cattles/{id}", async (ICattleRepository repo, IMapper mapper, int id) =>
@@ -71,6 +67,28 @@ app.MapGet("api/v1/cattles/{id}", async (ICattleRepository repo, IMapper mapper,
 
 });
 
+app.MapPost("api/v1/cattle", async (ICattleRepository repo, IMapper mapper, CattleCreateDto cattle) =>
+{
+    if (cattle is not null)
+    {
+        var mapped_object = mapper.Map<Cattle>(cattle);
+        await repo.CreateCattle(mapped_object);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<CattleReadDto>(mapped_object);
+
+        return Results.Created($"Gjedhja me id {result.Id} u krijua!", result);
+    }
+    return Results.NoContent();
+});
+
+app.MapGet("api/v1/cattlesmilk", async (ICattleMilkRepository repo, IMapper mapper) =>
+{
+    var cattles = await repo.GetAllCattlesMilk();
+
+    return Results.Ok(mapper.Map<IEnumerable<CattleMilkReadDto>>(cattles));
+});
+
 app.MapGet("api/v1/cattlesmilk/{id}", async (ICattleMilkRepository repo, IMapper mapper, int id) =>
 {
     var cattlemilk = await repo.GetCattleMilkById(id);
@@ -84,22 +102,10 @@ app.MapGet("api/v1/cattlesmilk/{id}", async (ICattleMilkRepository repo, IMapper
     }
 
 });
-//app.MapPost("api/v1/cattle", async (ICattleRepository repo, IMapper mapper, CattleCreateDto cattle) =>
-//{
-//    if(cattle is not null)
-//    {
-//        var mapped_object = mapper.Map<Cattle>(cattle);
-//        await repo.CreateCattle(mapped_object);
-//        await repo.SaveChanges();
 
-//        var result = mapper.Map<CattleReadDto>(mapped_object);
 
-//        return Results.Created($"Gjedhja me id {result.Id} u krijua!", result);
-//    }
-//    return Results.NoContent();
-//});
 
-//Create CattleMilk
+////Create CattleMilk
 app.MapPost("api/v1/cattlemilk", async (ICattleMilkRepository repo, IMapper mapper, CattleMilkCreateDto cattlemilk) =>
 {
     if (cattlemilk is not null)
@@ -114,7 +120,7 @@ app.MapPost("api/v1/cattlemilk", async (ICattleMilkRepository repo, IMapper mapp
     }
     return Results.NoContent();
 });
-//Last CattleMilk
+////Last CattleMilk
 app.MapGet("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, IMapper mapper, int id) =>
 {
     var pos = await repo.GetLastCattleMilk(id);
@@ -127,7 +133,7 @@ app.MapGet("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, IMapper 
         return Results.NotFound(new { error = "not found" });
     }
 });
-// Delete
+//// Delete
 app.MapDelete("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, int id) =>
 {
     var milk = await repo.GetCattleMilkById(id);
@@ -139,15 +145,15 @@ app.MapDelete("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, int i
     await repo.SaveChanges();
     return Results.NoContent();
 });
-// Editimi
-app.MapPut("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, IMapper mapper, CattleMilkUpdateDto cattlemilk, int id) =>
+//// Editimi
+app.MapPut("api/v1/cattlemilk/{id}", async (ICattleMilkRepository repo, IMapper mapper, int id) =>
 {
+    var cattlemilk = await repo.GetCattleMilkById(id);
     if (cattlemilk is not null)
     {
-        var mapped_object = mapper.Map<CattleMilk>(cattlemilk);
-        repo.UpdateCattleMilk(mapped_object, id);
+        await repo.UpdateCattleMilk(cattlemilk);
         await repo.SaveChanges();
-        var result = mapper.Map<CattleMilkReadDto>(mapped_object);
+        var result = mapper.Map<CattleMilkReadDto>(cattlemilk);
         return Results.Created($"CattleMilk me id {result.Id} u editua!", result);
     }
     return Results.NoContent();

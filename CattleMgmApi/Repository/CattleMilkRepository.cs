@@ -49,14 +49,21 @@ namespace CattleMgmApi.Repository
             return await _context.CattleMilk.Where(x => x.Id == id).OrderByDescending(x => x.Created).FirstOrDefaultAsync();
         }
       
-        public Task SaveChanges()
+        public async Task SaveChanges()
         {
-            throw new NotImplementedException();
+            await _context.SaveChangesAsync();
         }
 
-        public void UpdateCattleMilk(CattleMilk cattlemilk, int Id)
+        public async Task<CattleMilk> UpdateCattleMilk(CattleMilk cattle)
         {
-            throw new NotImplementedException();
+            var oldCattle = await _context.CattleMilk.Where(x => x.Id == cattle.Id).FirstOrDefaultAsync();
+            oldCattle.LitersCollected = cattle.LitersCollected;
+            oldCattle.Price = cattle.Price;
+            oldCattle.Created = DateTime.Now;
+
+            return cattle; 
+
+
         }
 
      

@@ -15,7 +15,7 @@ namespace CattleMgmApi.Repository
         Task CreateCattleMilk(CattleMilk cattlemilk);
 
         void DeleteCattleMilk(CattleMilk cattlemilk);
-        void UpdateCattleMilk(CattleMilk cattlemilk, int Id);
+        Task<CattleMilk> UpdateCattleMilk(CattleMilk cattle);
         
     }
 }
