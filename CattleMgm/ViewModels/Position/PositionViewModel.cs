@@ -11,6 +11,8 @@ namespace CattleMgm.ViewModels.Position
         public double Lat { get; set; }
 
         public double Long { get; set; }
+        public string DateMeasured { get; set; }
+        public DateTime Date { get; set; }
     }
 
     public class PositionCreateViewModel
@@ -56,5 +58,12 @@ namespace CattleMgm.ViewModels.Position
 
         public double Long { get; set; }
 
+    }
+    public class SearchPosition
+    {
+        public int? CattleId { get; set; }
+        public double? Lat { get; set; }
+        public double? Long { get; set; }
+        public string? DateMeasured { get; set; }
     }
 }
