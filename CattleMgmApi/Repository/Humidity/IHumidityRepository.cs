@@ -12,11 +12,8 @@ namespace CattleMgmApi.Repository.Humidity
 
         Task CreateHumidity(CattleHumidity humidity);
 
-        Task<CattleHumidity?> GetLastHumidity(int id);
-
         Task DeleteHumidity(CattleHumidity humidity);
         void UpdateHumidity(CattleHumidity mapped_object, int Id);
         Task UpdateHumidity(CattleHumidity existing_humidity);
-        //void DeleteCattle(CattleHumidity humidity);
     }
 }
