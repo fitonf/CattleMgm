@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.Farm;
 using CattleMgm.Repository.Position;
 using CattleMgm.ViewModels;
@@ -141,6 +142,28 @@ namespace CattleMgm.Controllers
             _db.SaveChanges();
 
             return Json(error);
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var positions = new List<CattlePosition>();
+            positions = await _posRepository.GetAllPositions();
+            var query = positions
+               .Select(q => new PositionReportModel
+               {
+                   Id = q.Id.ToString(),
+                   CattleName = $"{q.Cattle.Name}",
+                   Lat = q.Lat,
+                   Long = q.Long
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\positionReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
 }

@@ -45,4 +45,16 @@ namespace CattleMgm.ViewModels.Position
         [Display(Name = "Longitude")]
         public double Long { get; set; }
     }
+
+    public class PositionReportModel
+    {
+        public string Id { get; set; }
+
+        public string CattleName { get; set; }
+
+        public double Lat { get; set; }
+
+        public double Long { get; set; }
+
+    }
 }
