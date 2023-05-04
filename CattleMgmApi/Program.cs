@@ -1,6 +1,7 @@
 using AutoMapper;
 using CattleMgmApi.Data.Entities;
 using CattleMgmApi.Dtos;
+using CattleMgmApi.Dtos.BreedDtos;
 using CattleMgmApi.Dtos.Farmer;
 using CattleMgmApi.Dtos.CattlePositionDtos;
 using CattleMgmApi.Dtos.MunicipalyDtos;
@@ -9,6 +10,7 @@ using CattleMgmApi.Repository.Farmers;
 using Microsoft.AspNetCore.Builder;
 using CattleMgmApi.Repository.CattlePositionRepository;
 using CattleMgmApi.Repository.MunicipalityRepository;
+using CattleMgmApi.Repository.BreedRepository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,6 +26,8 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IBreedRepository, BreedRepository>();
+
 builder.Services.AddScoped<IFarmerRepository, FarmerRepository>();
 builder.Services.AddScoped<IMunicipalityRepository, MunicipalityRepository>();
 
@@ -218,6 +222,74 @@ app.MapGet("api/v1/positions/{id}", async (IPositionRepository repo, IMapper map
 app.MapGet("api/v1/farmers", async (IFarmerRepository repo, IMapper mapper) =>
 {
     var farmers = await repo.GetAllFarmers();
+//listimi i Breed
+app.MapGet("api/v1/breed", async (IBreedRepository repo, IMapper mapper) =>
+{
+    var breed = await repo.GetAllBreed();
+
+    return Results.Ok(mapper.Map<IEnumerable<BreedReadDto>>(breed));
+});
+//listimi sipas id-se
+app.MapGet("api/v1/breeds/{id}", async (IBreedRepository repo, IMapper mapper, int id) =>
+{
+    var breed = await repo.GetBreedById(id);
+    if (breed is not null)
+    {
+        return Results.Ok(mapper.Map<CattleReadDto>(breed));
+    }
+    else
+    {
+        return Results.NotFound(new { error = "not found" });
+    }
+
+});
+//krijimi i breed
+app.MapPost("api/v1/breeds", async (IBreedRepository repo, IMapper mapper, BreedCreateDto breed) =>
+{
+    if (breed is not null)
+    {
+        var mapped_object = mapper.Map<Breed>(breed);
+        await repo.CreateBreed(mapped_object);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<BreedReadDto>(mapped_object);
+
+        return Results.Created($"Lloji me id {result.Id} u krijua!", result);
+    }
+    return Results.NoContent();
+});
+//editimi i breed
+app.MapPut("api/v1/breeds/{id}", async (int id, IBreedRepository repo, IMapper mapper, BreedUpdateDto breed) =>
+{
+    var existing_breed = await repo.GetBreedById(id);
+    if (existing_breed is null)
+    {
+        return Results.NotFound($"Lloji me id {id} nuk u gjet!");
+    }
+
+    mapper.Map(breed, existing_breed);
+    await repo.UpdateBreed(existing_breed);
+    await repo.SaveChanges();
+
+    var result = mapper.Map<BreedReadDto>(existing_breed);
+
+    return Results.Ok(result);
+});
+
+//fshirja e breed
+app.MapDelete("api/v1/breeds/{id}", async (int id, IBreedRepository repo) =>
+{
+    var existing_breed = await repo.GetBreedById(id);
+    if (existing_breed is null)
+    {
+        return Results.NotFound($"Lloji me id {id} nuk u gjet!");
+    }
+
+    await repo.DeleteBreed(existing_breed);
+    await repo.SaveChanges();
+
+    return Results.NoContent();
+});
 
     return Results.Ok(mapper.Map<IEnumerable<FarmerReadDto>>(farmers));
 });
