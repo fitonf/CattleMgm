@@ -17,6 +17,8 @@ namespace CattleMgm.Repository.Cattles
             throw new NotImplementedException();
         }
 
+       
+
         public List<Cattle> GetCattles()
         {
             var cattles = _context.Cattle

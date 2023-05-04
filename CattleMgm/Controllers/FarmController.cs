@@ -139,8 +139,8 @@ namespace CattleMgm.Controllers
             {
                 ModelState.AddModelError("", "Plotesoni fushat obligative");
                 return View(model);
-              //  error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
-               // return Json(error);
+                //  error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+                // return Json(error);
             }
 
             var item = _db.Farm.Find(model.Id);
@@ -164,6 +164,8 @@ namespace CattleMgm.Controllers
 
             return RedirectToAction("Index", "Farm");
         }
-    
+
+
+   
     }
 }

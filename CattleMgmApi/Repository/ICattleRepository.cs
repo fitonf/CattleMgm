@@ -12,6 +12,16 @@ namespace CattleMgmApi.Repository
 
         Task CreateCattle(Cattle cattle);
 
-        void DeleteCattle(Cattle cattle);
+        void DeleteCattle(int id);
+
+        //Task UpdateCattle(Cattle cattle);
+        //void UpdateCattle(int id, Cattle mapped_object);
+        //void UpdateCattle(int id, Cattle mapped_object);
+
+        void UpdateCattle(Cattle cattle, int id);
+        
+       
+
+
     }
 }

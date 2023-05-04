@@ -15,7 +15,8 @@ namespace CattleMgmApi.Profiles
             CreateMap<CattleCreateDto, Cattle>();
             //update
             CreateMap<CattleUpdateDto, Cattle>();
-
+            //Delete
+            CreateMap<CattleDeleteDto, Cattle>();
 
 
         }

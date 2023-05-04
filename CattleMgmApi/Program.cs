@@ -78,8 +78,41 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
     return Results.NoContent();
 });
 
+
 //krijimi i api per editimin e gjedhes
 
+
+app.MapPut("api/v1/cattles/{id}", async (ICattleRepository repo, IMapper mapper, CattleUpdateDto cattle, int id) =>
+{
+    
+    if (cattle is not null)
+    {
+        var mapped_object = mapper.Map<Cattle>(cattle);
+        repo.UpdateCattle(mapped_object, id);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<CattleReadDto>(mapped_object);
+
+        return Results.Created($"Gjedhja me id {result.Id} u modifikua!", result);
+        //.Updated($"Gjedhja me id {result.Id} u modifikua!", result);
+    }
+    return Results.NoContent();
+});
+
+app.MapDelete("api/v1/cattles/{id}" , async (ICattleRepository repo, IMapper mapper, int id) =>
+{
+    var cattle = await repo.GetCattleById(id);
+    if (cattle is not null)
+    {
+        var mapped_object = mapper.Map<Cattle>(cattle);
+        repo.DeleteCattle(id);
+        await repo.SaveChanges();
+        var result = mapper.Map<CattleReadDto>(mapped_object);
+
+    }
+    return Results.NoContent();
+    
+});
 
 
 //app.MapGet("/", () => "Hello World!");

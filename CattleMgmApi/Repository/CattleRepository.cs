@@ -23,14 +23,55 @@ namespace CattleMgmApi.Repository
             await _context.Cattle.AddAsync(cattle);
         }
 
-        public void DeleteCattle(Cattle cattle)
-        {
-            if(cattle == null)
-                throw new ArgumentNullException(nameof(cattle));
+        //public async Task UpdateCattle(Cattle cattle)
+        //{
+        //    var cat = _context.Cattle.Find(cattle.Id);
+        //    if (cat == null)
+        //    {
+        //        throw new ArgumentNullException(nameof(cattle));
+        //    }
 
-            //fshirja nga db me EFCore
-            _context.Cattle.Remove(cattle);
+        //    cat.Name = cattle.Name;
+        //    cat.Weight = cattle.Weight;
+        //    cat.BreedId = cattle.BreedId;
+        //    cat.BirthDate = cattle.BirthDate;
+        //    cat.Gender = cattle.Gender;
+        //    cat.FarmId = cattle.FarmId;
+        //    _context.Update(cat);
+
+        //    //insertimi ne databaze me EFCore
+
+        //}
+
+        public void UpdateCattle(Cattle cattle, int id)
+        {
+            if (cattle == null)
+            {
+                throw new ArgumentNullException(nameof(cattle));
+            }
+            cattle.Id = id;
+            
+
+            _context.Cattle.Update(cattle);
         }
+        public void DeleteCattle(int id)
+        {
+            var cattle = _context.Cattle.FirstOrDefault(x => x.Id == id);
+            if (cattle != null)
+            {
+                _context.Cattle.Remove(cattle);
+                _context.SaveChanges();
+            }
+        }
+
+        //public void DeleteCattle(Cattle cattle)
+        //{
+        //    if(cattle == null)
+        //        throw new ArgumentNullException(nameof(cattle));
+
+        //    //fshirja nga db me EFCore
+        //    _context.Cattle.Remove(cattle);
+        //}
 
         public async Task<IEnumerable<Cattle>> GetAllCattles()
         {
