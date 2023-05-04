@@ -1,8 +1,10 @@
 using AutoMapper;
 using CattleMgmApi.Data.Entities;
 using CattleMgmApi.Dtos;
+using CattleMgmApi.Dtos.CattlePositionDtos;
 using CattleMgmApi.Dtos.MunicipalyDtos;
 using CattleMgmApi.Repository;
+using CattleMgmApi.Repository.CattlePositionRepository;
 using CattleMgmApi.Repository.MunicipalityRepository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
