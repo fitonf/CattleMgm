@@ -14,6 +14,7 @@ using CattleMgm.ViewModels.Position;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using CattleMgm.Models.Session;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -41,6 +42,7 @@ namespace CattleMgm.Controllers
             ViewData["Title"] = "Lista e gjedheve";
 
             var lista = _cattleRepository.GetCattles(); //Cattle 
+            var unicipality = _db.Municipality.ToList();
 
             List<CattleViewModel> listaViewModel = new List<CattleViewModel>(); // 
 
@@ -73,10 +75,12 @@ namespace CattleMgm.Controllers
         public async Task<IActionResult> Create()
         {
             var farms = await _farmRepository.GetAllFarms();
+            var muni = await _db.Municipality.Select(q => new { q.Id, q.Emri }).ToListAsync();
             var breed = await _db.Breed.Select(q => new { q.Id, q.Name }).ToListAsync();
 
             ViewBag.Farms = new SelectList(farms, "Id", "Name");
             ViewBag.Breed = new SelectList(breed, "Id", "Name");
+            ViewBag.Municipality = new SelectList(muni, "Id", "Emri");
 
             List<SelectListItem> gender = new List<SelectListItem>
             {
@@ -95,10 +99,12 @@ namespace CattleMgm.Controllers
             if(!ModelState.IsValid)
             {
                 var farms = await _farmRepository.GetAllFarms();
+                var muni = await _db.Municipality.Select(q => new { q.Id, q.Emri }).ToListAsync();
                 var breed = await _db.Breed.Select(q => new { q.Id, q.Name }).ToListAsync();
 
                 ViewBag.Farms = new SelectList(farms, "Id", "Name");
                 ViewBag.Breed = new SelectList(breed, "Id", "Name");
+                ViewBag.Municipality = new SelectList(muni, "Id", "Emri");
 
                 List<SelectListItem> gender = new List<SelectListItem>
             {
@@ -121,6 +127,7 @@ namespace CattleMgm.Controllers
                 CreatedBy = user.Id,
                 Created = DateTime.Now,
                 Weight = model.Weight,
+                MunicipalityId = model.MunicipalityId
                
                 
             };
@@ -220,9 +227,31 @@ namespace CattleMgm.Controllers
             return View(model);
         }
 
+        //public async Task<IActionResult> Create()
+        //{
+        //    var farms = await _farmRepository.GetAllFarms();
+        //    var muni = await _db.Municipality.Select(q => new { q.Id, q.Emri }).ToListAsync();
+        //    var breed = await _db.Breed.Select(q => new { q.Id, q.Name }).ToListAsync();
+
+        //    ViewBag.Farms = new SelectList(farms, "Id", "Name");
+        //    ViewBag.Breed = new SelectList(breed, "Id", "Name");
+        //    ViewBag.Municipality = new SelectList(muni, "Id", "Emri");
+
+        //    List<SelectListItem> gender = new List<SelectListItem>
+        //    {
+        //        new SelectListItem() { Text = "Mashkull", Value = 1.ToString() },
+        //        new SelectListItem() { Text = "Femer", Value = 2.ToString() }
+        //    };
+
+        //    ViewBag.Gender = new SelectList(gender, "Value", "Text");
+
+        //    return View();
+        //}
+
         [HttpGet]
-        public IActionResult Edit(string ide)
+        public async Task <IActionResult> Edit(string ide)
         {
+
             if (ide == null)
             {
                 return BadRequest();
@@ -230,6 +259,7 @@ namespace CattleMgm.Controllers
 
             int id = AesCrypto.Decrypt<int>(ide);
             var cat = _db.Cattle.Find(id);
+           
 
             // Gender ViewBag
             var genderList = new List<SelectListItem>
@@ -249,6 +279,11 @@ namespace CattleMgm.Controllers
             var farmList = new SelectList(farms, "Id", "Name", cat.FarmId);
             ViewBag.Farms = farmList;
 
+            // Municipality ViewBag
+            var muni = await _db.Municipality.Select(q => new { q.Id, q.Emri }).ToListAsync();
+            ViewBag.Municipality = new SelectList(muni, "Id", "Emri");
+
+
             if (cat == null)
             {
                 return NotFound();
@@ -262,7 +297,8 @@ namespace CattleMgm.Controllers
                 BreedId = cat.BreedId,
                 BirthDate = cat.BirthDate.ToShortDateString(),
                 Gender = cat.Gender,
-                FarmId = cat.FarmId
+                FarmId = cat.FarmId,
+                MunicipalityId = cat.MunicipalityId
             };
 
             return PartialView(editViewModel);
@@ -271,10 +307,11 @@ namespace CattleMgm.Controllers
         [HttpPost]
         public IActionResult Edit(CattleEditViewModel viewModel)
         {
-            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Lageshtia u ndryshua me sukses", Title = "Sukses" };
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Te dhenat e gjedhit u ndryshuan me sukses", Title = "Sukses" };
             if (!ModelState.IsValid)
             {
                 var cat = _db.Cattle.Find(viewModel.Id);
+               
                 if (cat == null)
                 {
                     return NotFound();
@@ -286,6 +323,9 @@ namespace CattleMgm.Controllers
                 cat.BirthDate = DateTime.Parse(viewModel.BirthDate);
                 cat.Gender = viewModel.Gender;
                 cat.FarmId = viewModel.FarmId;
+                cat.MunicipalityId = viewModel.MunicipalityId;
+
+
                 _db.Update(cat);
                 _db.SaveChanges();
                 return Json(error);
@@ -306,20 +346,24 @@ namespace CattleMgm.Controllers
             var farmList = new SelectList(farms, "Id", "Name", viewModel.FarmId);
             ViewBag.Farms = farmList;
 
+            var muni = _db.Municipality.ToList();
+            var muniList = new SelectList(muni, "Id", "Name", viewModel.MunicipalityId);
+            ViewBag.Municipalitys = muniList;
+
             return PartialView(viewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(int id)
         {
 
-            if (Id == null)
+            if (id == null)
             {
                 return BadRequest();
             }
 
 
-            var cattle = _db.Cattle.Find(Id);
+            var cattle = _db.Cattle.Find(id);
             if (cattle != null)
             {
                 var result = _db.Cattle.Remove(cattle);
@@ -330,6 +374,40 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+
+            var cattle = _db.Cattle.ToList();//
+            var farm = _db.Farm.ToList();
+            var breed = _db.Breed.ToList();
+            var municipality = _db.Municipality.ToList();
+
+
+
+
+            var query = cattle
+
+
+               .Select(q => new CattleReportModel
+               {
+                Id = q.Id, 
+                Name = q.Name,
+                Weight = q.Weight,
+                BreedId = q.Breed.Name,
+                BrithDate = q.BirthDate,
+                Gender = q.Gender == 1 ? "Mashkull" : "Femer",
+                FarmId = q.Farm.Name,
+                MunicipalityId = q.Municipality.Emri
+        }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\CattleReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
 }

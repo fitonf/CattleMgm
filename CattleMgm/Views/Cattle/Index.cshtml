@@ -7,6 +7,25 @@
         </div>
     </div>
     <div class="card-body">
+
+        <div class="button-items" style="float:right;">
+            <div class="btn-group dropstart">
+                <button style="margin:0 5px 7px 0" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-chevron-left"></i>Shkarko
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" onclick="Report(ReportType.PDF)">
+                        <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">PDF</span>
+                    </button>
+                    <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
+                        <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">Excel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <table id="cattle-table" class="table table-responsive">
             <thead>
                 <tr>
@@ -33,12 +52,14 @@
                         <td>@item.FarmName</td>
                         <td>@item.FarmerName</td>
                         <td>@item.CreatedBy</td>
-                        <td><a class="btn btn-sm btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
-                        <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
-                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteCattle('@item.Id')">Delete</a>
-                        </td>
                         <td>@item.Komuna</td>
-                        <td><a class="btn btn-primary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a></td>
+                        <td>
+                            <a class="btn btn-sm btn-secondary" asp-route-id="@item.Id" asp-action="Details" asp-controller="Cattle"><i class="fa fa-info-circle"></i> Details</a>
+                            <a class="btn btn-sm btn-primary" onclick="EditMenu('@AesCrypto.Enkrypt(item.Id)')"><i class="fa fa-edit"></i>Edit</a>
+                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="deleteCattle('@item.Id')">Delete</a>
+                        </td>
+                        
+                       
                     </tr>
                 }
             </tbody>
@@ -55,7 +76,13 @@
             "ordering": false
 
         });
-        var DeleteCattle = function (id) {
+
+        function EditMenu(id) {
+            $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Cattle")?ide=' + id, function () {
+                $('#modal-center-large').modal('toggle')
+            })
+        }
+        function deleteCattle(id) {
             Swal.fire({
                 title: 'A jeni te sigurt?',
                 text: "Kjo ben fshirjen e gjedhes!",
@@ -71,17 +98,12 @@
                     cancelButton: "btn btn-secondary"
                 }
             }).then((result) => {
-                debugger;
                 if (result.value) {
-                    debugger;
-                    // Make the AJAX request
                     $.ajax({
+                        url: '@Url.Action("Delete", "Cattle")',
                         type: 'POST',
-                        url: '@Url.Action("Delete","Cattle")/' + id,//
                         data: { id: id },
-
                         success: function (data) {
-                            debugger;
                             Swal.fire({
                                 text: "Gjedhi u fshi me sukses!",
                                 icon: "success",
@@ -95,9 +117,9 @@
                             });
                         },
                         error: function (xhr, status, error) {
-                            debugger;
+                            console.log(xhr.responseText); // Log the full error response
                             Swal.fire({
-                                text: "Sorry, looks like there are some errors detected, please try again.",
+                                text: "Sorry, there was an error deleting the cattle. Please try again later.",
                                 icon: "error",
                                 buttonsStyling: false,
                                 confirmButtonText: "Ok, got it!",
@@ -108,9 +130,26 @@
                         }
                     });
                 }
-
             });
-
         }
+        function Report(type) {
+            if (type == '@((int)ReportType.PDF)' || type == '@((int)ReportType.Excel)') {
+                $.ajax({
+                    url: "/Cattle/OpenIndexReport",
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    success: function () {
+                        if (type == '@((int)ReportType.Excel)')
+                            window.open("/Reports/Design/?format=excel", '_blank');
+                        else {
+                            let W = window.open("/Reports/Design/?format=pdf", '_blank');
+                            W.onload = function () { this.document.title = 'Raporti'; }
+                        }
+                    }
+                });
+            }
+        }
+
     </script>
 }
