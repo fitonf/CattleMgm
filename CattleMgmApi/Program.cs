@@ -4,6 +4,10 @@ using CattleMgmApi.Dtos;
 using CattleMgmApi.Repository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +20,11 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
+
+
+
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -77,6 +85,18 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
     }
     return Results.NoContent();
 });
+
+app.MapGet("api/v1/roles", async (IRoleRepository repo, IMapper mapper) =>
+{
+    var roles = await repo.GetRoles();
+    var mapped_object = mapper.Map<List<RoleReadDto>>(roles);
+
+    return Results.Ok(mapped_object);
+});
+
+
+
+
 
 //krijimi i api per editimin e gjedhes
 
