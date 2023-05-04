@@ -3,6 +3,7 @@ using CattleMgm.Data.Entities;
 using CattleMgm.Data.Migrations;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Municipality;
 using Microsoft.AspNetCore.Authorization;
@@ -200,5 +201,36 @@ namespace CattleMgm.Controllers
             return Json(error);
 
         }
+        #region Report
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var municipality = _db.Municipality.ToList();
+            var query = municipality
+               .Select(q => new KomunaReportModel
+               {
+                   Id = q.Id,
+                   Emri = q.Emri ,
+                   ZIP = q.ZIP
+                  
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\KomunaReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+        #endregion
     }
+    internal class KomunaReportModel
+    {
+        public int Id { get; set; }
+        public string Emri { get; set; }
+        public int ZIP { get; set; }
+    }
+
+
 }
