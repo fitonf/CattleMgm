@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.CattleBloodPressures;
 using CattleMgm.ViewModels.CattleBloodPressure;
 using CattleMgm.ViewModels.User;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Net;
 
@@ -51,6 +53,8 @@ namespace CattleMgm.Controllers
 
             return View();
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(CattleBloodPressureCreateViewModel model){
@@ -167,6 +171,40 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+
+            var cattle = _db.Cattle.ToList();//
+            var farm = _db.Farm.ToList();
+            var breed = _db.Breed.ToList();
+            var municipality = _db.CattleBloodPressure.ToList();
+
+
+
+
+            var query = cattle
+
+
+               .Select(q => new CattleReportModel
+               {
+                   Id = q.Id,
+                   Name = q.Name,
+                   Weight = q.Weight,
+                   BreedId = q.Breed.Name,
+                   BrithDate = q.BirthDate,
+                   Gender = q.Gender == 1 ? "Mashkull" : "Femer",
+                   FarmId = q.Farm.Name,
+                   MunicipalityId = q.Municipality.Emri
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\CattleBloodPressureRaport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
     }
