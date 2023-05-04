@@ -19,7 +19,6 @@ namespace CattleMgmApi.Repository.Humidity
             {
                 throw new ArgumentNullException(nameof(humidity));
             }
-            //insertimi ne databaze me EFCore
 
             await _context.CattleHumidity.AddAsync(humidity);
         }
@@ -29,29 +28,38 @@ namespace CattleMgmApi.Repository.Humidity
             if (humidity == null)
                 throw new ArgumentNullException(nameof(humidity));
 
-            //fshirja nga db me EFCore
+
             _context.CattleHumidity.Remove(humidity);
         }
 
-        public async Task<IEnumerable<CattleHumidity>> GetAllHumidity()
+        public async Task<IEnumerable<CattleHumidity>> GetAllHumidity()///
         {
-            //listimi i tabeles me EFCore
-            var humiditys = await _context.CattleHumidity.ToListAsync();
+            var humidity = await _context.CattleHumidity.ToListAsync();
 
-            return humiditys;
+            return humidity;
         }
 
         public async Task<CattleHumidity?> GetHumidityById(int id)
         {
-            //gjetja e nje gjedhe sipas id's se caktuar
             return await _context.CattleHumidity.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public void UpdateHumidity(CattleHumidity humidity, int id)
+        {
+            if (humidity == null)
+            {
+                throw new ArgumentNullException(nameof(humidity));
+            }
+
+            humidity.Id = id;
+
+            _context.CattleHumidity.Update(humidity);
+
         }
 
         public async Task SaveChanges()
         {
-            // ruajtja ne databaze
             await _context.SaveChangesAsync();
         }
     }
 }
-
