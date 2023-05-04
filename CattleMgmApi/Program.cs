@@ -6,12 +6,22 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CattleMgmApi.Dtos.Roles;
+using CattleMgm.Models;
+using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
+        .AddEntityFrameworkStores<PraktikadbContext>()
+        .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<RoleManager<ApplicationRole>>();
+builder.Services.AddScoped<IRolesRepository, RoleRepository>();
+
 
 var sqlConBuilder = new SqlConnectionStringBuilder();
 sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
@@ -97,11 +107,18 @@ app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
 });
 
 
+app.MapPost("api/v1/roles", async (HttpContext context) =>
+{
+    var serviceProvider = context.RequestServices;
+    var repo = serviceProvider.GetRequiredService<IRolesRepository>();
+    var mapper = serviceProvider.GetRequiredService<IMapper>();
 
-
+    // Call CreateRole method and return the result
+    var result = await repo.CreateRole("Some Role Name");
+    return mapper.Map<RolesCreateDto>(result);
+});
 
 //krijimi i api per editimin e gjedhes
-
 
 
 //app.MapGet("/", () => "Hello World!");

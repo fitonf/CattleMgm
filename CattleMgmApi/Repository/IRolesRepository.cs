@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using CattleMgm.Models;
 using CattleMgmApi.Data.Entities;
 
 namespace CattleMgmApi.Repository
@@ -8,7 +9,7 @@ namespace CattleMgmApi.Repository
     {
         Task<List<AspNetRoles>> GetRoles();
         //Task<AspNetRoles> GetRoleById(int id);
-        //Task CreateRole(AspNetRoles role);
+        Task<ApplicationRole> CreateRole(string roleName);
         //void UpdateRole(AspNetRoles role);
         //void DeleteRole(AspNetRoles role);
         //Task<bool> RoleExists(int id);

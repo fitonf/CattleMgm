@@ -3,6 +3,5 @@
     public class RolesCreateDto
     {
         public string Name { get; set; }
-
     }
 }
