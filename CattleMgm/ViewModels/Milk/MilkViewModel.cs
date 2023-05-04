@@ -25,9 +25,13 @@
         public double Price { get; set; }
 
         public double LitersCollected { get; set; }
+
+        public string? Identifier { get; set; }
     }
     public class MilkEditViewModel :MilkCreateViewModel
     {
        public int Id { get; set; }
+
+
     }
 }
