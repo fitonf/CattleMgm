@@ -1,9 +1,12 @@
 using AutoMapper;
 using CattleMgmApi.Data.Entities;
 using CattleMgmApi.Dtos;
+using CattleMgmApi.Dtos.Farmer;
 using CattleMgmApi.Dtos.CattlePositionDtos;
 using CattleMgmApi.Dtos.MunicipalyDtos;
 using CattleMgmApi.Repository;
+using CattleMgmApi.Repository.Farmers;
+using Microsoft.AspNetCore.Builder;
 using CattleMgmApi.Repository.CattlePositionRepository;
 using CattleMgmApi.Repository.MunicipalityRepository;
 using Microsoft.Data.SqlClient;
@@ -21,6 +24,7 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<IFarmerRepository, FarmerRepository>();
 builder.Services.AddScoped<IMunicipalityRepository, MunicipalityRepository>();
 
 builder.Services.AddScoped<IPositionRepository, PositionRepository>();
@@ -45,7 +49,6 @@ app.MapGet("api/v1/cattles", async (ICattleRepository repo, IMapper mapper) =>
 
     return Results.Ok(mapper.Map<IEnumerable<CattleReadDto>>(cattles));
 });
-
 
 //perdorimi i dbcontextit per nxjerrje te te dhenave nga databaza pa readdto
 //app.MapGet("api/v1/cattles", async (PraktikadbContext context) =>
@@ -194,6 +197,7 @@ app.MapPut("api/v1/position/{id}", async (IPositionRepository repo, IMapper mapp
     return Results.NoContent();
 });
 
+//krijimi i api per editimin e gjedhes
 
 app.MapGet("api/v1/positions/{id}", async (IPositionRepository repo, IMapper mapper, int id) =>
 {
@@ -207,8 +211,74 @@ app.MapGet("api/v1/positions/{id}", async (IPositionRepository repo, IMapper map
         return Results.NotFound(new { error = "not found" });
     }
 
+
+//perdorimi i repository, mapper per mshefjen e struktures se databazes 
+
+
+app.MapGet("api/v1/farmers", async (IFarmerRepository repo, IMapper mapper) =>
+{
+    var farmers = await repo.GetAllFarmers();
+
+    return Results.Ok(mapper.Map<IEnumerable<FarmerReadDto>>(farmers));
 });
 
+app.MapGet("api/v1/farmers/{id}", async (IFarmerRepository repo, IMapper mapper, int id) =>
+{
+    var farmer = await repo.GetFarmerById(id);
+    if (farmer is not null)
+    {
+        return Results.Ok(mapper.Map<FarmerReadDto>(farmer));
+    }
+    else
+    {
+        return Results.NotFound(new { error = "not found" });
+    }
+
+});
+
+app.MapPost("api/v1/farmers", async (IFarmerRepository repo, IMapper mapper, FarmerCreateDto farmer) =>
+{
+    if (farmer is not null)
+    {
+        var mapped_object = mapper.Map<Farmer>(farmer);
+        await repo.CreateFarmer(mapped_object);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<FarmerReadDto>(mapped_object);
+
+        return Results.Created($"Fermeri me id {result.Id} u krijua!", result);
+    }
+    return Results.NoContent();
+});
+
+app.MapPut("api/v1/farmers/{id}", async (IFarmerRepository repo, int id, IMapper mapper, FarmerCreateDto farmer) =>
+{
+   
+    if (farmer is not null)
+    {
+        var mapped_object = mapper.Map<Farmer>(farmer);
+        repo.Update(id, mapped_object);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<FarmerReadDto>(mapped_object);
+
+        return Results.Created($"Fermeri me id {result.Id} u Editua!", result);
+    }
+    return Results.NoContent();
+});
+
+app.MapDelete("api/v1/farmers/{id}",async (IFarmerRepository repo, int id, IMapper mapper) =>
+{
+    var farmer = await repo.GetFarmerById(id);
+    if(farmer is not null)
+    {
+        var mapped_object = mapper.Map<Farmer>(farmer);
+        repo.DeleteFarmer(id);
+        await repo.SaveChanges();
+        var result = mapper.Map<FarmerReadDto>(mapped_object);
+    }
+    return Results.NoContent();
+});
 //app.MapGet("/", () => "Hello World!");
 
 app.Run();
