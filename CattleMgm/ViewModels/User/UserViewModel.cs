@@ -76,7 +76,8 @@ namespace CattleMgm.ViewModels.User
 		public string? PhoneNumber { get; set; }
 
 		[Required(ErrorMessage = "Kjo fushë është obligative")]
-		public string RoleId { get; set; }
+        [Display(Name = "Roli")]
+        public string RoleId { get; set; }
 
 		[Required(ErrorMessage = "Kjo fushë është obligative")]
 		[DataType(DataType.Password)]

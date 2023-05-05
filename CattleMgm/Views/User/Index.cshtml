@@ -18,8 +18,7 @@
                 <div class="col-md-2">
                     <div class="mb-3">
                         <label asp-for="Role" class="form-label mb-lg-0"></label>
-                        <input asp-for="Role" type="text" class="form-control" />
-                        @*@Html.DropDownListFor(m => m.Role, await repo.Roles(), "Zgjedhe...", new { @class = "form-control select2", @multiple = "multiple" })*@
+                        @Html.DropDownListFor(m=>m.Role, ViewBag.Roles as SelectList, "Zgjedh", new { @class = "form-control select2"})
                     </div>
                 </div>
 
@@ -90,31 +89,6 @@
                 </tr>
             </thead>
             <tbody>
-                 @* @foreach (var item in Model)
-                {
-                    var span = "";
-                    if (item.isRoleConfirmed == true)
-                    {
-                        span = "<span class='badge badge-outline-success'>Konfirmuar</span>";
-                    }
-                    else
-                    {
-                        span = "<span class='badge badge-outline-danger'>Jo e konfirmuar</span>";
-                    }
-                    <tr>
-                        <td>@item.UserName</td>
-                        <td>@item.Email</td>
-                        <td>@item.FirstName</td>
-                        <td>@item.LastName</td>
-                        <td>@item.PhoneNumber</td>
-                        <td>@Html.Raw(span)</td>
-                        <td>
-                            <a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="@item.Id" asp-controller="User">Edit</a>
-                            <a class="btn btn-sm btn-danger" href="javascript:;" onclick="DeleteUser('@item.Id')">Delete</a>
-                        </td>
-
-                    </tr>
-                }*@
             </tbody>
         </table>
     </div>
@@ -217,6 +191,10 @@
             }
         }
 
+        function EditUser(ide) {
+            window.location.href = '@Url.Action("Edit", "User")?id=' + ide;
+        }
+
 
         function kt_ajax_success(data) {
             var rowno = 0;
@@ -254,10 +232,10 @@
                                 '</button>' +
 
                                 '<div class="dropdown-menu">' +
-                                '<a class="btn btn-sm btn-primary" asp-action="Edit" asp-route-id="\'' + row.Id + '\'" asp-controller="User">Edit</a>';
-
-
-                            dropdown += '<button class="dropdown-item" type="button" onclick="DeleteUser(\'' + row.Id + '\')">' +
+                                '<button class="dropdown-item" type="button" onclick="EditUser(\'' + row.id + '\')">' +
+                                '<span class="title" style=" margin-top: 3px; margin-left: 10px;">Edit</span>' +
+                                '</button>';
+                            dropdown += '<button class="dropdown-item" type="button" onclick="DeleteUser(\'' + row.id + '\')">' +
                                 ' <span class="title" style=" margin-top: 3px; margin-left: 10px;">Delete</span>' +
                                 '</button>' +
                                 '</div>' +
