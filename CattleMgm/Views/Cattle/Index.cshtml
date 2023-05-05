@@ -17,8 +17,15 @@
                         
                         @*@Html.DropDownListFor(m => m.Role, await repo.Roles(), "Zgjedhe...", new { @class = "form-control select2", @multiple = "multiple" })*@
                         @Html.DropDownListFor(m=>m.MunicipalityId, ViewBag.Cattle as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                    </div>
+                
+                <div class="col-md-2">
+                    <div class="mb-3">
+                        <label asp-for="MunicipalityId" style="visibility:hidden"></label><br />
                         <button type="submit" name="button" class="btn btn-primary">Kerko</button>
                     </div>
+                </div>
+
             </div>
             </div>
         </form>
