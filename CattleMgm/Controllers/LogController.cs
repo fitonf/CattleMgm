@@ -13,6 +13,8 @@ using CattleMgm.ViewModels.CattleTemperature;
 using CattleMgm.ViewModels.Humidity;
 using CattleMgm.ViewModels.Position;
 using Microsoft.EntityFrameworkCore;
+using CattleMgm.Helpers.Security;
+using CattleMgm.ViewModels.User;
 
 namespace CattleMgm.Controllers
 {
@@ -30,27 +32,27 @@ namespace CattleMgm.Controllers
         {
             ViewData["Title"] = "Lista e erroreve";
 
-            var lista = _logRepository.GetLogs();
+            //var lista = _logRepository.GetLogs();
 
-            List<LogViewModel> listaViewModel = new List<LogViewModel>();
+            //List<LogViewModel> listaViewModel = new List<LogViewModel>();
 
-            foreach (var log in lista)
-            {
-                listaViewModel.Add(new LogViewModel
-                {
-                    Id = (int)log.LogId,
-                    UserId = log.UserId,
-                    Controller = log.Controller,
-                    Action = log.Action,
-                    HttpMethod = log.HttpMethod,
-                    Date=log.InsertedDate.ToShortDateString(),
-                    Url = log.Url
-                });
-            }
+            //foreach (var log in lista)
+            //{
+            //    listaViewModel.Add(new LogViewModel
+            //    {
+            //        Id = (int)log.LogId,
+            //        UserId = log.UserId,
+            //        Controller = log.Controller,
+            //        Action = log.Action,
+            //        HttpMethod = log.HttpMethod,
+            //        Date=log.InsertedDate.ToShortDateString(),
+            //        Url = log.Url
+            //    });
+            //}
 
-            listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
+            //listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
 
-            return View(listaViewModel);
+            return View();
         }
 
         [HttpGet]
@@ -84,6 +86,35 @@ namespace CattleMgm.Controllers
 
 
             return PartialView(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchLogs search)
+        {
+            DateTime dp;
+
+            List<LogViewModel> model = (from item in _db.Log
+                                         where
+                                         ((item.UserId == search.UserId || search.UserId == null) &&
+                                         (item.Controller == search.Controller || search.Controller == null))
+                                         select new LogViewModel
+                                         {
+                                             Id = (int)item.LogId,
+                                             UserId = item.UserId,
+                                             Controller = item.Controller,
+                                             Action=item.Action,
+                                             HttpMethod=item.HttpMethod,
+                                             Date=item.InsertedDate
+                                         }).ToList();
+
+            if (search.DateMeasured != null)
+            {
+                dp = DateTime.Parse(search.DateMeasured).Date;
+
+                model = model.Where(q => q.Date.Date == dp).ToList();
+            }
+
+            return Json(model);
         }
     }
 }
