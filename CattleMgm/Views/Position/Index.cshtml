@@ -202,6 +202,8 @@
                     { "data": "dateMeasured" },
                     {
                         "data": function (row, type, set) {
+                            //var lat=parseDouble(row.lat);
+                            //var long=parse(row.long);
                             debugger;
                             let currentDate = new Date();
                             var lockDate = new Date(row.LockoutEnd);
@@ -215,7 +217,7 @@
                                 '<button class="dropdown-item" type="button" onclick="EditPosition(\'' + row.id + '\')">' +
                                 '<span class="title" style=" margin-top: 3px; margin-left: 10px;">Edit</span>' +
                                 '</button>';
-                            dropdown += '<button class="dropdown-item" type="button" onclick="EditMap(\'' + row.lat + '','' + row.long + '\')">' +
+                            dropdown += '<button class="dropdown-item" type="button" onclick="EditMap(\'' + row.lat + "\',\'" + row.long + '\')">' +
                                 ' <span class="title" style=" margin-top: 3px; margin-left: 10px;">Map</span>' +
                                 '</button>' +
                                 '</div>' +
