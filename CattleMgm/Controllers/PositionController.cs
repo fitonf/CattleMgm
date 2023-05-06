@@ -172,14 +172,14 @@ namespace CattleMgm.Controllers
                                              CattleName = item.Cattle.Name,
                                              Lat = item.Lat,
                                              Long = item.Long,
-                                             Date = item.DateMeasured
+                                             DateMeasured = item.DateMeasured
                                          }).ToList();
 
             if (search.DateMeasured != null)
             {
                 dp = DateTime.Parse(search.DateMeasured).Date;
 
-                model = model.Where(q => q.Date.Date == dp).ToList();
+                model = model.Where(q => q.DateMeasured.Date == dp).ToList();
             }
 
             return Json(model);

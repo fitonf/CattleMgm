@@ -35,7 +35,7 @@
                     <div class="col-md-2">
                         <div class="mb-3">
                             <label asp-for="CattleId" class="form-label mb-lg-0"></label>
-                            @Html.DropDownListFor(m=>m.CattleId, ViewBag.Cattles as SelectList, "Zgjedh", new { @class = "form-control select2"})
+                            @Html.DropDownListFor(m=>m.CattleId, ViewBag.Cattles as SelectList, "Zgjedh", new { @class = "form-control select2"} )
                         </div>
                     </div>
                     <div class="col-md-2">
@@ -125,7 +125,7 @@
         });
 
         function EditMap(lat,long) {
-            debugger;
+            
             var map = L.map('map').setView([lat, long], 12);
 
             var singleMarker = L.marker([lat, long]);
@@ -202,9 +202,6 @@
                     { "data": "dateMeasured" },
                     {
                         "data": function (row, type, set) {
-                            //var lat=parseDouble(row.lat);
-                            //var long=parse(row.long);
-                            debugger;
                             let currentDate = new Date();
                             var lockDate = new Date(row.LockoutEnd);
                             var dropdown = '<div class="button-items table-button-items" style="float:right;">' +
