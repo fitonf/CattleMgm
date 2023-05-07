@@ -94,12 +94,16 @@ namespace CattleMgm.Controllers
         // Metoda per te shikuar se a eshte regjistruar temperatura per kete gjedha
         public async Task<IActionResult> IsTemperatureAvailable(int CattleId, double Temperature)
         {
+            // Shikon ne qofte se temperatura per kete gjedh eshte i regjistruar.
             var existingTemp = await _db.CattleTemperature.FirstOrDefaultAsync(t => t.CattleId == CattleId && t.Temperature == Temperature);
 
+            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
             if (existingTemp == null)
             {
                 return Json(true);
             }
+
+            // Perndryshe, kthen error mesazh si JSON.
             else
             {
                 return Json($"Një temperaturë për këtë gjedh ekziston.");

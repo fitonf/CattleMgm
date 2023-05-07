@@ -79,19 +79,24 @@ namespace CattleMgm.Controllers
             return RedirectToAction("Index");
         }
 
+        // Metoda qe shikon a eshte regjistruar tensioni i gjakut per gjedhin e zgjedhur.
         public async Task<IActionResult> IsBloodPressureAvailable(int CattleId, double PressureFrom, double PressureTo)
         {
+            // Shikon ne qofte se tensioni per kete gjedh eshte i regjistruar.
             var existingBP = await _db.CattleBloodPressure.FirstOrDefaultAsync(bp => bp.CattleId == CattleId);
 
+            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
             if (existingBP == null)
             {
                 return Json(true);
             }
+            // Perndryshe, kthen error mesazh si JSON.
             else
             {
                 return Json($"Presioni i gjakut për këtë gjedh është regjistruar më parë.");
             }
         }
+
 
 
         [HttpGet]

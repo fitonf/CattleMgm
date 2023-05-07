@@ -90,15 +90,18 @@ namespace CattleMgm.Controllers
 
         }
 
-        // Metoda per Emrin check
+        // Metoda qe shikon a ekziston emri i Breed
         public async Task<IActionResult> IsNameAvailable(string Name)
         {
+            // Shikon ne qofte se emri ekziston.
             var breed = await _db.Breed.FirstOrDefaultAsync(b => b.Name == Name);
 
+            // Ne qofte se nuk ezkiston, kthen JSON si true per te treguar se mund te krijohet breed i ri.
             if (breed == null)
             {
                 return Json(true);
             }
+            // Ne qofte se ekziston, kthen JSON error.
             else
             {
                 return Json($"Nje kafshe me emer '{Name}' ekziston tashme.");
