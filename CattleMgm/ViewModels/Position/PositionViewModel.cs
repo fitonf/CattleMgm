@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CattleMgm.ViewModels.Position
 {
@@ -17,6 +18,7 @@ namespace CattleMgm.ViewModels.Position
     {
         [Required(ErrorMessage = "Ju lutem zgjedhni gjedhen")]
         [Display(Name = "Emri i Gjedhes")]
+        [Remote(action: "IsPositionAvailable", controller: "Position", AdditionalFields = nameof(Lat) + "," + nameof(Long))]
         public int CattleId { get; set; }
 
         [Required(ErrorMessage = "Kjo fushe eshte obligative")]

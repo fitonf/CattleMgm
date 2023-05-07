@@ -84,8 +84,27 @@ namespace CattleMgm.Controllers
 
         }
 
-        //estrdyuiojhgfgghvjbj
+        // Metoda qe shikon a eshte regjistruar pozicioni per gjedhin e zgjedhur.
+        public async Task<IActionResult> IsPositionAvailable(int CattleId)
+        {
+            // Shikon ne qofte se pozicioni per kete gjedh eshte i regjistruar.
+            var existingPosition = await _db.CattlePosition.FirstOrDefaultAsync(pos => pos.CattleId == CattleId);
 
+            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
+            if (existingPosition == null)
+            {
+                return Json(true);
+            }
+            // Perndryshe, kthen error mesazh si JSON.
+            else
+            {
+                return Json($"Një pozicion për këtë gjedh ekziston.");
+            }
+        }
+
+
+
+        //estrdyuiojhgfgghvjbj
         [HttpGet]
         public IActionResult Edit(int? id)
         {
