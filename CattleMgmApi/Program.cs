@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using CattleMgmApi.Dtos.Roles;
 using CattleMgm.Models;
 using System.Data;
+using System.Text.Json;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +100,8 @@ app.MapPost("api/v1/cattles", async (ICattleRepository repo, IMapper mapper, Cat
 
 
 // Roles
+
+// -- LIST ROLES --
 // GET request per te kerkuar te gjitha rolet nga databaza
 app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
 {
@@ -111,7 +115,7 @@ app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
     return Results.Ok(mapped_object);
 });
 
-
+// -- CREATE ROLE --
 // POST request e cila krijon rol te ri ne Databaze.
 app.MapPost("api/v1/roles", async (HttpContext context) =>
 {
@@ -128,6 +132,7 @@ app.MapPost("api/v1/roles", async (HttpContext context) =>
 });
 
 
+// -- DELETE ROLE --
 // DELETE request e cila fshin rolin nga Databaza ne baze te ID te shenuar ne path.
 app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
 {
@@ -146,6 +151,21 @@ app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
 });
 
 
+// -- DELETE ROLE --
+// MapPut request per te Edituar rolin.
+app.MapPut("api/v1/roles/{id}", async (HttpContext context) =>
+{
+    var serviceProvider = context.RequestServices;
+    var repo = serviceProvider.GetRequiredService<IRolesRepository>();
+    var roleId = context.GetRouteValue("id").ToString();
+    var role = await repo.GetRoleById(roleId);
+
+    if (role == null)
+    {
+        return Results.NotFound();
+    }
+
+});
 
 
 

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using CattleMgm.Models;
 using CattleMgmApi.Data.Entities;
+using CattleMgmApi.Dtos.Roles;
 using Microsoft.AspNetCore.Identity;
 
 namespace CattleMgmApi.Repository
@@ -10,11 +11,10 @@ namespace CattleMgmApi.Repository
     {
         Task<List<AspNetRoles>> GetRoles();
         Task<ApplicationRole> CreateRole(string roleName);
-        //void UpdateRole(AspNetRoles role);
-        Task<AspNetRoles> GetRoleById(string roleId);
+        Task<ApplicationRole> GetRoleById(string roleId);
         Task<IdentityResult> DeleteRole(string roleId);
-
-        //Task<bool> RoleExists(int id);
-        //Task SaveChanges();
+        Task<bool> UpdateRole(ApplicationRole role, RolesEditDto model);
+        bool RoleExists(int id);
+        void SaveChanges();
     }
 }

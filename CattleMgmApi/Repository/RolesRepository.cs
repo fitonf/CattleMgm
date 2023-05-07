@@ -1,7 +1,8 @@
-﻿using CattleMgm.Models; // The ApplicationRole model is defined here.
-using CattleMgmApi.Data.Entities; // The AspNetRoles model is defined here.
-using Microsoft.AspNetCore.Identity; // The RoleManager class is defined here.
-using Microsoft.EntityFrameworkCore; // The DbContext class is defined here.
+﻿using CattleMgm.Models;
+using CattleMgmApi.Data.Entities;
+using CattleMgmApi.Dtos.Roles;
+using Microsoft.AspNetCore.Identity; 
+using Microsoft.EntityFrameworkCore; 
 
 namespace CattleMgmApi.Repository
 {
@@ -30,10 +31,11 @@ namespace CattleMgmApi.Repository
         }
 
         // 
-        public async Task<AspNetRoles> GetRoleById(string id)
+        public async Task<ApplicationRole> GetRoleById(string id)
         {
-            return await _context.AspNetRoles.FirstOrDefaultAsync(r => r.Id == id);
+            return await _roleManager.FindByIdAsync(id);
         }
+
 
 
         // Kthen listen e te gjitha roleve ne Databaze
@@ -64,6 +66,35 @@ namespace CattleMgmApi.Repository
 
             // Kthen rezultatet e operacionit delete.
             return result;
+        }
+
+
+        // Edit
+        public async Task<bool> UpdateRole(ApplicationRole role, RolesEditDto model)
+        {
+            if (role == null)
+            {
+                throw new ArgumentNullException(nameof(role));
+            }
+
+            // update the role properties with the values from the model
+            role.Name = model.Name;
+
+            // update the role in the database
+            var result = await _roleManager.UpdateAsync(role);
+
+            return result.Succeeded;
+        }
+
+
+        public bool RoleExists(int id)
+        {
+            return _context.AspNetRoles.Any(e => e.Id == id.ToString());
+        }
+
+        public void SaveChanges()
+        {
+            _context.SaveChanges();
         }
 
     }
