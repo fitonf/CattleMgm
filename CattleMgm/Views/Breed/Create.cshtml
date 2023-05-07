@@ -2,33 +2,35 @@
 
 @{
     ViewData["Title"] = "Regjistrimi i llojit te gjedheve";
-
 }
 
 <div class="card">
     <div class="card-header with-border">
         <h4>Plotesoni te dhenat me poshte</h4>
     </div>
-    <form id="createForm" method="post">
+    <form asp-action="Create" asp-controller="Breed" method="post">
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <label class="required" asp-for="Name">Emri i Gjedhes</label>
+                    <label class="required" asp-for="Name">Emri i Llojit</label>
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Type">Tipi </label>
+                    <label asp-for="Type">Tipi i Llojit</label>
                     <input asp-for="Type" class="form-control" />
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
-
-
             </div>
         </div>
         <div class="card-footer">
             <input type="submit" class="btn btn-sm btn-primary" value="Regjistro" />
         </div>
     </form>
-
 </div>
+
+<style>
+    .validation-summary-errors{
+        color: red;
+    }
+</style>

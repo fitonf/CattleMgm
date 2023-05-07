@@ -54,22 +54,23 @@ namespace CattleMgm.Controllers
                 ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
                 return View(model);
             }
-            var existingBreed = await _db.Breed.FirstOrDefaultAsync(b => b.Name == model.Name || b.Type == model.Type);
-
+            var existingBreed = await _db.Breed.FirstOrDefaultAsync(b => b.Name == model.Name);
+            
+            // Nuk lejon qe te shtohet Lloji me emer te njejte (por lejohet numri i tipit te njejte
             if (existingBreed != null)
             {
-                if (existingBreed.Name == model.Name && existingBreed.Type == model.Type)
+                //if (existingBreed.Name == model.Name && existingBreed.Type == model.Type)
+                //{
+                //    ModelState.AddModelError("", "Nje kafshe me kete emer dhe tip ekziston tashme");
+                //}
+                if (existingBreed.Name == model.Name)
                 {
-                    ModelState.AddModelError("", "Nje kafshe me kete emer dhe tip ekziston tashme");
+                    ModelState.AddModelError("", "Nje lloj me kete emer ekziston tashme");
                 }
-                else if (existingBreed.Name == model.Name)
-                {
-                    ModelState.AddModelError("", "Nje kafshe me kete emer ekziston tashme");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Nje kafshe me kete tip ekziston tashme");
-                }
+                //else
+                //{
+                //    ModelState.AddModelError("", "Nje kafshe me kete tip ekziston tashme");
+                //}
 
                 return View(model);
             }
@@ -88,6 +89,23 @@ namespace CattleMgm.Controllers
             return RedirectToAction("Index");
 
         }
+
+        // Metoda per Emrin check
+        public async Task<IActionResult> IsNameAvailable(string Name)
+        {
+            var breed = await _db.Breed.FirstOrDefaultAsync(b => b.Name == Name);
+
+            if (breed == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Nje kafshe me emer '{Name}' ekziston tashme.");
+            }
+        }
+
+
         [HttpGet]
         public IActionResult Edit(string? ide)
         {
