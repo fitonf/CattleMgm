@@ -84,6 +84,24 @@ namespace CattleMgm.Controllers
 
         }
 
+        public async Task<IActionResult> IsHumidityAvailable(int CattleId, double Humidity)
+        {
+            // Shikon ne qofte se lageshtia per kete gjedh eshte i regjistruar.
+            var existingHumidity = await _db.CattleHumidity.FirstOrDefaultAsync(h => h.CattleId == CattleId);
+
+            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
+            if (existingHumidity == null)
+            {
+                return Json(true);
+            }
+            // Perndryshe, kthen error mesazh si JSON.
+            else
+            {
+                return Json($"Lagështia për këtë gjedh është regjistruar.");
+            }
+        }
+
+
         [HttpGet]
 
         public IActionResult Edit(string ide)
