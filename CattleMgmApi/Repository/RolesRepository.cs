@@ -11,18 +11,23 @@ namespace CattleMgmApi.Repository
         // RoleManager naj qasje ne metodat per te menaxhuar rolet
         private RoleManager<ApplicationRole> _roleManager;
         // PraktikaDbContext jep qasje ne Databaze.
-        private PraktikadbContext _context; 
-
+        private PraktikadbContext _context;
+        
+        // Konstructor e cila merr parametrat e nevojitura per te kryer metodat.
         public RoleRepository(RoleManager<ApplicationRole> roleManager, PraktikadbContext context)
         {
             _roleManager = roleManager;
             _context = context;
         }
 
+        // Krijon nje rol te ri me emrin e dhene.
         public async Task<ApplicationRole> CreateRole(string roleName)
         {
+            // Kthen objektin e ri te krijuar ApplicationRole.
             var role = new ApplicationRole { Name = roleName };
             var result = await _roleManager.CreateAsync(role);
+
+            // Dergon exception ne qofte se procesi deshton.
             if (!result.Succeeded)
             {
                 throw new Exception("Failed to create role");
@@ -30,11 +35,13 @@ namespace CattleMgmApi.Repository
             return role;
         }
 
-        // 
+        // Gets a role by its ID
         public async Task<ApplicationRole> GetRoleById(string id)
         {
+            // Kthen objektin e nevojitur te ApplicationRole (i lidhur permes _roleManager).
             return await _roleManager.FindByIdAsync(id);
         }
+
 
 
 
@@ -72,30 +79,35 @@ namespace CattleMgmApi.Repository
         // Edit
         public async Task<bool> UpdateRole(ApplicationRole role, RolesEditDto model)
         {
+            // Shikon ne qofte se objekti eshte null.
             if (role == null)
             {
                 throw new ArgumentNullException(nameof(role));
             }
 
-            // update the role properties with the values from the model
+            // Perditeson vetite e rolit me vlerat nga modeli.
             role.Name = model.Name;
 
-            // update the role in the database
+            // Perditeson rolin ne databaze.
             var result = await _roleManager.UpdateAsync(role);
 
             return result.Succeeded;
         }
 
 
+
         public bool RoleExists(int id)
         {
+            // Shikon ne qofte se roli me kete ID ekziston ne databaze.
             return _context.AspNetRoles.Any(e => e.Id == id.ToString());
         }
 
         public void SaveChanges()
         {
+            // Ruan ne databaze ndryshimet e bera.
             _context.SaveChanges();
         }
+
 
     }
 }
