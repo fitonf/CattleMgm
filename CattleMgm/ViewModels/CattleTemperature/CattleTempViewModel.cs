@@ -31,10 +31,10 @@ namespace CattleMgm.ViewModels.CattleTemperature
 
 
         [Display(Name = "Gjedhja")]
-        [Remote(action: "IsTemperatureAvailable", controller: "Temperature", AdditionalFields = nameof(CattleId))]
         public int CattleId { get; set; }
 
         [Display(Name = "Temperatura")]
+        [Remote(action: "IsTemperatureAvailable", controller: "Temperature", AdditionalFields = nameof(CattleId))]
         public double Temperature { get; set; }
 
         [Display(Name = "Data")]
