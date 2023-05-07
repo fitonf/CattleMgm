@@ -1,6 +1,7 @@
 ﻿using CattleMgm.Controllers;
 using CattleMgm;
 using System.ComponentModel.DataAnnotations;
+using CattleMgm.Data;
 
 namespace CattleMgm.ViewModels.Humidity
 {
@@ -24,10 +25,12 @@ namespace CattleMgm.ViewModels.Humidity
     {
 
 
-        [Display(Name = "Emri")]
+        [Display(Name = "Gjedhi")]
+        [Required(ErrorMessage = "Zgjidhni gjedhen.")]
         public int CattleId { get; set; }
 
         [Display(Name = "Lageshtia")]
+        [Required(ErrorMessage = "Caktoni lageshtinë.")]
         public double Humidity { get; set; }
 
         [Display(Name = "Data")]
@@ -45,6 +48,4 @@ namespace CattleMgm.ViewModels.Humidity
         public int Id { get; set; }
 
     }
-
-
 }
