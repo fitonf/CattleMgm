@@ -104,7 +104,7 @@ namespace CattleMgm.Controllers
             // Ne qofte se ekziston, kthen JSON error.
             else
             {
-                return Json($"Nje kafshe me emer '{Name}' ekziston tashme.");
+                return Json($"Nje lloj me emer '{Name}' tashmë ekziston.");
             }
         }
 

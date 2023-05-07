@@ -2,6 +2,7 @@
 using CattleMgm;
 using System.ComponentModel.DataAnnotations;
 using CattleMgm.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CattleMgm.ViewModels.Humidity
 {
@@ -27,6 +28,7 @@ namespace CattleMgm.ViewModels.Humidity
 
         [Display(Name = "Gjedhi")]
         [Required(ErrorMessage = "Zgjidhni gjedhen.")]
+        [Remote(action: "IsHumidityAvailable", controller: "Humidity", AdditionalFields = "Humidity")]
         public int CattleId { get; set; }
 
         [Display(Name = "Lageshtia")]
