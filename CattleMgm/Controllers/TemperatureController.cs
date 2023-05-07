@@ -91,6 +91,21 @@ namespace CattleMgm.Controllers
         }
 
 
+        // Metoda per te shikuar se a eshte regjistruar temperatura per kete gjedha
+        public async Task<IActionResult> IsTemperatureAvailable(int CattleId, double Temperature)
+        {
+            var existingTemp = await _db.CattleTemperature.FirstOrDefaultAsync(t => t.CattleId == CattleId && t.Temperature == Temperature);
+
+            if (existingTemp == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Një temperaturë për këtë gjedh ekziston.");
+            }
+        }
+
         //Http-te e editimit
         [HttpGet]
 

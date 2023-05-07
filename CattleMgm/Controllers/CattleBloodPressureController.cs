@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Net;
 
@@ -77,6 +78,21 @@ namespace CattleMgm.Controllers
             //ka ndodh nje gabim
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> IsBloodPressureAvailable(int CattleId, double PressureFrom, double PressureTo)
+        {
+            var existingBP = await _db.CattleBloodPressure.FirstOrDefaultAsync(bp => bp.CattleId == CattleId);
+
+            if (existingBP == null)
+            {
+                return Json(true);
+            }
+            else
+            {
+                return Json($"Presioni i gjakut për këtë gjedh është regjistruar më parë.");
+            }
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> EditAsync(int id)

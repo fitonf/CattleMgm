@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace CattleMgm.ViewModels.CattleBloodPressure
 {
@@ -16,8 +17,10 @@ namespace CattleMgm.ViewModels.CattleBloodPressure
         [Required]
         public int CattleId { get; set; }
         [Required]
+        [Remote(action: "IsBloodPressureAvailable", controller: "CattleBloodPressure", AdditionalFields = nameof(CattleId) + "," + nameof(PressureFrom) + "," + nameof(PressureTo))]
         public int PressureFrom { get; set; }
         [Required]
+        [Remote(action: "IsBloodPressureAvailable", controller: "CattleBloodPressure", AdditionalFields = nameof(CattleId) + "," + nameof(PressureFrom) + "," + nameof(PressureTo))]
         public int PressureTo { get; set; }
         
         //public string DateMeasured { get; set; }

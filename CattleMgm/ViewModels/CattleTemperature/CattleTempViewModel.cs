@@ -1,4 +1,5 @@
 ﻿using CattleMgm.ViewModels.Menu;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace CattleMgm.ViewModels.CattleTemperature
@@ -30,20 +31,17 @@ namespace CattleMgm.ViewModels.CattleTemperature
 
 
         [Display(Name = "Gjedhja")]
-        public int CattleId { get;set; }
+        public int CattleId { get; set; }
 
         [Display(Name = "Temperatura")]
+        [Remote(action: "IsTemperatureAvailable", controller: "Temperature", AdditionalFields = nameof(CattleId))]
         public double Temperature { get; set; }
 
         [Display(Name = "Data")]
-        public int DateMeasured { get; set; }
-
+        public DateTime DateMeasured { get; set; }
 
         [Display(Name = "Krijuar nga")]
         public int CreatedBy { get; set; }
-
-
-
     }
     //Ndryshimi fundit
     public class CattleTempEditViewModel : CattleTempCreateViewModel
