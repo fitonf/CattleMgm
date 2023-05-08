@@ -1,12 +1,13 @@
 ﻿@model SearchMediaModel
 @{
+
     <div class="card">
         <div class="card-header">
             <div class="card-toolbar float-end">
                 <a class="btn btn-sm btn-primary" asp-action="" asp-controller="Media">Upload</a>
             </div>
             <div class="card-body">
-                <form asp-action="_DocumentList" asp-controller="Media" method="post" data-ajax="true" data-ajax-success="kt_ajax_success" data-ajax-method="POST" id="frmSearch">
+                <form asp-action="_Lista" asp-controller="Media" method="post" data-ajax="true" data-ajax-success="kt_ajax_success" data-ajax-method="POST" id="frmSearch">
                     @Html.AntiForgeryToken()
                     @Html.Hidden("type")
                     <div class="row">
@@ -14,13 +15,6 @@
                             <div class="mb-3">
                                 <label asp-for="Name" class="form-label mb-lg-0"></label>
                                 @Html.DropDownListFor(m=>m.Name, ViewBag.Names as SelectList, "Zgjedh", new { @class = "form-control select2"})
-                            </div>
-                        </div>
-
-                        <div class="col-md-2">
-                            <div class="mb-3">
-                                <label asp-for="Name" class="form-label mb-lg-0"></label>
-                                <input asp-for="Name" type="text" class="form-control" />
                             </div>
                         </div>
 

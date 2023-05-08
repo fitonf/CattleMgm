@@ -19,4 +19,5 @@ namespace CattleMgm.ViewModels.Media
         public string CreatedBy { get; set; }
 
     }
+
 }

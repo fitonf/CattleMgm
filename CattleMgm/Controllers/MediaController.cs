@@ -40,31 +40,34 @@ namespace CattleMgm.Controllers
             return View();
         }
 
-        public async Task<IActionResult> DocumentListAsync()
+        public IActionResult DocumentList()
         {
             ViewData["Title"] = "Lista e dokumenteve";
+            var roles = _db.AspNetRoles
+                                .Select(m => new { m.Name })
+                                .ToList();
+            ViewBag.Names = new SelectList(roles, "Name");
+            //var lista = await _mediaRepository.GetAllFiles();
 
-            var lista = await _mediaRepository.GetAllFiles();
+            //List<MediaListViewModel> listaViewModel = new List<MediaListViewModel>();
 
-            List<MediaListViewModel> listaViewModel = new List<MediaListViewModel>();
+            //foreach (var media in lista)
+            //{
+            //    listaViewModel.Add(new MediaListViewModel
+            //    {
+            //        id = media.id,
+            //        Name = media.Name,
+            //        Identifier = media.Identifier,
+            //        Path = media.Path,
+            //        Type = media.Type,
+            //        Created = media.Created,
+            //        CreatedBy = media.CreatedBy,
+            //    }); ;
+            //}
 
-            foreach (var media in lista)
-            {
-                listaViewModel.Add(new MediaListViewModel
-                {
-                    id = media.id,
-                    Name = media.Name,
-                    Identifier = media.Identifier,
-                    Path = media.Path,
-                    Type = media.Type,
-                    Created = media.Created,
-                    CreatedBy = media.CreatedBy,
-                }); ;
-            }
+            //listaViewModel = listaViewModel.OrderByDescending(q => q.Name).ToList();
 
-            listaViewModel = listaViewModel.OrderByDescending(q => q.Name).ToList();
-
-            return View(listaViewModel);
+            return View(/*listaViewModel*/);
         }
         public async Task<IActionResult> Lista()
         {
