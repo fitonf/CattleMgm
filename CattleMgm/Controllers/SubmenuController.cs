@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Submenu;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,8 @@ namespace CattleMgm.Controllers
 
         public IActionResult _Index(int id)
         {
-            var submenus = _db.SubMenu.Where(q => q.MenuId == id).Select(q => new SubmenuViewModel {
+            var submenus = _db.SubMenu.Where(q => q.MenuId == id).Select(q => new SubmenuViewModel
+            {
                 Id = q.SubmenuId,
                 MId = q.MenuId,
                 Action = q.Action,
@@ -63,7 +65,8 @@ namespace CattleMgm.Controllers
                 return Json(error);
             }
 
-            SubMenu subMenu = new SubMenu {
+            SubMenu subMenu = new SubMenu
+            {
                 MenuId = model.MId,
                 Action = model.Action,
                 Controller = model.Controller,
@@ -89,79 +92,129 @@ namespace CattleMgm.Controllers
 
             return Json(error);
         }
-    
-    [HttpGet]
-    public IActionResult _Edit(int mid, int ide)
-    {
-        if (ide == null)
+
+        [HttpGet]
+        public IActionResult _Edit(int mid, int ide)
         {
-            return BadRequest();
+            if (ide == null)
+            {
+                return BadRequest();
+            }
+            //int did = AesCrypto.Decrypt<int>(ide);
+
+            var submenu = _db.SubMenu.Find(ide);
+
+
+            if (submenu == null)
+            {
+                return NotFound();
+            }
+
+            SubmenuEditViewModel editViewModel = new SubmenuEditViewModel
+            {
+                Id = submenu.SubmenuId,
+                MId = submenu.MenuId,
+                Menu = AesCrypto.Enkrypt(submenu.MenuId),
+                Action = submenu.Action,
+                Controller = submenu.Controller,
+                Area = submenu.Area,
+                Policy = submenu.Claim,
+                Icon = submenu.Icon,
+                IsActive = true,
+                NameSq = submenu.NameSq,
+                NameEn = submenu.NameEn,
+                NameSr = submenu.NameSr,
+                OrdinalNumber = submenu.OrdinalNumber,
+                StaysOpenFor = submenu.StaysOpenFor,
+                ParentID = submenu.ParentSubId
+            };
+            return PartialView(editViewModel);
         }
-        //int did = AesCrypto.Decrypt<int>(ide);
 
-        var submenu = _db.SubMenu.Find(ide);
-
-
-        if (submenu == null)
+        [HttpPost]
+        public IActionResult _Edit(SubmenuEditViewModel model)
         {
-            return NotFound();
-        }
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
 
-        SubmenuEditViewModel editViewModel = new SubmenuEditViewModel
-        {
-            Id = submenu.SubmenuId,
-            MId = submenu.MenuId,
-            Menu = AesCrypto.Enkrypt(submenu.MenuId),
-            Action = submenu.Action,
-            Controller = submenu.Controller,
-            Area = submenu.Area,
-            Policy = submenu.Claim,
-            Icon = submenu.Icon,
-            IsActive = true,
-            NameSq = submenu.NameSq,
-            NameEn = submenu.NameEn,
-            NameSr = submenu.NameSr,
-            OrdinalNumber = submenu.OrdinalNumber,
-            StaysOpenFor = submenu.StaysOpenFor,
-            ParentID = submenu.ParentSubId
-        };
-        return PartialView(editViewModel);
-    }
+            if (!ModelState.IsValid)
+            {
+                error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+                return Json(error);
+            }
+            var submenu = _db.SubMenu.Find(model.Id);
+            if (submenu == null)
+            {
+                return NotFound();
 
-    [HttpPost]
-    public IActionResult _Edit(SubmenuEditViewModel model)
-    {
-        ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
+            }
+            submenu.Action = model.Action;
+            submenu.Controller = model.Controller;
+            submenu.Area = model.Area;
+            submenu.Claim = model.Policy;
+            submenu.Icon = model.Icon;
+            submenu.NameSq = model.NameSq;
+            submenu.NameEn = model.NameEn;
+            submenu.NameSr = model.NameSr;
+            submenu.OrdinalNumber = model.OrdinalNumber;
+            submenu.StaysOpenFor = model.StaysOpenFor;
+            submenu.ParentSubId = model.ParentID;
 
-        if (!ModelState.IsValid)
-        {
-            error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
+            _db.Update(submenu);
+
+            _db.SaveChanges();
+
             return Json(error);
+
         }
-        var submenu = _db.SubMenu.Find(model.Id);
-        if (submenu == null)
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport(int MId)
         {
-            return NotFound();
+            var submenu = _db.SubMenu.ToList();
+            var menu = _db.Menu.ToList();
 
+            var query = submenu.Select(q => new SubMenuReportModel
+            {
+                Id = q.SubmenuId,
+                MId = q.MenuId,
+                NameSq = q.NameSq,
+                Action = q.Action,
+                Area = q.Area,
+                Controller = q.Controller,
+                OrdinalNumber = q.OrdinalNumber,
+                IsActive = q.IsActive,
+                Icon = q.Icon,
+                StaysOpenFor = q.StaysOpenFor
+            }).ToList();
+
+            HttpContext.Session.SetString("Path", "Reports\\SubMenuReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+            return Json(true);
         }
-        submenu.Action = model.Action;
-        submenu.Controller = model.Controller;
-        submenu.Area = model.Area;
-        submenu.Claim = model.Policy;
-        submenu.Icon = model.Icon;
-        submenu.NameSq = model.NameSq;
-        submenu.NameEn = model.NameEn;
-        submenu.NameSr = model.NameSr;
-        submenu.OrdinalNumber = model.OrdinalNumber;
-        submenu.StaysOpenFor = model.StaysOpenFor;
-        submenu.ParentSubId = model.ParentID;
 
-        _db.Update(submenu);
-
-        _db.SaveChanges();
-
-        return Json(error);
-
-        }
     }
 }
+
+//public async Task<IActionResult> _Index(SearchSubmenu search)
+//{
+//    List<SubmenuViewModel> model = (from item in _db.SubMenu.Include(q => q.Menu)
+//                                        //join ur in _context.UserRoles on item.Id equals ur.UserId
+//                                    where
+//                                    ((item.Menu.NameSq == search.Menu || search.Menu == null) &&
+//                                    (item.NameSq == search.Name || search.Name == null) &&
+//                                    (item.Area == search.Area || search.Area == null) &&
+//                                    (item.Action == search.Action || search.Action == null) &&
+//                                    (item.Controller == search.Controller || search.Controller == null))
+//                                    select new SubmenuViewModel
+//                                    {
+//                                        Id = item.SubmenuId,
+//                                        MId = item.MenuId,
+//                                        Name = item.NameSq,
+//                                        Area = item.Area,
+//                                        Action = item.Action,
+//                                        Controller = item.Controller,
+//                                    }).ToList();
+
+
+//    return Json(model);
+//}
