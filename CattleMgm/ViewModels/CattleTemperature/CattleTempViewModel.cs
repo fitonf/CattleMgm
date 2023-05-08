@@ -52,5 +52,29 @@ namespace CattleMgm.ViewModels.CattleTemperature
        
     }
 
+    //Modeli per Raport te temp
+
+    public class CattleTempReportModel
+    {
+        public int Id { get; set; }
+
+
+        public string Cattle { get; set; }
+
+     
+        public double Temperature { get; set; }
+
+     
+        public string DateMeasured { get; set; }
+
+
+       
+        public string CreatedBy { get; set; }
+        public string CreatedByName { get; set; }
+    }
+
+
+
+
 
 }

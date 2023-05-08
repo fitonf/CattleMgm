@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.CattleTemperature;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.CattleTemperature;
@@ -180,7 +181,36 @@ namespace CattleMgm.Controllers
 
         }
 
+        #region Report
 
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var temp = _db.CattleTemperature.Include(x=> x.Cattle).ToList();
+          
+            var query = temp
+               .Select(q => new CattleTempReportModel
+
+               {
+                   Id = q.Id,
+                   Cattle = q.Cattle.Name,
+                   Temperature = q.Temperature,
+                   DateMeasured = q.DateMeasured.ToShortDateString(),
+                  // CreatedBy = q.CreatedBy,
+                   CreatedByName = _db.AspNetUsers.Where(u =>u.Id ==q.CreatedBy)
+                                                  .Select(u => u.FirstName)
+                                                  .FirstOrDefault()
+
+
+               });
+
+            HttpContext.Session.SetString("Path", "Reports\\TempReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+        #endregion
 
     }
 }

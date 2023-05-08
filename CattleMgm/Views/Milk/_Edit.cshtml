@@ -1,7 +1,6 @@
 ﻿@model MilkEditViewModel
 @{
     int i = 1;
-    Layout = null;
 }
 
 <div class="modal-header">
@@ -9,7 +8,7 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <form asp-action="Edit" asp-controller="Milk" class="noLoading" id="frmEditMilk" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
+    <form asp-action="_Edit" asp-controller="Milk" class="noLoading" id="frmEditMilk" method="post" data-ajax="true" data-ajax-method="post" data-ajax-success="EditSuccess" role="form">
 
         @Html.AntiForgeryToken()
         <input asp-for="Id" hidden />

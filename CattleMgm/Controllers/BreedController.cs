@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Breed;
@@ -188,6 +189,26 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var breed = _db.Breed.ToList();
+            var query = breed
+               .Select(q => new BreedReportModel
+               {
+                   Id = q.Id,
+                   Name = q.Name,
+                   Type = q.Type
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\BreedReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
 

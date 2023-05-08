@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using CattleMgm.Models.Session;
 using System.Net;
 
 
@@ -168,6 +169,35 @@ namespace CattleMgm.Controllers
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+
+            var humidity = _db.CattleHumidity.ToList();
+            var cattles = _db.Cattle.ToList();
+            var query = humidity
+
+
+               .Select(q => new HumidityReportModel
+               {
+
+                   Id = q.Id,
+                   CattleId = q.Cattle.Name,
+                   Humidity = q.Humidity,
+                   DateMeasured = q.DateMeasured,
+                   CreatedBy = user == null ? " " : user.FirstName + " " + user.LastName
+
+
+
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\HumidityReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
         }
     }
 }

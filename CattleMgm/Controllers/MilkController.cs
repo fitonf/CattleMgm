@@ -19,6 +19,7 @@ namespace CattleMgm.Controllers
     public class MilkController : BaseController
     {
         public IMilkRepository _MilkRepository;
+        public ICattleRepository _CattleRepository;
         public MilkController(ApplicationDbContext context
             , praktikadbContext db
             , UserManager<ApplicationUser> userManager
@@ -26,14 +27,15 @@ namespace CattleMgm.Controllers
         {
             _MilkRepository = milkRepository;
         }
-        public async  Task<IActionResult> Index()
+        public async Task<IActionResult> Index()
         {
             var milk = new List<CattleMilk>();
+            
             milk= await _MilkRepository.GetAllMilk();
 
             List<MilkViewModel> model = new List<MilkViewModel>();
 
-            foreach(var item in milk)
+            foreach (var item in milk)
             {
                 model.Add(new MilkViewModel
                 {
@@ -42,8 +44,9 @@ namespace CattleMgm.Controllers
                     Identifier = item.Cattle.UniqueIdentifier.ToString(),
                     DateCollected = item.Created.ToString("dd/MM/yyyy HH:mm"),
                     LitersCollected = item.LitersCollected,
-                    Price = item.Price
-                });
+                    Price = item.Price,
+                    TotalProfit = item.Price * item.LitersCollected
+                }) ;
             }
 
             return View(model);
@@ -52,28 +55,28 @@ namespace CattleMgm.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var cattles = new List<Cattle>();
+            var cattles = await _db.Cattle.Select(q => new { q.Id, Name = q.Name }).ToListAsync();
             var farmerId = await _db.Farmer.Where(x => x.UserId == user.Id).FirstOrDefaultAsync();
             //if (!User.IsInRole("Administrator"))
             //{
-            //    cattles = _cattleRepository.GetCattlesByFarmerId(farmerId.Id);
+            //    cattles = _CattleRepository.GetCattlesByFarmerId(farmerId.Id);
             //}
             //else
             //{
-            //    cattles = _cattleRepository.GetCattles();
+            //    cattles = _CattleRepository.GetCattles();
             //}
-            ViewBag.Cattles = new SelectList(cattles,"Id","Name");
+            ViewBag.Cattles = new SelectList(cattles, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(MilkCreateViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-				ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
-				return View(model);
-			}
+                ModelState.AddModelError("", "Ka ndodhur nje gabim. Plotesoni te dhenat obligative");
+                return View(model);
+            }
 
             CattleMilk cattleMilk = new CattleMilk();
             cattleMilk.Identifier = Guid.NewGuid();
@@ -109,11 +112,11 @@ namespace CattleMgm.Controllers
 
             MilkEditViewModel editViewModel = new MilkEditViewModel
             {
-               Id=milk.Id,
-               CattleId = milk.CattleId,
-               Price=milk.Price,
-               LitersCollected=milk.LitersCollected
-              
+                Id = milk.Id,
+                CattleId = milk.CattleId,
+                Price = milk.Price,
+                LitersCollected = milk.LitersCollected
+
             };
 
             return PartialView(editViewModel);
@@ -122,33 +125,25 @@ namespace CattleMgm.Controllers
         [HttpPost]
         public IActionResult _Edit(MilkEditViewModel model)
         {
-            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Submenu eshte modifikuar me sukses", Title = "Sukses" };
+            ErrorViewModel error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Success, ErrorDescription = "Milk forma eshte modifikuar me sukses", Title = "Sukses" };
 
             if (!ModelState.IsValid)
             {
                 error = new ErrorViewModel { ErrorNumber = Helpers.ErrorStatus.Warning, ErrorDescription = "Plotesoni te dhenat obligative", Title = "Lajmerim" };
                 return Json(error);
             }
-            var submenu = _db.SubMenu.Find(model.Id);
-            if (submenu == null)
+            var milk = _db.CattleMilk.Find(model.Id);
+
+            if (milk == null)
             {
                 return NotFound();
 
             }
+            milk.Id = model.Id;
+            milk.Price = model.Price;
+            milk.LitersCollected = model.LitersCollected;
 
-            //submenu.Action = model.Action;
-            //submenu.Controller = model.Controller;
-            //submenu.Area = model.Area;
-            //submenu.Claim = model.Policy;
-            //submenu.Icon = model.Icon;
-            //submenu.NameSq = model.NameSq;
-            //submenu.NameEn = model.NameEn;
-            //submenu.NameSr = model.NameSr;
-            //submenu.OrdinalNumber = model.OrdinalNumber;
-            //submenu.StaysOpenFor = model.StaysOpenFor;
-            //submenu.ParentSubId = model.ParentID;
-
-            _db.Update(submenu);
+            _db.Update(milk);
 
             _db.SaveChanges();
 
