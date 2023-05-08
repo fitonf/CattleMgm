@@ -1,6 +1,9 @@
 using AutoMapper;
 using CattleMgmApi.Data.Entities;
 using CattleMgmApi.Dtos;
+using CattleMgmApi.Dtos.TempDtos;
+using CattleMgmApi.Repository;
+using CattleMgmApi.Repository.Temperature;
 using CattleMgmApi.Dtos.BreedDtos;
 using CattleMgmApi.Dtos.Farmer;
 using CattleMgmApi.Dtos.CattlePositionDtos;
@@ -13,6 +16,7 @@ using CattleMgmApi.Repository.MunicipalityRepository;
 using CattleMgmApi.Repository.BreedRepository;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +30,7 @@ sqlConBuilder.ConnectionString = builder.Configuration.GetConnectionString("Defa
 builder.Services.AddDbContext<PraktikadbContext>(opt => opt.UseSqlServer(sqlConBuilder.ConnectionString));
 
 builder.Services.AddScoped<ICattleRepository, CattleRepository>();
+builder.Services.AddScoped<ICattleTempRepository, CattleTempRepository>();
 builder.Services.AddScoped<IBreedRepository, BreedRepository>();
 
 builder.Services.AddScoped<IFarmerRepository, FarmerRepository>();
@@ -353,7 +358,79 @@ app.MapDelete("api/v1/farmers/{id}",async (IFarmerRepository repo, int id, IMapp
 });
 //app.MapGet("/", () => "Hello World!");
 
+
+
+
+
+//Krijimi i Api per CattleTemperature
+
+app.MapGet("api/v1/cattleTemp", async (ICattleTempRepository repo1, IMapper mapper1) =>
+{
+    var cattleTemps = await repo1.GetAllCattlesTemp();
+
+    return Results.Ok(mapper1.Map<IEnumerable<CattleTempReadDto>>(cattleTemps));
+});
+
+app.MapGet("api/v1/cattleTemp/{id}", async (ICattleTempRepository repo, IMapper mapper, int id) =>
+{
+    var cattleTemps = await repo.GetCattleTempById(id);
+    if (cattleTemps is not null)
+    {
+        return Results.Ok(mapper.Map<CattleTempReadDto>(cattleTemps));
+    }
+    else
+    {
+        return Results.NotFound(new { error = "not found" });
+    }
+
+});
+
+
+app.MapPost("api/v1/cattleTemp", async (ICattleTempRepository repo, IMapper mapper, CattleTempCreateDto cattleTemp) =>
+{
+    if (cattleTemp is not null)
+    {
+        var mapped_object = mapper.Map<CattleTemperature>(cattleTemp);
+        await repo.CreateCattleTemp(mapped_object);
+        await repo.SaveChanges();
+
+        var result = mapper.Map<CattleTempReadDto>(mapped_object);
+
+        return Results.Created($"Gjedhja me id {result.Id} u krijua!", result);
+    }
+    return Results.NoContent();
+});
+
+
+app.MapPut("api/v1/cattleTemp/{id}", async (ICattleTempRepository repo, IMapper mapper, CattleTempUpdateDto cattleTemp, int id) =>
+    {
+        if (cattleTemp is not null)
+        {
+            var mapped_object = mapper.Map<CattleTemperature>(cattleTemp);
+            repo.UpdateCattleTemp(mapped_object,id);
+            await repo.SaveChanges();
+
+            var result = mapper.Map<CattleTempReadDto>(mapped_object);
+
+            return Results.Created($"Gjedhja me id {result.Id} u editua me sukses!", result);
+
+        }
+        return Results.NoContent();
+    });
+
+
+app.MapDelete("api/v1/cattleTemp/{id}", async (ICattleTempRepository repo, int id) =>
+
+{
+    var cattleTemp = repo.GetCattleTempById(id);
+    if(cattleTemp is not null)
+    {
+        repo.DeleteCattleTemp(await cattleTemp);
+        await repo.SaveChanges(); 
+        return Results.Ok($"Gjedhja me id {id} u fshi me sukses");
+    }
+
+    return Results.NoContent();
+});
+
 app.Run();
-
-
-
