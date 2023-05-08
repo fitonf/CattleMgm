@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CattleMgm.Models.Session;
 using System.Net;
+using CattleMgm.Models;
+using CattleMgm.ViewModels.User;
+
 
 
 namespace CattleMgm.Controllers
@@ -26,24 +29,28 @@ namespace CattleMgm.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var hum = await _db.CattleHumidity.Include(q => q.Cattle).ToListAsync();
-            List<HumidityViewModel> model = new List<HumidityViewModel>();
+            var cattle = await _db.Cattle.Select(q => new { q.Id, FullName = q.Name })
+                                .ToListAsync();
+        ViewBag.Cattles = new SelectList(cattle, "Id", "FullName");
+            return View();
+            //var hum = await _db.CattleHumidity.Include(q => q.Cattle).ToListAsync();
+            //List<HumidityViewModel> model = new List<HumidityViewModel>();
 
-            foreach (var item in hum)
-            {
+            //foreach (var item in hum)
+            //{
 
-                model.Add(new HumidityViewModel
-                {
-                    Id = item.Id,
-                    CattleName = item.Cattle.Name,
-                    CattleId = item.CattleId,
-                    Humidity = item.Humidity,
-                    DateMeasured = item.DateMeasured,
-                    CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName
-                });
-            }
-            model  = model.OrderByDescending(q => q.Id).ToList();
-            return View(model);
+            //    model.Add(new HumidityViewModel
+            //    {
+            //        Id = item.Id,
+            //        CattleName = item.Cattle.Name,
+            //        CattleId = item.CattleId,
+            //        Humidity = item.Humidity,
+            //        DateMeasured = item.DateMeasured,
+            //        CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName
+            //    });
+            //}
+            //model  = model.OrderByDescending(q => q.Id).ToList();
+         
         }
 
        
@@ -149,16 +156,18 @@ namespace CattleMgm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int Id)
+        public async Task<IActionResult> Delete(string id)
         {
 
-            if (Id == null)
+            var did = AesCrypto.Decrypt<int>(id);
+            if (id == null)
             {
                 return BadRequest();
             }
 
 
-            var cattle = _db.CattleHumidity.Find(Id);
+            //var cattle = _db.CattleHumidity.Find(Id);
+            var cattle = _db.CattleHumidity.Find(did);
             if (cattle != null)
             {
                 var result = _db.CattleHumidity.Remove(cattle);
@@ -170,6 +179,32 @@ namespace CattleMgm.Controllers
             return Json("success");
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchHumidity search)
+        {
+            List<HumidityViewModel> model = (from item in _db.CattleHumidity.Include(x => x.Cattle)
+
+                                             where
+                                          ((item.CattleId == search.CattleId || search.CattleId== null) &&
+                                          (item.Humidity == search.Humidity || search.Humidity == null))
+
+                                          select new HumidityViewModel
+                                          {
+                                              Id = AesCrypto.Enkrypt(item.Id),
+                                              CattleName = item.Cattle.Name,
+                                              Humidity = item.Humidity,
+                                              DateMeasured = item.DateMeasured,
+                                              CreatedBy = user.Id,
+
+        }).ToList();
+
+
+
+
+            return Json(model);
+        }
+
         [HttpPost]
         public async Task<JsonResult> OpenIndexReport()
         {
