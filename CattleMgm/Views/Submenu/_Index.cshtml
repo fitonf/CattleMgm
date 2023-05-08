@@ -1,41 +1,61 @@
-﻿@model IEnumerable<SubmenuViewModel>
+﻿Erona
+Erona Mehmeti
+@model IEnumerable<SubmenuViewModel>
 @{
     int rownumber = 0;
 }
 
-    <div class="card-body">
-        <table id="tblSubMenus" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>@Html.DisplayNameFor(m => m.Name)</th>
-                    <th>@Html.DisplayNameFor(m => m.Action)</th>
-                    <th>@Html.DisplayNameFor(m => m.Controller)</th>
-                    <th>@Html.DisplayNameFor(m => m.Area)</th>
-                    <th>Veprimet</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var menu in Model)
-                {
-                    rownumber++;
-                    <tr>
-                        <td>@rownumber</td>
-                        <td>@Html.DisplayFor(m => menu.Name)</td>
-                        <td>@Html.DisplayFor(m => menu.Action)</td>
-                        <td>@Html.DisplayFor(m => menu.Controller)</td>
-                        <td>@Html.DisplayFor(m => menu.Area)</td>
-                        <td class="button-td">
-                            <a class="btn btn-sm btn-primary" onclick="EditSubMenu(@menu.MId, @menu.Id)"><i class="fa fa-edit"></i>Edit</a>
-
-                            @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
-                                                                                                        new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
-                        *@</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<div class="card-body">
+    <div class="button-items" style="float:right;">
+        <div class="btn-group dropstart">
+            <button style="margin:0 5px 7px 0" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-chevron-left"></i>Shkarko
+            </button>
+            <div class="dropdown-menu">
+                <button class="dropdown-item" onclick="Report(ReportType.PDF)">
+                    <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                    <span class="title text-center w-100">PDF</span>
+                </button>
+                <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
+                    <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                    <span class="title text-center w-100">Excel</span>
+                </button>
+            </div>
+        </div>
     </div>
+    <table id="tblSubMenus" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>@Html.DisplayNameFor(m => m.Name)</th>
+                <th>@Html.DisplayNameFor(m => m.Action)</th>
+                <th>@Html.DisplayNameFor(m => m.Controller)</th>
+                <th>@Html.DisplayNameFor(m => m.Area)</th>
+                <th>Veprimet</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var menu in Model)
+            {
+                rownumber++;
+                <tr>
+                    <td>@rownumber</td>
+                    <td>@Html.DisplayFor(m => menu.Name)</td>
+                    <td>@Html.DisplayFor(m => menu.Action)</td>
+                    <td>@Html.DisplayFor(m => menu.Controller)</td>
+                    <td>@Html.DisplayFor(m => menu.Area)</td>
+                    <td class="button-td">
+                        <a class="btn btn-sm btn-primary" onclick="EditSubMenu(@menu.MId, @menu.Id)"><i class="fa fa-edit"></i>Edit</a>
+
+                        @*@(await Html.PartialAsync("_ActionButtonsPartial", new List<ActionButton> { new ActionButton { Title = Resource.Edit, Icon = SvgIcon.Edit, OnClick = $"EditSubMenu('{menu.mide}', '{AesCrypto.Enkrypt(menu.ide) }')", Display = true },
+                    new ActionButton{ Title = Resource.Delete, Icon = SvgIcon.Delete, OnClick = $"DeleteSubMenu('{AesCrypto.Enkrypt(menu.ide) }')", Display = true }, }))
+                    *@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 <script type="text/javascript">
 
@@ -49,4 +69,22 @@
     function EditSubMenu(MId, ide){
         $('#modal-center-large').find('.modal-content').load('@Url.Action("_Edit", "Submenu")?mid=' + MId+ '&ide='+ide)
     }
+     function Report(type) {
+            if (type == '@((int)ReportType.PDF)' || type == '@((int)ReportType.Excel)') {
+                $.ajax({
+                    url: "/Submenu/OpenIndexReport",
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    success: function () {
+                        if (type == '@((int)ReportType.Excel)')
+                            window.open("/Reports/Design/?format=excel", '_blank');
+                        else {
+                            let W = window.open("/Reports/Design/?format=pdf", '_blank');
+                            W.onload = function () { this.document.title = 'Raporti'; }
+                        }
+                    }
+                });
+            }
+        }
 </script>

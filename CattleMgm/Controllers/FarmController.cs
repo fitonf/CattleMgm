@@ -2,6 +2,7 @@
 using CattleMgm.Data.Entities;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.Farm;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Farm;
@@ -164,6 +165,31 @@ namespace CattleMgm.Controllers
 
             return RedirectToAction("Index", "Farm");
         }
-    
+
+
+        #region Report
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        { 
+            var farms = _db.Farm.ToList();
+            var query = farms
+               .Select(q => new FarmViewModel
+               {
+                   Id = q.Id,
+                   FarmName = q.Name,
+                   Place = q.Place,
+                   Address = q.Address
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\FarmRaport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+        #endregion
+
     }
 }

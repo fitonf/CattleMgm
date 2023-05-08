@@ -71,4 +71,41 @@ namespace CattleMgm.ViewModels.Submenu
     {
         public int Id { get; set; }
     }
+
+
+    public class SubMenuReportModel
+    {
+        public int Id { get; set; }
+        public int MId { get; set; }
+        public int? ParentID { get; set; }
+
+        public string NameSq { get; set; }  
+        public string NameEn { get; set; }
+
+        public string NameSr { get; set; }
+        public string? Area { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public int OrdinalNumber { get; set; }
+        public bool IsActive { get; set; }
+        public string Policy { get; set; }
+        public string Icon { get; set; }
+        public string StaysOpenFor { get; set; }
+    }
+
+    public class SearchSubmenu
+    {
+        public int MId { get; set; }
+        public string? Menu { get; set; }
+
+        public string? Name { get; set; }
+
+   
+        public string? Area { get; set; }
+
+        public string? Action { get; set; }
+
+        public string? Controller { get; set; }
+
+    }
 }

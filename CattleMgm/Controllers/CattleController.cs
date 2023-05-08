@@ -3,22 +3,19 @@ using CattleMgm.Data.Entities;
 using CattleMgm.Helpers;
 using CattleMgm.Helpers.Security;
 using CattleMgm.Models;
+using CattleMgm.Models.Session;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.Repository.Farm;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Cattle;
 using CattleMgm.ViewModels.CattleTemperature;
 using CattleMgm.ViewModels.Humidity;
-using CattleMgm.ViewModels.Municipality;
 using CattleMgm.ViewModels.Position;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using CattleMgm.Models.Session;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Net;
 
 namespace CattleMgm.Controllers
 {
@@ -40,35 +37,12 @@ namespace CattleMgm.Controllers
         public IActionResult Index()
         {
             ViewData["Title"] = "Lista e gjedheve";
-
-            var lista = _cattleRepository.GetCattles(); //Cattle 
-            var unicipality = _db.Municipality.ToList();
-
-            List<CattleViewModel> listaViewModel = new List<CattleViewModel>(); // 
-
-            foreach (var cattle in lista)
-            {
-                listaViewModel.Add(new CattleViewModel
-                {
-                    Id = cattle.Id,
-                    Name = cattle.Name,
-                    Gender = cattle.Gender == (int)Gender.Male ? "Mashkull" : "Femer",
-                    BirthDate = cattle.BirthDate.ToShortDateString(),
-                    FarmName = cattle.Farm.Name,
-                    FarmerName = cattle.Farm.Farmer.FirstName +
-                    " " + cattle.Farm.Farmer.LastName,
-                    Breed = cattle.Breed.Name,
-                    UniqueIdentifier = cattle.UniqueIdentifier.ToString(),
-                    Weight = cattle.Weight,
-                    CreatedBy = cattle.CreatedByNavigation.FirstName + cattle.CreatedByNavigation.LastName,
-                    Komuna=cattle.Municipality.Emri
-
-                });
-            } //cattleviewmodel
-
-            listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
-
-            return View(listaViewModel);
+            var municipality = _db.Municipality
+                                        .Select(q => new { q.Id, q.Emri })
+                                        .ToList();
+            ViewBag.Cattle = new SelectList(municipality, "Id", "Emri");
+            
+            return View();
         }
 
         [HttpGet]
@@ -96,7 +70,7 @@ namespace CattleMgm.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CattleCreateViewModel model)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 var farms = await _farmRepository.GetAllFarms();
                 var muni = await _db.Municipality.Select(q => new { q.Id, q.Emri }).ToListAsync();
@@ -117,7 +91,8 @@ namespace CattleMgm.Controllers
                 return View(model);
             }
 
-            Cattle cattle = new Cattle() {
+            Cattle cattle = new Cattle()
+            {
                 UniqueIdentifier = Guid.NewGuid(),
                 FarmId = model.FarmId,
                 BreedId = model.BreedId,
@@ -128,8 +103,8 @@ namespace CattleMgm.Controllers
                 Created = DateTime.Now,
                 Weight = model.Weight,
                 MunicipalityId = model.MunicipalityId
-               
-                
+
+
             };
 
             await _db.Cattle.AddAsync(cattle);
@@ -143,7 +118,7 @@ namespace CattleMgm.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -155,15 +130,15 @@ namespace CattleMgm.Controllers
                                          .Include(q => q.CattleTemperature)
                                          .Include(q => q.CattlePosition)
                                          .Include(q => q.CattleHumidity)
-                                         .Include(q=>q.Municipality)
+                                         .Include(q => q.Municipality)
                                          .Include(q => q.CattleMilk).Where(q => q.Id == id).FirstOrDefaultAsync();
 
 
 
-            if(cattle == null)
+            if (cattle == null)
             {
                 return NotFound();
-            }    
+            }
 
             CattleDetailsViewModel model = new CattleDetailsViewModel();
 
@@ -198,17 +173,20 @@ namespace CattleMgm.Controllers
             //listen e nxjerrur me larte e kthejm ne tipin per view
             //dhe po e shtim ne model
             model.CattleTemp = (from t in temperatures
-                               select new CattleTempViewModel { 
-                                Temperature = t.Temperature,
-                                DateMeasured = t.DateMeasured,
-                               }).ToList();
+                                select new CattleTempViewModel
+                                {
+                                    Temperature = t.Temperature,
+                                    DateMeasured = t.DateMeasured,
+                                }).ToList();
 
-            model.CattleHumidity = cattle.CattleHumidity.Select(q => new HumidityViewModel { 
+            model.CattleHumidity = cattle.CattleHumidity.Select(q => new HumidityViewModel
+            {
                 Humidity = q.Humidity,
                 DateMeasured = q.DateMeasured
             }).ToList();
 
-            model.CattlePosition = cattle.CattlePosition.Select(q => new PositionViewModel { 
+            model.CattlePosition = cattle.CattlePosition.Select(q => new PositionViewModel
+            {
                 Id = q.Id,
                 Lat = q.Lat,
                 Long = q.Long
@@ -249,17 +227,17 @@ namespace CattleMgm.Controllers
         //}
 
         [HttpGet]
-        public async Task <IActionResult> Edit(string ide)
+        public async Task<IActionResult> Edit(string idee)
         {
 
-            if (ide == null)
+            if (idee == null)
             {
                 return BadRequest();
             }
 
-            int id = AesCrypto.Decrypt<int>(ide);
+            int id = AesCrypto.Decrypt<int>(idee);
             var cat = _db.Cattle.Find(id);
-           
+
 
             // Gender ViewBag
             var genderList = new List<SelectListItem>
@@ -271,7 +249,7 @@ namespace CattleMgm.Controllers
 
             // Breed ViewBag
             var breeds = _db.Breed.ToList();
-            var breedList = new SelectList(breeds, "Id", "Name", cat.BreedId);
+            var breedList = new SelectList(breeds, "Id", "Name");
             ViewBag.Breed = breedList;
 
             // Farm ViewBag
@@ -311,7 +289,7 @@ namespace CattleMgm.Controllers
             if (!ModelState.IsValid)
             {
                 var cat = _db.Cattle.Find(viewModel.Id);
-               
+
                 if (cat == null)
                 {
                     return NotFound();
@@ -354,16 +332,17 @@ namespace CattleMgm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            int decryptedId = AesCrypto.Decrypt<int>(id);
 
-            if (id == null)
+            if (decryptedId == null)
             {
                 return BadRequest();
             }
 
 
-            var cattle = _db.Cattle.Find(id);
+            var cattle = _db.Cattle.Find(decryptedId);
             if (cattle != null)
             {
                 var result = _db.Cattle.Remove(cattle);
@@ -392,15 +371,15 @@ namespace CattleMgm.Controllers
 
                .Select(q => new CattleReportModel
                {
-                Id = q.Id, 
-                Name = q.Name,
-                Weight = q.Weight,
-                BreedId = q.Breed.Name,
-                BrithDate = q.BirthDate,
-                Gender = q.Gender == 1 ? "Mashkull" : "Femer",
-                FarmId = q.Farm.Name,
-                MunicipalityId = q.Municipality.Emri
-        }).ToList();
+                   Id = q.Id,
+                   Name = q.Name,
+                   Weight = q.Weight,
+                   BreedId = q.Breed.Name,
+                   BrithDate = q.BirthDate,
+                   Gender = q.Gender == 1 ? "Mashkull" : "Femer",
+                   FarmId = q.Farm.Name,
+                   MunicipalityId = q.Municipality.Emri
+               }).ToList();
 
 
             HttpContext.Session.SetString("Path", "Reports\\CattleReport.rdl");
@@ -408,6 +387,39 @@ namespace CattleMgm.Controllers
 
 
             return Json(true);
+        }
+        public IActionResult _Index(SearchCattle search)
+        {
+            ViewData["Title"] = "Lista e gjedheve";
+
+            var lista = _cattleRepository.GetCattles().Where(x => x.MunicipalityId == search.MunicipalityId || search.MunicipalityId == null); //Cattle 
+
+
+            List<CattleViewModel> listaViewModel = new List<CattleViewModel>(); // 
+
+            foreach (var cattle in lista)
+            {
+                listaViewModel.Add(new CattleViewModel
+                {
+                    Id = AesCrypto.Enkrypt(cattle.Id),
+                    Name = cattle.Name,
+                    Gender = cattle.Gender == (int)Gender.Male ? "Mashkull" : "Femer",
+                    BirthDate = cattle.BirthDate.ToShortDateString(),
+                    FarmName = cattle.Farm.Name,
+                    FarmerName = cattle.Farm.Farmer.FirstName +
+                    " " + cattle.Farm.Farmer.LastName,
+                    Breed = cattle.Breed.Name,
+                    UniqueIdentifier = cattle.UniqueIdentifier.ToString(),
+                    Weight = cattle.Weight,
+                    CreatedBy = cattle.CreatedByNavigation.FirstName + cattle.CreatedByNavigation.LastName,
+                    Komuna = cattle.Municipality != null ? cattle.Municipality.Emri : ""
+
+                });
+            } //cattleviewmodel
+
+            listaViewModel = listaViewModel.OrderByDescending(q => q.Id).ToList();
+
+            return Json(listaViewModel);
         }
     }
 }

@@ -6,8 +6,7 @@ using CattleMgm.Models.Session;
 using CattleMgm.Repository.Cattles;
 using CattleMgm.ViewModels;
 using CattleMgm.ViewModels.Breed;
-using CattleMgm.ViewModels.Menu;
-using CattleMgm.ViewModels.Municipality;
+using CattleMgm.ViewModels.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -29,15 +28,8 @@ namespace CattleMgm.Controllers
         }
         public IActionResult Index()
         {
-            var breeds = _db.Breed.Select(q => new BreedViewModel
-            {
-                Id = q.Id,
-                Name = q.Name,
-                Type = q.Type
-               
-            }).ToList();
-
-            return View(breeds);
+            
+            return View();
         }
 
         [HttpGet]
@@ -170,25 +162,46 @@ namespace CattleMgm.Controllers
             return Json(error);
         }
         [HttpPost]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> Delete(string id)
         {
-            if (id == 0)
+            var did = AesCrypto.Decrypt<int>(id);
+            if (id == null)
             {
-                //ModelState.AddModelError("", "");
-                Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                return Json("Kjo id nuk ekziston");
+                return BadRequest();
             }
 
-            var breed = await _db.Breed.FindAsync(id);
 
-            if (breed is not null)
+            var breed = _db.Breed.Find(did);
+            if (breed != null)
             {
-                _db.Breed.Remove(breed);
+                var result = _db.Breed.Remove(breed);
+
                 await _db.SaveChangesAsync();
+
             }
 
             return Json("success");
 
+        }
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchBreed search)
+        {
+            List<BreedViewModel> model = (from item in _db.Breed
+                                             //join ur in _context.UserRoles on item.Id equals ur.UserId
+                                         where
+                                         ( (item.Name == search.Name || search.Name == null) &&
+                                         (item.Type == search.Type || search.Type == null))
+                                         select new BreedViewModel
+                                         {
+                                             Id = AesCrypto.Enkrypt(item.Id),
+                                             Name = item.Name,
+                                             Type = item.Type,
+                                             
+                                         }).ToList();
+
+           
+
+            return Json(model);
         }
 
         [HttpPost]
