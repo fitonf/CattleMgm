@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using CattleMgm.ViewModels.Roles;
+using System.Xml.Linq;
+using CattleMgm.Models.Session;
 
 namespace CattleMgm.Controllers
 {
@@ -32,7 +34,7 @@ namespace CattleMgm.Controllers
                      {
                          Id = item.Id,
                          Name = item.Name
-                     }).ToList();                
+                     }).ToList();
 
             return View(model);
         }
@@ -46,7 +48,7 @@ namespace CattleMgm.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(RolesCreateViewModel model)
         {
-            
+
             if (ModelState.IsValid)
             {
                 //IdentityRole identityRole = new IdentityRole
@@ -175,5 +177,29 @@ namespace CattleMgm.Controllers
             }
 
         }
+
+
+        [HttpPost]
+        public async Task<JsonResult> OpenIndexReport()
+        {
+            var roles = _db.AspNetRoles.ToList();
+            var query = roles
+               .Select(q => new IdentityRole
+               {
+                   Id = q.Id,
+                   Name = q.Name,
+               }).ToList();
+
+
+            HttpContext.Session.SetString("Path", "Reports\\RolesReport.rdl");
+            HttpContext.Session.Set("queryresult", query);
+
+
+            return Json(true);
+        }
+
+
+
+
     }
 }
