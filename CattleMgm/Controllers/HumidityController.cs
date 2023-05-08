@@ -86,19 +86,29 @@ namespace CattleMgm.Controllers
 
         public async Task<IActionResult> IsHumidityAvailable(int CattleId, double Humidity)
         {
-            // Shikon ne qofte se lageshtia per kete gjedh eshte i regjistruar.
-            var existingHumidity = await _db.CattleHumidity.FirstOrDefaultAsync(h => h.CattleId == CattleId);
+            // Merr rekordin e fundit per Gjedhen e zgjidhur.
+            var latestHumidity = await _db.CattleHumidity
+                .Where(h => h.CattleId == CattleId)
+                .OrderByDescending(h => h.DateMeasured)
+                .FirstOrDefaultAsync();
 
-            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
-            if (existingHumidity == null)
+            // Ne qofte nuk ekziston ndonje rekord, kthen JSON true e cila lejon perdoruesin te vazhdoj.
+            if (latestHumidity == null)
             {
                 return Json(true);
             }
-            // Perndryshe, kthen error mesazh si JSON.
-            else
+
+            // Deklaron variablen e kohes se matjes se fundit.
+            var timeElapsed = DateTime.Now - latestHumidity.DateMeasured;
+
+            // Ne qofte se me pak se 3 ore kane kaluar, atehere kthen JSON Error message e cila tregon edhe kur eshte bere matja e fundit.
+            if ((DateTime.Now - latestHumidity.DateMeasured).TotalHours <= 3)
             {
-                return Json($"Lagështia për këtë gjedh është regjistruar.");
+                return Json($"Lagështia për këtë gjedh është regjistruar më parë {Math.Round(timeElapsed.TotalMinutes, 2)} minuta më parë.");
             }
+
+            // Perndryshe, kthen JSON true.
+            return Json(true);
         }
 
 

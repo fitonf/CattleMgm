@@ -94,21 +94,38 @@ namespace CattleMgm.Controllers
         // Metoda per te shikuar se a eshte regjistruar temperatura per kete gjedha
         public async Task<IActionResult> IsTemperatureAvailable(int CattleId, double Temperature)
         {
-            // Shikon ne qofte se temperatura per kete gjedh eshte i regjistruar.
-            var existingTemp = await _db.CattleTemperature.FirstOrDefaultAsync(t => t.CattleId == CattleId && t.Temperature == Temperature);
+            // Merr rekorded e fundit per temperature per gjedhin e zgjedhur.
+            var lastTempRecord = await _db.CattleTemperature
+                            .Where(t => t.CattleId == CattleId)
+                            .OrderByDescending(t => t.DateMeasured)
+                            .FirstOrDefaultAsync();
 
-            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
-            if (existingTemp == null)
+            // Ne qofte se nuk ka record, kthen JSON true.
+            if (lastTempRecord == null)
             {
                 return Json(true);
             }
 
-            // Perndryshe, kthen error mesazh si JSON.
-            else
+            // Deklaron variablen e kohes se matjes se fundit.
+            var timeElapsed = DateTime.Now - lastTempRecord.DateMeasured;
+
+            // Ne qofte se me pak se 3 ore kane kaluar, atehere kthen JSON Error message e cila tregon edhe kur eshte bere matja e fundit.
+            if (lastTempRecord == null || (DateTime.Now - lastTempRecord.DateMeasured).TotalHours > 3)
             {
-                return Json($"Një temperaturë për këtë gjedh ekziston.");
+                return Json(true);
             }
+
+            // Ne qofte se me pak se 3 ore kane kaluar, atehere kthen JSON Error message e cila tregon edhe kur eshte bere matja e fundit.
+            if (timeElapsed.TotalHours < 3)
+            {
+                return Json($"Një temperaturë për këtë gjedh ekziston që është bërë {Math.Round((DateTime.Now - lastTempRecord.DateMeasured).TotalMinutes, 2)} minuta më parë.");
+            }
+
+            // Perndryshe, kthen JSON true.
+            return Json(true);
         }
+
+
 
         //Http-te e editimit
         [HttpGet]

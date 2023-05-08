@@ -82,20 +82,37 @@ namespace CattleMgm.Controllers
         // Metoda qe shikon a eshte regjistruar tensioni i gjakut per gjedhin e zgjedhur.
         public async Task<IActionResult> IsBloodPressureAvailable(int CattleId, double PressureFrom, double PressureTo)
         {
-            // Shikon ne qofte se tensioni per kete gjedh eshte i regjistruar.
-            var existingBP = await _db.CattleBloodPressure.FirstOrDefaultAsync(bp => bp.CattleId == CattleId);
+            // Get the latest blood pressure record for the selected cattle
+            var latestBP = await _db.CattleBloodPressure
+                .Where(bp => bp.CattleId == CattleId)
+                .OrderByDescending(bp => bp.DateMeasured)
+                .FirstOrDefaultAsync();
 
-            // Ne qofte se nuk ka rekord per kete gjedh, kthen JSON true duke treguar se nje rekord i ri mund te krijohet.
-            if (existingBP == null)
+            // If no record exists, allow the user to create a new one
+            if (latestBP == null)
             {
                 return Json(true);
             }
-            // Perndryshe, kthen error mesazh si JSON.
-            else
+
+            // Deklaron variablen e kohes se matjes se fundit.
+            var timeElapsed = DateTime.Now - latestBP.DateMeasured;
+
+            // Ne qofte se me pak se 3 ore kane kaluar, atehere kthen JSON Error message e cila tregon edhe kur eshte bere matja e fundit.
+            if (latestBP == null || (DateTime.Now - latestBP.DateMeasured).TotalHours > 3)
             {
-                return Json($"Presioni i gjakut për këtë gjedh është regjistruar më parë.");
+                return Json(true);
             }
+
+            // Ne qofte se me pak se 3 ore kane kaluar, atehere kthen JSON Error message e cila tregon edhe kur eshte bere matja e fundit.
+            if (timeElapsed.TotalHours < 3)
+            {
+                return Json($"Një matje e gjakut për këtë gjedh ekziston që është bërë {Math.Round((DateTime.Now - latestBP.DateMeasured).TotalMinutes, 2)} minuta më parë.");
+            }
+
+            // Perndryshe, kthen JSON true.
+            return Json(true);
         }
+
 
 
 
