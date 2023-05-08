@@ -111,7 +111,7 @@
             pageLength: 10,
             "ordering": false
         });
-        function EditMenu(id) {
+        function EditHumidity(id) {
             $('#modal-center-large').find('.modal-content').load('@Url.Action("Edit", "Humidity")?ide=' + id, function () {
                 $('#modal-center-large').modal('toggle')
             })
