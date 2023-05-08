@@ -12,7 +12,7 @@ namespace CattleMgm.ViewModels.Cattle
 {
     public class CattleViewModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         public string UniqueIdentifier { get; set; }
 
@@ -103,6 +103,9 @@ namespace CattleMgm.ViewModels.Cattle
     {
         public int Id { get; set; }
     }
-
+    public class SearchCattle
+    {
+        public int? MunicipalityId { get; set; }
+    }
 
 }

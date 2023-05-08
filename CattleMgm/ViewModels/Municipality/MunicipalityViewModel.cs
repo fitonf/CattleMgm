@@ -18,7 +18,7 @@ namespace CattleMgm.ViewModels.Municipality
         public string Name { get; set; }
 
 
-        public int? Zip { get; set; }
+        public int Zip { get; set; }
     }
     public class MunicipalityEditViewModel : MunicipalityCreateViewModel
     {

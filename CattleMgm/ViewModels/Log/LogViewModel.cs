@@ -12,7 +12,7 @@
 
         public string HttpMethod { get; set; }
 
-        public string Date { get; set; }
+        public DateTime Date { get; set; }
 
         public string Url { get; set; }
 
@@ -34,5 +34,15 @@
 
         public string Exception { get; set; }
 
+    }
+
+    public class SearchLogs
+    {
+
+        public string? UserId { get; set; }
+
+        public string? Controller { get; set; }
+
+        public string? DateMeasured { get; set; }
     }
 }

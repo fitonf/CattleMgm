@@ -212,7 +212,7 @@ namespace CattleMgm.Controllers
                {
                    Id = q.Id,
                    Emri = q.Emri ,
-                   ZIP = q.ZIP
+                   ZIP = q.Zip
                   
                }).ToList();
 
@@ -225,6 +225,25 @@ namespace CattleMgm.Controllers
         }
         #endregion
     }
+    //[HttpPost]
+    //public async Task<IActionResult> _Index(SearchMunicipality search)
+    //{
+    //    List<MunicipalityViewModel> model = (from item in _db.Municipality.ToList();
+    //    //join ur in _context.UserRoles on item.Id equals ur.UserId
+    //    where
+    //                                 (item.Name == search.Name || search.Name == null) &&
+    //                                 (item.ZIP == search.Zip || search.Zip == null) 
+    //                                 select new MunicipalityViewModel
+    //                                 {
+    //                                     Id = item.Id,
+    //                                     Name = item.Name,
+    //                                     ZIP = item.ZIP,
+    //                                 }).ToList();
+
+
+    //    return Json(model);
+    //}
+
     internal class KomunaReportModel
     {
         public int Id { get; set; }
