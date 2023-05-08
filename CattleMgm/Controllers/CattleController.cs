@@ -378,7 +378,7 @@ namespace CattleMgm.Controllers
                    BrithDate = q.BirthDate,
                    Gender = q.Gender == 1 ? "Mashkull" : "Femer",
                    FarmId = q.Farm.Name,
-                   MunicipalityId = q.Municipality.Emri
+                   MunicipalityId = q.MunicipalityId.HasValue ? q.Municipality.Emri : "Nuk eshte caktuar komuna"
                }).ToList();
 
 

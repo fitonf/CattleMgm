@@ -54,7 +54,7 @@
     ChartJs.prototype.init = function() {
         //creating lineChart
         var lineChart = {
-            labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October"],
+            labels: ["Janar", "February", "March", "April", "May", "June", "July", "August", "September", "October"],
             datasets: [{
                 label: "Conversion Rate",
                 fill: false,
@@ -200,7 +200,7 @@
 
         //barchart
         var barChart = {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: ["Janar", "February", "March", "April", "May", "June", "July"],
             datasets: [
                 {
                     label: "Sales Analytics",

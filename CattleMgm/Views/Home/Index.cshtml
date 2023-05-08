@@ -2,7 +2,85 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome-2</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="card">
+    <div class="card-header">
+    </div>
+    <div class="card-body">
+        <canvas id="bar" class="drop-shadow" height="300"></canvas>
+    </div>
 </div>
+
+
+@section Scripts{
+    <script src="~/lib/chartjs/chart.min.js"></script>
+@*    <script src="~/js/pages/jquery.chartjs.init.js"></script>
+*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            generateCattleMilkBarChart();
+        });
+
+        var generateCattleMilkBarChart = function () {
+            $.ajax({
+                url: "/Home/CattleMilkBarChart",
+                method: "GET",
+                success: GenerateChart,
+            });
+        }
+
+        var GenerateChart = function (results) {
+            console.log(results);
+            var barChart = {
+                labels: results.days,
+                datasets: [
+                    {
+                        label: "Milk collected(in liters)",
+                        backgroundColor: "rgba(23, 97, 253, 0.4)",
+                        borderColor: "#4a8af6",
+                        borderWidth: 2,
+                        barPercentage: 0.3,
+                        categoryPercentage: 0.5,
+                        hoverBackgroundColor: "rgba(23, 97, 253, 0.7)",
+                        hoverBorderColor: "#4a8af6",
+                        data: results.data
+                    }
+                ]
+            };
+
+            var barOpts = {
+                responsive: true,
+                legend: {
+                    labels: {
+                        fontColor: '#8997bd'
+                    }
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            barPercentage: 0.8,
+                            categoryPercentage: 0.4,
+                            display: true,
+                            gridLines: {
+                                color: 'rgba(137, 151, 189, 0.15)',
+                            },
+                            ticks: {
+                                fontColor: '#8997bd'
+                            }
+                        }],
+                    yAxes: [{
+                        gridLines: {
+                            color: 'rgba(137, 151, 189, 0.15)',
+                        },
+                        ticks: {
+                            fontColor: '#8997bd'
+                        }
+                    }]
+                }
+
+            };
+            var container = $($("#bar")).parent();
+            var ww = $("#bar").attr('width', $(container).width());
+            new Chart($("#bar").get(0).getContext("2d"), { type: 'bar', data: barChart, options: barOpts });
+        }
+    </script>
+}
