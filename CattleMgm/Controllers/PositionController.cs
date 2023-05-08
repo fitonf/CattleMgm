@@ -30,24 +30,10 @@ namespace CattleMgm.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var positions = new List<CattlePosition>();
-            positions = await _posRepository.GetAllPositions();
-            
-
-            List<PositionViewModel> model = new List<PositionViewModel>();
-
-            foreach (var item in positions)
-            {
-                model.Add(new PositionViewModel
-                {
-                    Id=item.Id,
-                    CattleName = $"{item.Cattle.Name}",
-                    Lat = item.Lat,
-                    Long = item.Long
-
-                });
-            }
-            return View(model);
+            var positions = await _db.Cattle.Select(q => new { q.Id, FullName = q.Name })
+                                .ToListAsync();
+            ViewBag.Cattles = new SelectList(positions, "Id", "FullName");
+            return View();
         }
 
         [HttpGet]
@@ -164,6 +150,39 @@ namespace CattleMgm.Controllers
 
 
             return Json(true);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> _Index(SearchPosition search)
+        {
+            DateTime dp;
+
+
+            List<PositionViewModel> model = (from item in _db.CattlePosition.Include(x => x.Cattle)
+                                                 //join ur in _context.UserRoles on item.Id equals ur.UserId
+                                             where
+                                         (item.CattleId==search.CattleId|| search.CattleId == null)&&
+                                         (item.Lat==search.Lat||search.Lat==null)&&
+                                         (item.Long == search.Long || search.Long == null) 
+                                         
+
+                                         select new PositionViewModel
+                                         {
+                                             Id =item.Id,
+                                             CattleName = item.Cattle.Name,
+                                             Lat = item.Lat,
+                                             Long = item.Long,
+                                             DateMeasured = item.DateMeasured
+                                         }).ToList();
+
+            if (search.DateMeasured != null)
+            {
+                dp = DateTime.Parse(search.DateMeasured).Date;
+
+                model = model.Where(q => q.DateMeasured.Date == dp).ToList();
+            }
+
+            return Json(model);
         }
     }
 }
