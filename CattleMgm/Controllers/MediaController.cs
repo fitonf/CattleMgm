@@ -43,10 +43,10 @@ namespace CattleMgm.Controllers
         public IActionResult DocumentList()
         {
             ViewData["Title"] = "Lista e dokumenteve";
-            var roles = _db.AspNetRoles
+            var names = _db.Media
                                 .Select(m => new { m.Name })
                                 .ToList();
-            ViewBag.Names = new SelectList(roles, "Name");
+            ViewBag.Names = new SelectList(names, "Name");
             //var lista = await _mediaRepository.GetAllFiles();
 
             //List<MediaListViewModel> listaViewModel = new List<MediaListViewModel>();
