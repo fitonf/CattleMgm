@@ -195,9 +195,9 @@ namespace CattleMgm.Controllers
                                               CattleName = item.Cattle.Name,
                                               Humidity = item.Humidity,
                                               DateMeasured = item.DateMeasured,
-                                              CreatedBy = user.Id,
+                                              CreatedBy = user == null ? "" : user.FirstName + " " + user.LastName,
 
-        }).ToList();
+                                          }).ToList();
 
 
 
