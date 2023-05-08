@@ -10,6 +10,23 @@
         </div>
     </div>
     <div class="card-body">
+          <div class="button-items" style="float:right;">
+            <div class="btn-group dropstart">
+                <button style="margin:0 5px 7px 0" type="button" class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="mdi mdi-chevron-left"></i>Shkarko
+                </button>
+                <div class="dropdown-menu">
+                    <button class="dropdown-item" onclick="Report(ReportType.PDF)">
+                        <img src="~/Media/Extensions/pdf.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">PDF</span>
+                    </button>
+                    <button class="dropdown-item" onclick="Report(ReportType.EXCEL)">
+                        <img src="~/Media/Extensions/xls.png" class="btn-download" asp-append-version="true" />
+                        <span class="title text-center w-100">Excel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
         <table id="cattle-table" class="table table-responsive">
             <thead>
                 <tr>
@@ -46,7 +63,28 @@
             "language": {
                 "emptyTable": "Nuk u shfaq asnjë e dhënë"
             }
-        }); 
+        });
+                //var Report = function(type) {
+                        }
+
+        function Report(type) {
+            if (type == '@((int)ReportType.PDF)' || type == '@((int)ReportType.Excel)') {
+                $.ajax({
+                    url: "/Breed/OpenIndexReport",
+                    cache: false,
+                    type: "POST",
+                    dataType: "json",
+                    success: function () {
+                        if (type == '@((int)ReportType.Excel)')
+                            window.open("/Reports/Design/?format=excel", '_blank');
+                        else {
+                            let W = window.open("/Reports/Design/?format=pdf", '_blank');
+                            W.onload = function () { this.document.title = 'Raporti'; }
+                        }
+                    }
+                });
+            }
+        }
             function deleteTest(event, id){
             var rowToDelete = $(event.target).closest('tr');
             //var rowToDelete;
