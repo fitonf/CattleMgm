@@ -117,19 +117,13 @@ app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
 
 // -- CREATE ROLE --
 // POST request e cila krijon rol te ri ne Databaze.
-app.MapPost("api/v1/roles", async (HttpContext context) =>
+app.MapPost("api/v1/roles", async (IRolesRepository repo, IMapper mapper, RolesEditDto roleDto) =>
 {
-    // Merr serviset e nevojitura.
-    var serviceProvider = context.RequestServices;
-    var repo = serviceProvider.GetRequiredService<IRolesRepository>();
-    var mapper = serviceProvider.GetRequiredService<IMapper>();
-
-    // Therret metoden CreateRole then e kalon emrin e rolit si argument.
-    var result = await repo.CreateRole("Some Role Name");
-
-    // Kryen Map-min e rezultatit tek nje objekt RolesCreateDto dhe e kthen.
-    return mapper.Map<RolesCreateDto>(result);
+    var role = mapper.Map<ApplicationRole>(roleDto);
+    await repo.CreateRole(role.Name);
+    return Results.Created($"/api/v1/roles/{role.Id}", role);
 });
+
 
 
 // -- DELETE ROLE --
@@ -151,7 +145,7 @@ app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
 });
 
 
-// -- DELETE ROLE --
+// -- Edit ROLE --
 // MapPut request per te Edituar rolin.
 app.MapPut("api/v1/roles/{id}", async (HttpContext context) =>
 {
@@ -165,6 +159,15 @@ app.MapPut("api/v1/roles/{id}", async (HttpContext context) =>
         return Results.NotFound();
     }
 
+    var model = await JsonSerializer.DeserializeAsync<RolesEditDto>(context.Request.Body);
+    if (await repo.UpdateRole(role, model))
+    {
+        return Results.Ok();
+    }
+    else
+    {
+        return Results.BadRequest("Failed to update role.");
+    }
 });
 
 
