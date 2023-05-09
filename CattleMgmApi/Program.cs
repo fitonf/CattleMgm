@@ -117,18 +117,18 @@ app.MapGet("api/v1/roles", async (IRolesRepository repo, IMapper mapper) =>
 
 // -- CREATE ROLE --
 // POST request e cila krijon rol te ri ne Databaze.
-app.MapPost("api/v1/roles", async (IRolesRepository repo, IMapper mapper, RolesEditDto roleDto) =>
+app.MapPost("api/v1/roles/create", async (IRolesRepository repo, IMapper mapper, RolesEditDto roleDto) =>
 {
     var role = mapper.Map<ApplicationRole>(roleDto);
     await repo.CreateRole(role.Name);
-    return Results.Created($"/api/v1/roles/{role.Id}", role);
+    return Results.Created($"/api/v1/roles/create/{role.Id}", role);
 });
 
 
 
 // -- DELETE ROLE --
 // DELETE request e cila fshin rolin nga Databaza ne baze te ID te shenuar ne path.
-app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
+app.MapDelete("api/v1/roles/delete/{id}", async (HttpContext context) =>
 {
     var serviceProvider = context.RequestServices;
     var repo = serviceProvider.GetRequiredService<IRolesRepository>();
@@ -147,7 +147,7 @@ app.MapDelete("api/v1/roles/{id}", async (HttpContext context) =>
 
 // -- Edit ROLE --
 // MapPut request per te Edituar rolin.
-app.MapPut("api/v1/roles/{id}", async (HttpContext context) =>
+app.MapPut("api/v1/roles/edit/{id}", async (HttpContext context) =>
 {
     var serviceProvider = context.RequestServices;
     var repo = serviceProvider.GetRequiredService<IRolesRepository>();

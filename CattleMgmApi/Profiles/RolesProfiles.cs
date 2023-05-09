@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CattleMgm.Models;
 using CattleMgmApi.Data.Entities;
 using CattleMgmApi.Dtos.Roles;
 
@@ -12,9 +13,9 @@ namespace CattleMgmApi.Profiles
             //read
             CreateMap<AspNetRoles, RolesReadDto>();
             //create
-            CreateMap<RolesCreateDto, AspNetRoles>();
+            CreateMap<RolesCreateDto, ApplicationRole>();
             //update
-            CreateMap<RolesEditDto, AspNetRoles>();
+            CreateMap<RolesEditDto, ApplicationRole>();
 
         }
     }

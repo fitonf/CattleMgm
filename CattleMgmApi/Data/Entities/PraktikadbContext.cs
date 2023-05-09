@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CattleMgm.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace CattleMgmApi.Data.Entities;
@@ -26,6 +27,9 @@ public partial class PraktikadbContext : DbContext
     public virtual DbSet<AspNetUserTokens> AspNetUserTokens { get; set; }
 
     public virtual DbSet<AspNetUsers> AspNetUsers { get; set; }
+
+    public DbSet<ApplicationRole> Roles { get; set; }
+
 
     public virtual DbSet<Breed> Breed { get; set; }
 
